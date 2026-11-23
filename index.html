@@ -1781,7 +1781,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.53';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.54';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7719,6 +7719,16 @@ load(); setArt('anime',false); render();
 /* ---- 화면 왼쪽 맨 위에 현재 게임 버전 항상 표시 (GAME_VER를 그대로 읽으므로 패치하면 자동으로 바뀜) ---- */
 (()=>{ const put=()=>{ if(!document.body)return; let v=document.getElementById('gameVer'); if(!v){ v=document.createElement('div'); v.id='gameVer'; } v.textContent='v'+GAME_VER; if(v.parentNode!==document.body||v.nextSibling)document.body.appendChild(v); };
  put(); setInterval(put,1500); })();
+
+/* ---- 앱(GitHub 주소)에서 실행 중일 때 새 버전 자동 적용
+   켤 때·다시 볼 때·1분마다 서버의 version.json을 확인 → 새 버전이면 저장 후 새로고침.
+   던전 전투 중에는 진행이 끊기지 않도록 던전을 나온 뒤에 적용 ---- */
+(()=>{ if(!/github\.io$/.test(location.hostname))return; let busy=0, pend=null;
+ const apply=v=>{ try{ if(typeof S!=='undefined'&&S&&typeof save==='function')save(); }catch(e){} try{toast(`새 버전 v${v}으로 업데이트합니다`,1500);}catch(e){} setTimeout(()=>location.reload(),900); };
+ const chk=async()=>{ if(busy)return; busy=1; try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); const j=await r.json();
+   if(j&&j.v&&j.v!==GAME_VER){ if(typeof SCREEN!=='undefined'&&SCREEN==='battle'){ if(pend!==j.v){ pend=j.v; try{toast(`새 버전 v${j.v} 준비됨 · 던전을 나가면 적용됩니다`,2500);}catch(e){} } } else apply(j.v); } }catch(e){} busy=0; };
+ setTimeout(chk,2500); setInterval(chk,60000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden)chk(); }); addEventListener('focus',chk);
+})();
 </script>
-<script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script></body>
+<script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});});}</script></body>
 </html>
