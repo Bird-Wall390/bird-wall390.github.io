@@ -1945,7 +1945,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.59';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.60';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7217,6 +7217,7 @@ function lootPosApply(){ const a=$('#bhudB'), hp=!!(S&&S.opt&&S.opt.lootPos==='h
  const mb=$('#bMenu'), et=$('#einfoTog'); let menuW=0;
  if(mb&&et){ const cs=getComputedStyle(et); mb.style.left=(et.offsetLeft+et.offsetWidth+6)+'px'; mb.style.bottom=cs.bottom; menuW=mb.offsetWidth+6; }
  // [모두 줍기]: [전투로그] 버튼 바로 옆에 바짝 (스킬 확장창에 가리지 않게)
+ { const it=$('#infoTog'), la=L.querySelector('.lootall'); if(it&&la&&it.offsetWidth>0){ la.style.setProperty('width',it.offsetWidth+'px','important'); la.style.setProperty('height',it.offsetHeight+'px','important'); la.style.setProperty('padding','0','important'); la.style.setProperty('white-space','nowrap'); la.style.setProperty('box-sizing','border-box'); } }
  const w=(tg.offsetWidth||90)+6;
  if(hp){ L.style.right='auto'; L.style.left=(w+8+menuW)+'px'; }
  else{ L.style.left='auto'; L.style.right=w+'px'; }
@@ -7468,6 +7469,13 @@ function drawBattle(){
   if(B.preview){B.preview.tiles.forEach(([x,y])=>hl(x,y,'rgba(255,150,40,.55)')); g.strokeStyle='#ffd23f'; g.lineWidth=2; g.strokeRect(OX+B.preview.ax*TW+2,OY+B.preview.ay*TH+2,TW-4,TH-4);}
  }
  if(B.cur&&!B.cur.dead){g.strokeStyle='#ffd23f';g.lineWidth=2;g.strokeRect(OX+B.cur.x*TW+3,OY+B.cur.y*TH+3,TW-6,TH-6);}
+ // 정보 표시 대상 이펙트 (v0.5.60)
+ if(B.info&&!B.info.dead&&B.units.includes(B.info)){ const iu=B.info, pu=.5+.5*Math.sin(now/220), isE=iu.side!=='A', col=isE?'255,120,90':'110,210,255', x0=OX+iu.x*TW+2, y0=OY+iu.y*TH+2, w0=TW-4, h0=TH-4, L=Math.min(w0,h0)*.28;
+  g.save(); g.fillStyle=`rgba(${col},${.07+.07*pu})`; g.fillRect(x0,y0,w0,h0);
+  g.strokeStyle=`rgba(${col},${.7+.3*pu})`; g.lineWidth=3; g.lineCap='square'; const o=1+pu*2; g.beginPath();
+  g.moveTo(x0-o,y0+L);g.lineTo(x0-o,y0-o);g.lineTo(x0+L,y0-o); g.moveTo(x0+w0-L,y0-o);g.lineTo(x0+w0+o,y0-o);g.lineTo(x0+w0+o,y0+L);
+  g.moveTo(x0-o,y0+h0-L);g.lineTo(x0-o,y0+h0+o);g.lineTo(x0+L,y0+h0+o); g.moveTo(x0+w0-L,y0+h0+o);g.lineTo(x0+w0+o,y0+h0+o);g.lineTo(x0+w0+o,y0+h0-L); g.stroke();
+  const cx=x0+w0/2, ty=y0-TH*.55+Math.sin(now/200)*3; g.fillStyle=`rgba(${col},.95)`; g.strokeStyle='rgba(0,0,0,.8)'; g.lineWidth=1.5; g.beginPath(); g.moveTo(cx-8,ty-9);g.lineTo(cx+8,ty-9);g.lineTo(cx,ty+3);g.closePath(); g.fill(); g.stroke(); g.restore(); }
  // 궁극기 암전
  if(now<B.dimUntil){const a=Math.min(.5,(B.dimUntil-now)/300); g.fillStyle=`rgba(0,0,0,${a})`; g.fillRect(-20,-20,CW+40,CH+40);}
  // 유닛
