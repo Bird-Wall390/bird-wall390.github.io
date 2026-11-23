@@ -1301,7 +1301,7 @@ body .lw-x:hover,body .iw-x:hover{filter:brightness(1.2)}
 @media(max-height:520px){.npcl-list .npcl-grid.many{gap:8px}.npcl-list .npcl-grid.many .npcl-face .npcl-ph{aspect-ratio:164/116;object-position:50% 0%}}}
 /* v0.5.44: NPC 목록 — 창을 화면 높이만큼 키우고, 카드가 남는 높이를 모두 채워 일러스트를 크게 */
 @media(min-width:701px){.npcl-box.npcl-list{height:min(900px,calc(100% - 8px))!important}
- .npcl-list .npcl-grid{grid-template-columns:none!important;grid-template-rows:100%;grid-auto-flow:column;grid-auto-columns:calc((100% - 40px) / 5);align-content:stretch!important;overflow-x:auto;overflow-y:hidden;padding-bottom:8px;scroll-behavior:smooth}
+ .npcl-list .npcl-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;grid-template-rows:none;grid-auto-flow:row;grid-auto-rows:100%;align-content:start!important;overflow-x:hidden;overflow-y:auto;padding-bottom:0;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#6c6658 transparent}
  .npcl-list .npcl-card{min-height:0}
  .npcl-list .npcl-face{flex:1 1 0;min-height:0;position:relative}
  .npcl-list .npcl-face .npcl-ph,.npcl-list .npcl-grid.many .npcl-face .npcl-ph{position:absolute;inset:0;width:100%!important;height:100%!important;aspect-ratio:auto!important;object-fit:cover;object-position:50% 0%!important}
@@ -1925,15 +1925,18 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #bhudB #bhHub>button:nth-child(-n+4){height:70px!important}
 #bhudB #bhHub>button .kh{font-size:12px!important;left:10px!important;top:7px!important}
 #bhudB #bhHub>button.sk2b{display:flex!important;align-items:center;justify-content:center;padding:0!important}
-#bhudB #bhHub>button.sk2b .sk2ic{width:34px;height:34px;fill:#d9c9a3;stroke:#d9c9a3;filter:drop-shadow(0 1px 1px #000)}
+#bhudB #bhHub>button.sk2b .sk2ic{width:26px;height:26px;fill:#d9c9a3;stroke:#d9c9a3;filter:drop-shadow(0 1px 1px #000)}
 #bhudB #bhHub>button.sk2b.sel .sk2ic{fill:#ffe08a;stroke:#ffe08a}
+/* v0.5.56: 스킬 확장 버튼은 나머지 3개보다 작게 */
+#bhudB #bhHub>button.sk2b{height:50px!important;width:76%!important;justify-self:center}
+#bhudB #bhHub>button.sk2b .kh{font-size:11px!important;left:7px!important;top:4px!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.56';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.57';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5014,7 +5017,6 @@ function openNpcUI(T){
  const list=()=>{clearInterval(timer); shopEnd(root);
   root.innerHTML=`<div class="npcl-box npcl-list"><div class="npcl-h"><span><b>${T.name}</b> · NPC</span><button id="nx">닫기</button></div><div class="npcl-grid${T.npcs.length>5?' many':''}">${T.npcs.map((n,i)=>{const nm=npcNameOf(n[0]), shop=npcShopKind(n[0]), hq=(n[3]||[]).some(qVisible);
    return `<div class="npcl-card" data-n="${i}"><span class="npcl-face"></span><b>${nm[1]}</b><small>${nm[0]}</small><div class="npcl-btns"><button data-npcshop="${i}" ${shop?'':'disabled title="이 NPC는 물건을 팔지 않습니다."'}>${shop==='craft'?'제작':'상점'}</button><button data-npcq="${i}" class="${npcQIds(n).some(id=>qVisible(id)&&qStatusAt(id,n)[0]==='ready')?'qblink':''}">퀘스트</button></div>${npcBadge(n)}</div>`;}).join('')}</div></div>`;
-  {const g=root.querySelector('.npcl-grid'); if(g)g.addEventListener('wheel',e=>{if(g.scrollWidth>g.clientWidth&&Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault(); g.scrollLeft+=e.deltaY;}},{passive:false});}
   root.querySelectorAll('.npcl-card').forEach((b,i)=>{const fa=npcFaceArt(T.npcs[i][0],96,96); if(NPC_FACE_POS[T.npcs[i][0]])fa.style.setProperty('object-position',NPC_FACE_POS[T.npcs[i][0]],'important'); b.querySelector('.npcl-face').appendChild(fa); const n=T.npcs[i], k=npcShopKind(n[0]); const sb=b.querySelector('[data-npcshop]'), qb=b.querySelector('[data-npcq]'); sb.onclick=()=>{if(k==='smith')(openSmith.tab='shop',openSmith(root,n,list,close)); else if(k==='craft')openCraft(root,n,list,close); else if(k==='herb')openHerbShop(root,n,list,close);}; qb.onclick=()=>talk(n);});
   $('#nx').onclick=close;};
  const talk=n=>{
