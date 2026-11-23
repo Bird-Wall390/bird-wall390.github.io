@@ -2045,13 +2045,16 @@ body button.dsbtn,.dsbtn{font-family:'Do Hyeon','Malgun Gothic',sans-serif!impor
 @keyframes isoRise{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%)}}
 .dswarn.isow{top:7%!important;max-width:40%!important;padding:7px 14px!important;background:linear-gradient(90deg,#2a0620,#6a1030)!important;border-color:#ff6aa0!important;box-shadow:0 0 14px rgba(255,60,120,.65),0 4px 12px rgba(0,0,0,.6)!important}
 .dswarn.isow b{color:#ffc4dc;font-size:1.08em}.dswarn.isow i{color:#ffd0e0!important;filter:drop-shadow(0 0 6px #ff3a7a)!important}
+.dswarn.isow{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;max-width:44%!important;text-align:right;color:#ffd6e6;font-size:clamp(13px,calc(1.5*var(--vw)),18px);line-height:1.6;letter-spacing:.5px;text-shadow:0 0 8px #000,0 0 14px #000,0 1px 3px #000,0 0 16px rgba(255,60,120,.7)!important;animation:dcWarnIn .6s ease both,isoWarnPulse 3s ease-in-out .6s infinite}
+@keyframes isoWarnPulse{0%,100%{opacity:.88}50%{opacity:1}}
+.dc-iso span .srn{font-size:19px;letter-spacing:2px}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.75';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.76';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6173,8 +6176,8 @@ function renderDSel(app){
   ${z.dungeons.map((d,i)=>{const op=dgOpen(z,i), dn=p.dd[i]||0, cl=dn>=1;
    const nd=i===ZR.sel?ZR.diff:(ZR.dsel[i]!=null?ZR.dsel[i]:dgTop(z,i)), isSel=i===ZR.sel;
    return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${isSel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
-    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${iso?(isSel?'<div class="dc-iso"><i>☠</i><span>경계-이면</span><i>☠</i></div>':'<i class="dc-isk">☠</i>'):''}${isSel&&!iso&&nd>=2?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>'+(nd>=3?4:3)+'명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도"></button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도"></button></div>`:''}</div></div>`;}).join('')}
-  ${iso?'<div class="dswarn isow"><i>☠</i><span><b>경계-이면 · 균열이 비틀린 곳</b> 몬스터가 한층 강해지고 보상은 두 배가 되지만, 입장할 때마다 시렌스의 경계석 1개가 사라집니다.'+(ZR.diff>=2?' 권장인원 '+(ZR.diff>=3?4:3)+'명.':'')+'</span></div>':ZR.diff>=2?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
+    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${iso?(isSel?'<div class="dc-iso"><i>☠</i><span><bdo dir="ltr" class="srn">'+sirenOf('경계 이면')+'</bdo></span><i>☠</i></div>':'<i class="dc-isk">☠</i>'):''}${isSel&&!iso&&nd>=2?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>'+(nd>=3?4:3)+'명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도"></button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도"></button></div>`:''}</div></div>`;}).join('')}
+  ${iso?'<div class="dswarn isow"><span>문 너머에서는 이쪽의 그림자가 자란다.<br>열린 틈으로 나간 것은 돌아오지 않으며, 돌아온 것은 더 이상 떠난 그것이 아니다.</span></div>':ZR.diff>=2?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso"><i>☠</i>${iso?'경계-이면 끄기':'경계-이면'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
