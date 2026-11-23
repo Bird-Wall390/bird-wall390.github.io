@@ -2104,13 +2104,21 @@ html body #app .wqm{background:none!important;box-shadow:none!important;border:0
 html body .navb:hover,html body .navb:focus,html body .navb:active{background:transparent!important;box-shadow:none!important;outline:none!important;filter:none!important}
 html body #app .wqm{font-size:0!important;-webkit-text-stroke:0!important;text-shadow:none!important;line-height:0!important;filter:drop-shadow(0 0 5px var(--qc,#ffd860)) drop-shadow(0 2px 2px rgba(0,0,0,.7))}
 html body #app .wqm svg{display:block}
+.overlay.augpick .aug{transition:transform .12s,box-shadow .12s,filter .12s}
+.overlay.augpick .aug.sel{transform:translateY(3px) scale(.965);filter:brightness(1.18);box-shadow:inset 0 0 0 2px var(--agc,#ffd860),inset 0 6px 18px rgba(0,0,0,.55),0 0 18px var(--agc,#ffd860)}
+.overlay.augpick .aug.sel.press{animation:augPress .28s ease-out}
+@keyframes augPress{0%{transform:translateY(-2px) scale(1.02)}45%{transform:translateY(5px) scale(.95)}100%{transform:translateY(3px) scale(.965)}}
+.augok-w{display:flex;justify-content:center;margin-top:12px}
+.augok{min-width:140px;padding:9px 30px;font-size:16px;font-weight:900;letter-spacing:2px;color:#2a1a04;background:linear-gradient(180deg,#ffe9a0,#d9a93c 60%,#a8791c);border:2px solid #fff0b8;border-radius:10px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.6)}
+.augok:hover:not(:disabled){filter:brightness(1.1)}.augok:active:not(:disabled){transform:translateY(2px)}
+.augok:disabled{filter:grayscale(.85) brightness(.6);cursor:not-allowed;box-shadow:none}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.100';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.101';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6563,8 +6571,8 @@ function offerAugment(title,cb){
  pool.forEach(a=>{if(a.skill)a.g=2;}); // 한 번에 나오는 후보 3개는 모두 같은 등급입니다 (등급을 먼저 뽑고, 그 등급 안에서 3개를 고릅니다)
  const choices=[]; {const byG={}; pool.forEach(a=>{(byG[a.g||1]=byG[a.g||1]||[]).push(a);}); const gs=Object.keys(byG).map(Number); let gx=Math.random()*gs.reduce((t,g)=>t+(AUG_GW[g]||10),0), G=gs[gs.length-1]; for(const g of gs){gx-=AUG_GW[g]||10; if(gx<=0){G=g;break;}}
   const gp=byG[G]||[]; while(choices.length<3&&gp.length)choices.push(gp.splice(Math.floor(Math.random()*gp.length),1)[0]);}
- const ov=modal(`<h3 style="color:var(--gold)">✦ ${title} — 각인 선택</h3><div class="dim" style="font-size:12px">하나를 고릅니다. 각인은 이 경계를 떠날 때까지 유지됩니다.${augCount()>=AUG_CAP?` <b style="color:#ffb070">현재 ${AUG_CAP}개로 상한입니다. 고르면 기존 각인 하나와 교체합니다.</b>`:` (${augCount()} / ${AUG_CAP})`}</div><div class="augs">${choices.map((a,i)=>{const g=AUG_G[a.g||1]; return `<div class="aug g${a.g||1}" data-ai="${i}" style="border-color:${g[1]}" data-tip="${esc(augTip(a))}"><em style="color:${g[1]}">${g[0]}${a.g===9?' · 심연의 성흔':''}</em><b style="color:${g[1]}">${esc(a.name)}</b><span style="font-size:13px;white-space:pre-line">${esc(a.desc)}</span></div>`;}).join('')}</div>`,ov=>{ ov.classList.add('augpick'); {const gg=AUG_G[(choices[0]&&choices[0].g)||1]; ov.style.setProperty('--agc',gg[1]); ov.classList.add('ag'+((choices[0]&&choices[0].g)||1));} {const epic=choices.length&&choices.every(a=>(a.g||1)===3), LOCK=epic?3200:1900; ov.classList.add('augin'); if(epic){ov.classList.add('augepic'); const fx=document.createElement('div'); fx.className='augfx'; let h='<i class="afl"></i><i class="arays"></i><i class="aring"></i>'; for(let i=0;i<26;i++){const a=Math.random()*Math.PI*2, d=120+Math.random()*260; h+=`<s style="--dx:${Math.cos(a)*d|0}px;--dy:${Math.sin(a)*d|0}px;--dl:${(Math.random()*.9).toFixed(2)}s;--sz:${3+Math.random()*5|0}px"></s>`;} fx.innerHTML=h; ov.appendChild(fx); setTimeout(()=>fx.remove(),LOCK+600);} try{sfx(epic?'augepic':'augopen');}catch(e){} setTimeout(()=>{ov.classList.remove('augin');},LOCK);}
-  ov.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>{ if(ov.classList.contains('augin')||ov._pk)return; const a=choices[+el.dataset.ai]; ov._pk=1; const pkD=augPickFx(ov,el,a); setTimeout(()=>{
+ const ov=modal(`<h3 style="color:var(--gold)">✦ ${title} — 각인 선택</h3><div class="dim" style="font-size:12px">하나를 고릅니다. 각인은 이 경계를 떠날 때까지 유지됩니다.${augCount()>=AUG_CAP?` <b style="color:#ffb070">현재 ${AUG_CAP}개로 상한입니다. 고르면 기존 각인 하나와 교체합니다.</b>`:` (${augCount()} / ${AUG_CAP})`}</div><div class="augs">${choices.map((a,i)=>{const g=AUG_G[a.g||1]; return `<div class="aug g${a.g||1}" data-ai="${i}" style="border-color:${g[1]}" data-tip="${esc(augTip(a))}"><em style="color:${g[1]}">${g[0]}${a.g===9?' · 심연의 성흔':''}</em><b style="color:${g[1]}">${esc(a.name)}</b><span style="font-size:13px;white-space:pre-line">${esc(a.desc)}</span></div>`;}).join('')}</div><div class="augok-w"><button type="button" id="augOk" class="augok" disabled>선택</button></div>`,ov=>{ ov.classList.add('augpick'); {const gg=AUG_G[(choices[0]&&choices[0].g)||1]; ov.style.setProperty('--agc',gg[1]); ov.classList.add('ag'+((choices[0]&&choices[0].g)||1));} {const epic=choices.length&&choices.every(a=>(a.g||1)===3), LOCK=epic?3200:1900; ov.classList.add('augin'); if(epic){ov.classList.add('augepic'); const fx=document.createElement('div'); fx.className='augfx'; let h='<i class="afl"></i><i class="arays"></i><i class="aring"></i>'; for(let i=0;i<26;i++){const a=Math.random()*Math.PI*2, d=120+Math.random()*260; h+=`<s style="--dx:${Math.cos(a)*d|0}px;--dy:${Math.sin(a)*d|0}px;--dl:${(Math.random()*.9).toFixed(2)}s;--sz:${3+Math.random()*5|0}px"></s>`;} fx.innerHTML=h; ov.appendChild(fx); setTimeout(()=>fx.remove(),LOCK+600);} try{sfx(epic?'augepic':'augopen');}catch(e){} setTimeout(()=>{ov.classList.remove('augin');},LOCK);}
+  const doPick=el=>{ if(ov.classList.contains('augin')||ov._pk)return; const a=choices[+el.dataset.ai]; ov._pk=1; if(window.gtipHide)gtipHide(); const okb=ov.querySelector('#augOk'); if(okb)okb.disabled=true; const pkD=augPickFx(ov,el,a); setTimeout(()=>{
    const take=rep=>{
     if(rep){const k=R.augs.indexOf(rep); if(k>=0)R.augs.splice(k,1); if(String(rep.id).startsWith('sk:'))R.skAug.delete(String(rep.id).slice(3)); const m=newMods(); if(R.augs.some(x=>x.id==='solo'))m.dr+=.15; R.augs.forEach(x=>{const d=AUGS.find(y=>y.id===x.id); if(d)d.f(m);}); Object.assign(R.mods,m);}   // 교체: 효과를 처음부터 다시 계산합니다
     if(ZR)ZR.pity=0; if(a.skill)R.skAug.add(a.skill); else a.f(R.mods); R.augs.push({id:a.id,name:a.name,desc:a.desc,g:a.g||1}); if(ZR&&R.dg&&!(ZR.augGot||(ZR.augGot=[])).includes(R.dg.idx))ZR.augGot.push(R.dg.idx); if(window.gtipHide)gtipHide(); document.querySelectorAll('.overlay.augrep').forEach(o=>o.remove()); ov.remove(); const b=$('#bAugB'); if(b)b.textContent='각인 '+R.augs.length; cb&&cb();};
@@ -6574,7 +6582,11 @@ function offerAugment(title,cb){
    modal(`<h3 style="color:var(--gold)">교체할 각인을 고르십시오</h3><div class="dim" style="font-size:12px;margin-bottom:6px">각인은 경계당 최대 ${AUG_CAP}개입니다. 새 각인 「${esc(a.name)}」을(를) 얻으려면 기존 각인 하나를 잃습니다.</div><div class="augrep-l">${cur.map((x,i)=>`<button class="augrep-b" data-rp="${i}" style="border-color:${AUG_G[x.g||1][1]};color:${AUG_G[x.g||1][1]}" data-tip="${esc(augTip(x))}">[${AUG_G[x.g||1][0]}] ${esc(x.name)}</button>`).join('')}</div><div class="row" style="margin-top:8px"><button id="rpNo">취소 (다른 각인 고르기)</button></div>`,o=>{o.classList.add('augrep');
     o.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>take(cur[+b.dataset.rp])); o.querySelector('#rpNo').onclick=()=>{o.remove(); ov._pk=0; ov.querySelectorAll('.aug').forEach(c=>c.classList.remove('picked','dim'));};});
   },pkD);
-  });
+  };
+  // 각인을 누르면 눌린 상태로 표시되고 설명(툴팁)이 고정됨 → 아래 [선택] 버튼을 눌러야 확정
+  {const okb=ov.querySelector('#augOk'); let selEl=null;
+   ov.querySelectorAll('[data-ai]').forEach(el=>el.addEventListener('click',()=>{ if(ov.classList.contains('augin')||ov._pk)return; selEl=el; ov.querySelectorAll('.aug').forEach(c=>{c.classList.toggle('sel',c===el); if(c===el){c.classList.remove('press'); void c.offsetWidth; c.classList.add('press');}}); okb.disabled=false; }));
+   okb.onclick=()=>{ if(selEl)doPick(selEl); };}
  });
 }
 /* ================= 전투 ================= */
@@ -8452,7 +8464,7 @@ function bindAct(el,acts){
  document.addEventListener('mouseover',e=>{const t=e.target.closest&&e.target.closest('.tm'); if(t){tmShow(t); return;} tmHide(); let el=e.target.closest&&e.target.closest('[data-tip]'); if(!el){ const ic=e.target.closest&&e.target.closest('img[data-ic]'); if(ic){ const it=ICREG.get(ic.getAttribute('data-ic')); if(it){ try{ ic.setAttribute('data-tip','<div class="tipcard">'+itemCard(it)+'</div>'); el=ic; }catch(_){} } } else { const ci=e.target.closest&&e.target.closest('.cic'); if(ci&&!ci.closest('[data-tip]')&&ci.getAttribute('data-ck')){ const k=ci.getAttribute('data-ck'), d=CONS[k]; if(d){ ci.setAttribute('data-tip','<div class="tipcard"><b>'+esc(d.name||k)+'</b><div class="dim" style="margin-top:3px">'+esc(d.desc||'')+'</div></div>'); el=ci; } } } } if(el){if(!pin)show(el);} else hide();});
  document.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return; const t=e.target.closest&&e.target.closest('.tm'); if(t){tmShow(t); return;} tmHide();});
  /* 장비 칸을 클릭하면 상세 툴팁이 고정되고, 다른 곳을 클릭하면 닫힙니다 */
- document.addEventListener('click',e=>{const T=e.target; if(!T.closest)return; if(T.closest('#gtip'))return; const el=T.closest('[data-tip]'); if(el&&((el.getAttribute('data-tip')||'').indexOf('dnf')>=0||el.closest('.invwin,.npcl-box,.lwin'))){pin=false; show(el); pin=true; tip.classList.add('pin');} else if(pin)force();},true);
+ document.addEventListener('click',e=>{const T=e.target; if(!T.closest)return; if(T.closest('#gtip'))return; const el=T.closest('[data-tip]'); if(el&&((el.getAttribute('data-tip')||'').indexOf('dnf')>=0||el.closest('.invwin,.npcl-box,.lwin,.augs'))){pin=false; show(el); pin=true; tip.classList.add('pin');} else if(pin)force();},true);
  document.addEventListener('contextmenu',()=>{if(pin)force();}); document.addEventListener('keydown',e=>{if(e.key==='Escape'&&pin)force();});
  document.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return; const el=e.target.closest&&e.target.closest('[data-tip]'); if(el)show(el); else hide();});
  window.gtipHide=force;})();
