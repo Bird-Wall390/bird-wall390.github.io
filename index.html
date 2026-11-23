@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&family=Gaegu:wght@700&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&family=Gaegu:wght@700&family=Gowun+Batang:wght@700&family=Almendra:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
 <title>Risk Of Dungeon — 턴제 액션 로그라이크 (데모)</title>
 <style>
 :root{--bg:#0d0b14;--panel:#1a1626;--panel2:#241f35;--line:#3a3352;--txt:#ece6ff;--dim:#9a90b8;--gold:#ffcc4d;--red:#ff5d5d;--blue:#5db4ff;--green:#5dff9a;--acc:#ff8a3d}
@@ -2078,13 +2078,17 @@ html body #app button.dsbtn.dsbtn.dsbtn i{-webkit-text-fill-color:#f0d890!import
 .dc-iso.dc-hell span{background:linear-gradient(180deg,#e8461e,#8a1010 60%,#3a0808);border-color:#e8a050}
 .dswarn.still,.dswarn.still.isow{animation:none!important;opacity:1!important}
 .dc-iso.dc-stack{bottom:calc(100% + 25px)}
+/* v0.5.85 Map Select 띠 */
+.dsband{top:calc(54% - 62px)!important;height:124px!important;left:0!important;right:0!important;width:auto!important;margin:0!important;border:0!important;border-image:none!important;background:rgba(66,50,28,.8)!important}
+.dsb-m{font-family:'Almendra','Cinzel Decorative',Georgia,serif!important;font-weight:700!important;font-size:clamp(46px,8.6vh,84px)!important;letter-spacing:1px!important;color:#f6ecc0!important;text-shadow:-2px 0 #2a1c08,2px 0 #2a1c08,0 -2px #2a1c08,0 2px #2a1c08,0 0 10px rgba(0,0,0,.6)!important;line-height:1.1}
+.dsb-s{display:none!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.84';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.85';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6179,7 +6183,7 @@ function startRestScene(z){
 /* ---------- 던전 선택창 (양피지 지도) ---------- */
 function dselIntro(){ if(!DSEL_INTRO)return; DSEL_INTRO=false; const wm=document.getElementById('wmap'); if(!wm)return;
  const nodes=[...wm.querySelectorAll('.wnode')]; nodes.forEach(n=>n.classList.add('dsh')); const tp=document.getElementById('wtip'); if(tp)tp.style.display='none'; wm.classList.add('dsintro');
- const b=document.createElement('div'); b.className='dsband'; b.innerHTML=`<div class="dsb-m">던전 선택</div><div class="dsb-s"><bdo dir="ltr" class="srn">${sirenOf('던전 선택')}</bdo></div>`; document.body.appendChild(b);
+ const b=document.createElement('div'); b.className='dsband'; b.innerHTML=`<div class="dsb-m">Map Select</div>`; document.body.appendChild(b);
  try{sfx('clack');}catch(e){}
  setTimeout(()=>{b.classList.add('out');},1050); setTimeout(()=>b.remove(),1400);
  setTimeout(()=>{ wm.classList.remove('dsintro'); nodes.forEach(n=>{ if(!n.isConnected)return; n.classList.remove('dsh'); n.classList.add('dsin'); }); },1080); }
