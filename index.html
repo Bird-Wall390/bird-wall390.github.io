@@ -1892,7 +1892,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.32';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.33';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4947,7 +4947,7 @@ function openNpcUI(T){
   $('#nqf').appendChild(npcFaceArt(n[0],170,200,true)); $('#nqdx').onclick=()=>{clearInterval(timer); typing=false; $('#nqd').style.display='none';}; $('#nx').onclick=close; $('#nb').onclick=list;
   const left=()=>{const box=root.querySelector('.nq-left'); if(!sel){box.innerHTML=`<div class="nq-ph"><span class="dim">${quests.length?'의뢰를 선택하십시오.':'현재 받을 수 있는 의뢰가 없습니다.'}</span></div>`; return;}
    const q=QUESTS[sel], o=q.obj, goal=qGoal(sel);
-   box.innerHTML=`<div class="nq-ttl">${qBadge(sel)} ${q.name} <span class="nq-st ${qSt(sel)[0]}">${qSt(sel)[1]}</span></div><div class="nq-sheet">${q.story?`<b>내용</b><p>${q.story}</p>`:''}<b>조건</b><p>${q.brief}</p>${matSource(q)?`<b>획득처</b><p>${matSource(q)}</p>`:''}<b>목표</b><p>${goal}</p><b>보상</b>${rewardIcons(sel)}${q.cls&&q.type!=='unique'?`<p class="dim">${CLASSES[q.cls].name} 전용</p>`:''}</div>`;};
+   box.innerHTML=`<div class="nq-ttl">${qBadge(sel)} ${q.name} <span class="nq-st ${qSt(sel)[0]}">${qSt(sel)[1]}</span></div><div class="nq-sheet"><b>조건</b><p>${q.brief}</p>${matSource(q)?`<b>획득처</b><p>${matSource(q)}</p>`:''}<b>목표</b><p>${goal}</p><b>보상</b>${rewardIcons(sel)}${q.cls&&q.type!=='unique'?`<p class="dim">${CLASSES[q.cls].name} 전용</p>`:''}</div>`;};
   const isDone=id=>qSt(id)[0]==='done';
   const rlist=()=>{const l=$('#nql'), vis=quests.filter(id=>showDone?isDone(id):!isDone(id)), nd=quests.filter(isDone).length, tb=$('#nqDone'); if(tb){tb.textContent=showDone?'← 진행 가능 의뢰':`완료한 의뢰 (${nd})`; tb.onclick=()=>{showDone=!showDone; sel=null; left(); rlist(); const d=$('#nqd'); if(d)d.style.display='none'; clearInterval(timer); typing=false;};}
    l.innerHTML=vis.length?vis.map(id=>`<button class="nq-row ${id===sel?'sel':''} ${qSt(id)[0]==='done'?'done':''}" data-q="${id}"><span class="nq-b ${qSt(id)[0]}">${qSt(id)[1]}</span>${qBadge(id)} ${QUESTS[id].name}</button>`).join(''):`<div class="dim" style="padding:10px">${showDone?'완료한 의뢰가 없습니다.':'이 NPC는 지금 맡길 의뢰가 없습니다.'}</div>`; l.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>pick(b.dataset.q));};
