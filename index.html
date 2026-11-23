@@ -1521,7 +1521,7 @@ html body .lwin.inbox.dsk,html body .skhost .lwin.inbox.dsk.dsk.dsk{left:0!impor
 .dk-lv{min-width:34px;height:15px;padding:0 4px;background:#050505;border:1px solid #3a3a3a;border-radius:2px;text-align:center;font-size:11px;line-height:13px}.dk-lv b{color:#fff}.dk-lv b.z{color:#777}.dk-ms{color:#ffcf3a!important;font-style:italic;font-size:10px}
 .dk-rec{position:absolute;left:-6px;top:-7px;font-style:normal;font-size:9px;background:#2a8a3a;color:#fff;padding:0 3px;border-radius:2px;border:1px solid #7dff9a}
 .dk-eq{position:absolute;right:-5px;bottom:-5px;font-style:normal;font-size:10px;background:#1a4a80;color:#fff;width:15px;height:15px;border-radius:50%;text-align:center;line-height:15px;border:1px solid #7fc8ff}
-.dk-awk{position:absolute;right:-6px;top:-7px;font-style:normal;font-size:9px;background:#a01a4a;color:#fff;padding:0 3px;border-radius:2px}.dk-awk.q{background:#7a2ac8}
+.dk-awk{position:absolute;right:-6px;top:-7px;font-style:normal;font-size:9px;background:#a01a4a;color:#fff;padding:0 3px;border-radius:2px}.dk-awk.q{background:#7a2ac8}.dk-awk.p{background:#2a7a3a}
 .dk-ctl{position:static!important;width:auto!important;margin:0 0 6px}.dk-msv{display:flex;gap:10px;align-items:center;padding:10px;background:#15110c}.dk-msi{width:56px;height:56px;flex:none;border:2px solid #3a8a4a;border-radius:4px;overflow:hidden}.dk-msi .skimg{width:100%;height:100%}
 .dk-sh button{margin-left:auto;padding:2px 10px!important;font-size:11.5px!important;min-height:0!important}.dk-sh b{color:#8fd0ff;font-size:12.5px}
 .dk-tp{width:196px!important;pointer-events:none}.dk-tp button{pointer-events:auto}
@@ -1884,7 +1884,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.4';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.5';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5261,7 +5261,7 @@ function townSkTip(h,sk,learned){
 /* ===== 스킬창 (던파 2012 개편 스킬창 방식: 전체화면 트리 + 상세 정보 + 단축키 등록 + 최종 적용) ===== */
 let SK_SEL={}, SK_REC_ON=true, SK_SEL_MS=false;
 function skTreeLayout(cls){
- const all=Object.values(SK).filter(s=>s.cls===cls&&!s.passive).sort((a,b)=>skLearnLv(a)-skLearnLv(b)||(a.quest?1:0)-(b.quest?1:0));
+ const all=Object.values(SK).filter(s=>s.cls===cls).sort((a,b)=>skLearnLv(a)-skLearnLv(b)||(a.quest?1:0)-(b.quest?1:0));
  const lvls=[...new Set(all.map(skLearnLv))].sort((a,b)=>a-b), COLS=5, pos={}, par={}, used={};
  const key=s=>s.elem||skKind(s);
  all.forEach((s,i)=>{ const row=lvls.indexOf(skLearnLv(s)); used[row]=used[row]||new Set();
@@ -5288,7 +5288,7 @@ function skDoUp(h,sk){ if(skCanUp(h,sk))return false; const learned=h.skills.inc
 function skPrevAnim(cv,sk,h){
  const g=cv.getContext('2d'), W=cv.width, H=cv.height, PW=76, PH=42, COLS=7, ROWS=5, OX0=Math.round((W-COLS*PW)/2), OY0=H-ROWS*PH-8, t0=performance.now();
  const tc=(x,y)=>({cx:OX0+x*PW+PW/2, cy:OY0+y*PH+PH/2});
- const vm=VFX_MAP[sk.id]||{}, sup=isSupport(sk)||sk.t==='self'||sk.t==='ally'||sk.t==='allies', hx=1, hy=2;
+ const vm=VFX_MAP[sk.id]||{}, sup=!!sk.passive||isSupport(sk)||sk.t==='self'||sk.t==='ally'||sk.t==='allies', hx=1, hy=2;
  const dX=sk.t==='area'?(sk.shape==='diamond'?4:3):2, dY=2;
  const md=(x,y,a,b)=>Math.abs(x-a)+Math.abs(y-b), cb=(x,y,a,b)=>Math.max(Math.abs(x-a),Math.abs(y-b));
  let hit=[], rng=[], tgt=[dX,dY];
@@ -5302,7 +5302,7 @@ function skPrevAnim(cv,sk,h){
  if(sk.t==='line'||sk.t==='dash'){ for(let i=1;i<=(sk.len||1)&&hx+i<COLS;i++)hit.push([hx+i,hy]); }
  if(sup){hit=[[hx,hy]]; tgt=[hx,hy];}
  const hitSet=new Set(hit.map(([x,y])=>x+','+y)), dummyHit=!sup&&hitSet.has(dX+','+dY);
- const hero={kind:'hero',spec:(CLASSES[h.cls]||{}).spec,h}, col=sk.elem&&ELEM_FX[sk.elem]?ELEM_FX[sk.elem]:'#ffd23f';
+ const hero={kind:'hero',spec:(CLASSES[h.cls]||{}).spec,h}, col=sk.passive?'#6dff86':sk.elem&&ELEM_FX[sk.elem]?ELEM_FX[sk.elem]:'#ffd23f';
  const T=2300, A0=380, IMP=vm.bt!=null?640:A0+60, DUR=900;
  const bvAt=(idx,x,y,sz,k,flip)=>{const IM=BV.ims[idx>>4]; if(!IM)return; const C=BV.C,e=idx&15,row=(e/2)|0,col0=(e%2)*4,p=Math.min(.9999,Math.max(0,k))*4,fi=Math.floor(p),ft=p-fi,al=k<.06?k/.06:k>.85?Math.max(0,(1-k)/.15):1;
   g.save(); g.globalCompositeOperation='lighter'; g.translate(x,y); if(flip)g.scale(-1,1); const w=sz*(.96+.08*Math.min(1,k*1.4));
@@ -5353,7 +5353,7 @@ function skPrevAnim(cv,sk,h){
    }
    if(dummyHit&&t>=IMP&&t<IMP+700){ const q=(t-IMP)/700; g.save(); g.globalAlpha=1-q; g.fillStyle='#fff'; g.strokeStyle='#000'; g.lineWidth=4; g.font='bold 22px sans-serif'; g.textAlign='center'; const txt=String(Math.round((sk.pow||1)*100*(sk.hits||1)))+'%'; g.strokeText(txt,dp.cx,dp.cy-128-q*24); g.fillText(txt,dp.cx,dp.cy-128-q*24); g.restore(); }
   }
-  g.save(); g.font='bold 17px sans-serif'; g.textAlign='right'; g.fillStyle=sup?'#9dffb8':'#ffb07a'; g.fillText((sup?'적용 범위':(sk.t==='single'?'대상':'공격 범위'))+' '+hit.length+'칸',W-10,22); if(rng.length){g.fillStyle='rgba(140,190,255,.9)'; g.fillText('사거리 '+(sk.range||0)+'칸',W-10,42);} g.restore();
+  g.save(); g.font='bold 17px sans-serif'; g.textAlign='right'; g.fillStyle=sup?'#9dffb8':'#ffb07a'; g.fillText(sk.passive?'패시브 · 항상 적용':(sup?'적용 범위':(sk.t==='single'?'대상':'공격 범위'))+' '+hit.length+'칸',W-10,22); if(rng.length){g.fillStyle='rgba(140,190,255,.9)'; g.fillText('사거리 '+(sk.range||0)+'칸',W-10,42);} g.restore();
   requestAnimationFrame(loop); };
  requestAnimationFrame(loop); }
 function tabSkill(c){
@@ -5367,7 +5367,7 @@ function tabSkill(c){
   return `<path d="M${a.x} ${y1} V${ym} H${b.x} V${b.y-24}" class="${lit?'lit':''}"/>`;}).join('');
  const cells=T.all.map(s=>{const p=T.pos[s.id], ln=h.skills.includes(s.id), need=skLearnLv(s), lock=!ln&&(h.lv<need||(s.quest&&!(typeof DBG!=='undefined'&&DBG.on))), pend=SK_SNAP[h.id]&&SK_SNAP[h.id].log.some(e=>e.id===s.id), eqi=skFix(h).indexOf(s.id);
   return `<div class="dk-c${ln?' on':''}${lock?' lock':''}${s.id===sel&&!SK_SEL_MS?' sel':''}${pend?' pend':''}" data-dk="${s.id}" style="left:${PADX+p.c*CW+(CW-50)/2}px;top:${PADY+p.r*RH}px">
-   <div class="dk-ic k-${skKind(s)}${s.quest||s.awaken?' uq':''}">${skGlyph(s)}${SK_REC_ON&&REC.has(need)?'<i class="dk-rec">추천</i>':''}${eqi>=0?`<i class="dk-eq">${eqi+1}</i>`:''}${s.awaken?'<i class="dk-awk">각성</i>':s.quest?'<i class="dk-awk q">고유</i>':''}</div>
+   <div class="dk-ic k-${skKind(s)}${s.quest||s.awaken?' uq':''}">${skGlyph(s)}${SK_REC_ON&&REC.has(need)?'<i class="dk-rec">추천</i>':''}${eqi>=0?`<i class="dk-eq">${eqi+1}</i>`:''}${s.awaken?'<i class="dk-awk">각성</i>':s.quest?'<i class="dk-awk q">고유</i>':s.passive?'<i class="dk-awk p">패시브</i>':''}</div>
    <div class="dk-lv">${lvBox(s)}</div></div>`;}).join('');
  const axis=T.lvls.map((lv,i)=>`<div class="dk-ax" style="top:${PADY+i*RH+14}px">${lv}</div>`).join('');
  // 선택 스킬 팝업 (아이콘 옆 + − M)
@@ -5383,7 +5383,7 @@ function tabSkill(c){
    pop=`<div class="dk-pop dk-tp" style="left:${left}px;top:${top}px"><div class="dk-pn">${esc(sk.name)}</div>${ctl.replace('<div class="dk-pop dk-ctl">','<div>')}</div>`; ctl=''; }
  }
  // 공용 스킬 줄: 방어구 마스터리 + 패시브
- const M=MASTERY[h.cls], pas=Object.values(SK).filter(s=>s.cls===h.cls&&s.passive);
+ const M=MASTERY[h.cls], pas=[];
  const common=(M?[`<div class="dk-cm on${SK_SEL_MS?' sel':''}" data-dkm="1" title="${esc(ATYPES[M.at].n+' 마스터리 · 기본 습득 · '+masteryDesc(h.cls).replace(/<[^>]+>/g,''))}"><div class="dk-ic k-passive">${SK_IMG['ms_'+h.cls]?`<img class="skimg" src="${SK_IMG['ms_'+h.cls]}" alt="">`:'⛨'}</div><b class="dk-ms">Master</b></div>`]:[]).concat(pas.map(s=>`<div class="dk-cm${h.skills.includes(s.id)?' on':''}${s.id===sel?' sel':''}" data-dk="${s.id}"><div class="dk-ic k-passive">${skGlyph(s)}</div>${lvBox(s)}</div>`)).join('');
  // 오른쪽 상세 정보
  let det='';
