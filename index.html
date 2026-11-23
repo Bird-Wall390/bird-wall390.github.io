@@ -1815,7 +1815,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.71';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.72';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2052,8 +2052,10 @@ const PB_FLAT=new Set(['pcrit','mcrit','spd','acc','eva','mov']);
 const pbVal=(sk,k,L)=>Math.round(sk.pb[k]*(1+.1*((L||1)-1)));
 const fragHave=()=>((S&&S.mats&&S.mats.frag_n)?S.mats.frag_n.n:0)||0;
 /* 스킬 사용 시 무의 파편 소모량: 고유 스킬은 MP에 비례(2~4개), 35레벨 이상 스킬은 레벨에 따라 1~4개 */
-function fragCost(sk){ if(!sk||sk.basic)return 0; if(typeof DBG!=='undefined'&&DBG.on)return 0; const L=(typeof skLearnLv==='function')?skLearnLv(sk):1; if(sk.quest)return Math.max(2,Math.min(4,Math.round((sk.mp||0)/24))); if(L<35)return 0; return Math.max(1,Math.min(4,1+Math.floor((L-35)/8))); }
-const fragTxt=sk=>fragCost(sk)?` · 무의 파편 ${fragCost(sk)}`:'';
+const DBG_FREE=()=>typeof DBG!=='undefined'&&!!DBG.on;  // 디버그 모드: 아군 스킬 MP·파편·재사용 대기 없음
+function fragCost(sk){ return DBG_FREE()?0:fragBase(sk); }
+function fragBase(sk){ if(!sk||sk.basic)return 0; const L=(typeof skLearnLv==='function')?skLearnLv(sk):1; if(sk.quest)return Math.max(2,Math.min(4,Math.round((sk.mp||0)/24))); if(L<35)return 0; return Math.max(1,Math.min(4,1+Math.floor((L-35)/8))); }
+const fragTxt=sk=>fragBase(sk)?` · 무의 파편 ${fragBase(sk)}개${DBG_FREE()?' (디버그: 소모 없음)':''}`:'';
 const QUESTS={
  q_fire:{name:'업화의 불꽃',npc:'리프',cls:'mage',
   story:'숲의 바람이 잦아든 뒤, 뿔 달린 숲다람쥐들의 뿔에 꺼지지 않는 불씨가 깃들기 시작했습니다. 그 불씨가 응축된 정수를 가져오시면, 마법사에게 고급 스킬 「파이어 스트라이크」를 전수하겠습니다.',
@@ -5025,7 +5027,7 @@ function tabSkillOld(c){ // 이전 골드 습득 방식 (보관)
  if(sub==='eq')list=list.filter(sk=>h.equip.includes(sk.id)); else if(sub==='learn')list=list.filter(sk=>!h.skills.includes(sk.id));
  const rows=list.map(sk=>{const learned=h.skills.includes(sk.id), eq=h.equip.includes(sk.id), lvOk=h.lv>=sk.lv, gOk=S.gold>=sk.gold;
   const col=SK_COL[sk.elem]||(sk.t==='self'||sk.t==='ally'||sk.t==='allies'?'#2a8a5a':'#7a5a3a');
-  const req=learned?`<span class="ok">습득 완료</span><span>MP ${sk.mp||0}</span>${fragCost(sk)?`<span>무의 파편 ${fragCost(sk)}</span>`:''}<span>대기 ${sk.cd}턴</span>`
+  const req=learned?`<span class="ok">습득 완료</span><span>MP ${sk.mp||0}</span>${fragBase(sk)?`<span>무의 파편 ${fragBase(sk)}개</span>`:''}<span>대기 ${sk.cd}턴</span>`
    :sk.quest?`<span class="no">● 퀘스트 「${QUESTS[sk.quest].name}」</span>`
    :`<span class="${gOk?'':'no'}">G ${sk.gold}</span><span class="${lvOk?'':'no'}">● 레벨 ${sk.lv} ↑</span>`;
   const btn=learned?`<button data-tg="${sk.id}" ${!eq&&h.equip.length>=SK_MAX?'disabled':''}>${eq?'해제':'장착'}</button>`:sk.quest?'':`<button class="pri" data-learn="${sk.id}" ${!lvOk||!gOk?'disabled':''}>습득</button>`;
@@ -5115,7 +5117,7 @@ function tabSkill(c){
   let req, btn='';
   if(learned&&sk.passive){req=`<span class="ok">스킬 레벨 ${L} / ${SK_MAXLV}</span><span style="color:#6dff86;border-color:#3a8a4a">패시브 · 항상 적용</span>${max?'<span class="ok">최대 레벨</span>':`<span class="${lvOk?'':'no'}">다음 강화: 캐릭터 레벨 ${need} 이상</span><span class="${spOk?'':'no'}">SP ${cost}</span>`}`;
    btn=max?'':`<button class="pri" data-up="${sk.id}" ${lvOk&&spOk?'':'disabled'}>강화</button>`;}
-  else if(learned){req=`<span class="ok">스킬 레벨 ${L} / ${SK_MAXLV}</span><span>MP ${sk.mp||0}</span>${fragCost(sk)?`<span>무의 파편 ${fragCost(sk)}</span>`:''}<span>대기 ${sk.cd}턴</span>${max?'<span class="ok">최대 레벨</span>':`<span class="${lvOk?'':'no'}">다음 강화: 캐릭터 레벨 ${need} 이상</span><span class="${spOk?'':'no'}">SP ${cost}</span>`}`;
+  else if(learned){req=`<span class="ok">스킬 레벨 ${L} / ${SK_MAXLV}</span><span>MP ${sk.mp||0}</span>${fragBase(sk)?`<span>무의 파편 ${fragBase(sk)}개</span>`:''}<span>대기 ${sk.cd}턴</span>${max?'<span class="ok">최대 레벨</span>':`<span class="${lvOk?'':'no'}">다음 강화: 캐릭터 레벨 ${need} 이상</span><span class="${spOk?'':'no'}">SP ${cost}</span>`}`;
    btn=`<div class="col" style="gap:4px">${max?'':`<button class="pri" data-up="${sk.id}" ${lvOk&&spOk?'':'disabled'}>강화</button>`}<button data-tg="${sk.id}" ${!eq&&h.equip.length>=SK_MAX?'disabled':''}>${eq?'해제':'장착'}</button></div>`;}
   else if(sk.quest){const uq=QUESTS[sk.quest].type==='unique'; req=`<span class="no" ${uq?'style="color:#c77dff;border-color:#c77dff"':''}>● ${QTYPE[QUESTS[sk.quest].type||'normal'][0]} 퀘스트 「${QUESTS[sk.quest].name}」 보상</span>${uq?`<span class="${h.lv>=18?'ok':'no'}">캐릭터 Lv.18 이상 수주 · 연계 퀘스트</span>`:''}`; if(typeof DBG!=='undefined'&&DBG.on)btn=`<button class="pri" data-dbglearn="${sk.id}" style="background:#6a3a00;border-color:#ffd24a">DBG 습득</button>`;}
   else {req=`${sk.awaken?'<span style="color:#ff6aa0;border-color:#c0406a">● 각성 스킬</span>':sk.passive?'<span style="color:#6dff86;border-color:#3a8a4a">● 패시브</span>':''}<span class="${lvOk?'':'no'}">● 습득 레벨 ${need} 이상</span><span class="${spOk?'':'no'}">SP ${cost}</span>`; btn=`<button class="pri" data-learn="${sk.id}" ${lvOk&&spOk?'':'disabled'}>습득</button>`;}
@@ -6049,7 +6051,8 @@ function reachOf(u){
 function pathTo(prev,x,y){const p=[]; let k=K(x,y); while(prev.get(k)!==null&&prev.get(k)!==undefined){p.unshift(UK(k)); k=prev.get(k);} return p;}
 function basicSkill(u){return {id:'basic',name:u.basicName,t:'single',range:u.rng,pow:1,stat:u.stat,mp:0,cd:0,basic:true,hits:(u.side==='A'&&R.mods.dbl)?2:1};}
 const hasAug=(u,sk)=>u.side==='A'&&R.skAug.has(sk.id);
-function skCost(u,sk){ if(u.side==='E'||!sk.mp)return 0; let c=sk.mp*(1-R.mods.mpc)*(hasAug(u,sk)?.7:1)*(1-((u.fx&&u.fx.mpCost)||0)/100); return Math.max(0,Math.round(c)); }
+function skCost(u,sk){ if(u.side==='A'&&DBG_FREE())return 0; return skBaseCost(u,sk); }
+function skBaseCost(u,sk){ if(u.side==='E'||!sk.mp)return 0; let c=sk.mp*(1-R.mods.mpc)*(hasAug(u,sk)?.7:1)*(1-((u.fx&&u.fx.mpCost)||0)/100); return Math.max(0,Math.round(c)); }
 function skRange(u,sk){return (sk.basic?u.rng:sk.range||0)+(hasAug(u,sk)?1:0);}
 function skLen(u,sk){return (sk.len||0)+(hasAug(u,sk)?1:0);}
 function shapeTiles(cx,cy,shape){
@@ -6177,7 +6180,7 @@ async function perform(u,sk,opt){
  if(bleedTick(u)){await sleep(400); B.busy=false; checkEnd(); return;}
  u.mp-=skCost(u,sk);
  if(u.side==='A'){const fc=fragCost(sk); if(fc&&S.mats&&S.mats.frag_n){S.mats.frag_n.n=Math.max(0,S.mats.frag_n.n-fc); try{floatText(u,'무의 파편 −'+fc,'#cfd2e0');}catch(e){} save();}}
- if(sk.cd){u.cds[sk.id]=Math.max(1,sk.cd-(u.side==='A'?R.mods.cdr:0))+1; u.cdMax=u.cdMax||{}; u.cdMax[sk.id]=u.cds[sk.id]-1;}
+ if(sk.cd&&!(u.side==='A'&&DBG_FREE())){u.cds[sk.id]=Math.max(1,sk.cd-(u.side==='A'?R.mods.cdr:0))+1; u.cdMax=u.cdMax||{}; u.cdMax[sk.id]=u.cds[sk.id]-1;}
  if(sk.cd&&u.fx&&u.fx.cdReset&&Math.random()*100<u.fx.cdReset){u.cds[sk.id]=0; bto(()=>floatText(u,'재사용 초기화!','#9fe6ff'),300);}
  if(opt.ax!==u.x)u.face=opt.ax>u.x?1:-1;
  if(sk.awaken&&u.h){ awakenCut(u); await sleep(230); }
@@ -6629,7 +6632,7 @@ function btnTip(u,sk){
   if(sk.heal)big.push(['회복량',`약 ${Math.round(u.mag*sk.heal*m)}`,'#7dffa0']); if(sk.shield)big.push(['보호막',`약 ${Math.round(u.mag*sk.shield*m)}`,'#ffd23a']);
   if(sk.buff)big.push([`${{atk:'공격력',def:'방어력',mdef:'마법방어력'}[sk.buff.k]||'능력치'} 증가`,`+${Math.round(sk.buff.v*100)}% · ${sk.buff.turns}턴`,'#7fc8ff']); if(sk.mpGain)big.push(['MP 회복',`${sk.mpGain}`,'#6aa0ff']);
   return `<div class="skt">${sktHead(u,sk)}<div class="skt-dmg sup">${big.map(([l,v,c])=>`<div class="l">${l}</div><div class="n" style="color:${c}">${v}</div>`).join('')}</div>
-  ${sktR('대상',skTn(sk))}${sktR('소모 MP',skCost(u,sk),'#6aa0ff')+(fragCost(sk)?sktR('소모 무의 파편',fragCost(sk)+'개 (보유 '+fragHave()+')',fragHave()>=fragCost(sk)?'#cfd2e0':'#ff7a6a'):'')}${sktR('재사용 대기',`${sk.cd||0}턴`)}<div class="skt-note">${esc(sk.desc||'')}</div></div>`;}
+  ${sktR('대상',skTn(sk))}${sktR('소모 MP',(u.side==='A'&&DBG_FREE())?`${skBaseCost(u,sk)} <small>(디버그: 소모 없음)</small>`:skCost(u,sk),'#6aa0ff')+(fragBase(sk)?sktR('소모 무의 파편',DBG_FREE()?fragBase(sk)+'개 <small>(디버그: 소모 없음)</small>':fragCost(sk)+'개 (보유 '+fragHave()+')',DBG_FREE()||fragHave()>=fragCost(sk)?'#cfd2e0':'#ff7a6a'):'')}${sktR('재사용 대기',`${sk.cd||0}턴`)}<div class="skt-note">${esc(sk.desc||'')}</div></div>`;}
  const mg=isMagic(u,sk), base=mg?u.mag:u.atk, DO=dmgOpts(u);
  const p=(sk.pow||1)*(1+buffSum(u,'atk'))*(sk.basic?Math.max(.1,1+R.mods.basic):1)*(hasAug(u,sk)?1.4:1)*(u.h&&!sk.basic&&SK[sk.id]?skMul(u.h,sk):1)*(1+DO.allAtk/100)*(1+DO.inc/100);
  const per=Math.max(1,Math.round(base*p)), n=sk.hits||1, crit=mg?(u.mcrit??5):(u.pcrit??5);
@@ -6638,7 +6641,7 @@ function btnTip(u,sk){
   <div class="skt-dmg"><div class="l">예상 ${mg?'마법':'물리'} 데미지 <small>(대상 방어력 적용 전)</small></div><div class="n"><span class="d">${per}</span>${n>1?` <i>×</i> <span class="h">${n}타</span> <i>=</i> <span class="t">${per*n}</span>`:' <span class="h" style="font-size:14px">1타</span>'}</div></div>
   ${sktR('대상',sk.basic?`단일 · 사거리 ${skRange(u,sk)}`:skTn(sk))}${sts?sktR('상태이상',sts):''}
   ${sktR('적중률',`${clamp(92+(u.acc||0),40,100)}% <span class="dim">(회피율만큼 감소)</span>`)}${sktR(`${mg?'마법':'물리'} 크리티컬`,`${crit}%`,'#ffb040')}${DO.add?sktR('추가 데미지',`+${DO.add}%`,'#ff8a5a'):''}
-  ${sk.basic?'':sktR('소모 MP',skCost(u,sk),'#6aa0ff')+(fragCost(sk)?sktR('소모 무의 파편',fragCost(sk)+'개 (보유 '+fragHave()+')',fragHave()>=fragCost(sk)?'#cfd2e0':'#ff7a6a'):'')+sktR('재사용 대기',`${sk.cd||0}턴`)}
+  ${sk.basic?'':sktR('소모 MP',(u.side==='A'&&DBG_FREE())?`${skBaseCost(u,sk)} <small>(디버그: 소모 없음)</small>`:skCost(u,sk),'#6aa0ff')+(fragBase(sk)?sktR('소모 무의 파편',DBG_FREE()?fragBase(sk)+'개 <small>(디버그: 소모 없음)</small>':fragCost(sk)+'개 (보유 '+fragHave()+')',DBG_FREE()||fragHave()>=fragCost(sk)?'#cfd2e0':'#ff7a6a'):'')+sktR('재사용 대기',`${sk.cd||0}턴`)}
   ${n>1?`<div class="skt-note"><b class="h">${n}타</b>: 장비·각인의 확률 효과가 타마다 판정됩니다. 스킬 자체의 상태이상은 첫 타에만 판정합니다.</div>`:''}</div>`;
 }
 function cdSeg(u,id){const cd=u.cds[id]||0; if(cd<=0)return ''; const n=Math.max(cd,(u.cdMax&&u.cdMax[id])||cd); return `<span class="cdov"><span class="cdn">${cd}</span><span class="cdseg">${Array.from({length:n},(_,i)=>`<i class="${i<cd?'on':''}"></i>`).join('')}</span></span>`;}
