@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&family=Gaegu:wght@700&display=swap" rel="stylesheet">
 <title>Risk Of Dungeon — 턴제 액션 로그라이크 (데모)</title>
 <style>
 :root{--bg:#0d0b14;--panel:#1a1626;--panel2:#241f35;--line:#3a3352;--txt:#ece6ff;--dim:#9a90b8;--gold:#ffcc4d;--red:#ff5d5d;--blue:#5db4ff;--green:#5dff9a;--acc:#ff8a3d}
@@ -1996,13 +1996,33 @@ body button.dsbtn,.dsbtn{display:flex!important;align-items:center;gap:11px;just
 .dc-tab button:disabled{opacity:.55!important;filter:grayscale(.6)}
 .dc-tab{filter:drop-shadow(0 0 3px #000) drop-shadow(0 2px 4px rgba(0,0,0,.8))!important}
 .wtip{z-index:12!important}
+/* v0.5.67 */
+.dc-warn{position:static!important;height:24px!important;line-height:24px!important;font-size:13.5px!important;border-radius:0!important;animation:dcRise .5s cubic-bezier(.2,.9,.3,1) both,dcBlink .85s ease-in-out .55s infinite}
+.dc-warn b{font-size:18px!important}
+.dc-warn::before{display:none!important}
+.dc-wwrap{position:absolute;left:-2px;right:-2px;bottom:calc(100% + 2px);height:24px;overflow:hidden;border-radius:7px 7px 0 0;pointer-events:none}
+.dc-skull{position:absolute;left:50%;bottom:calc(100% + 18px);transform:translateX(-50%);font-style:normal;font-size:17px;line-height:1;color:#efe0c8;text-shadow:0 1px 3px #000;z-index:3;pointer-events:none;animation:dcSkull .5s ease .15s both}
+@keyframes dcRise{from{transform:translateY(105%)}to{transform:translateY(0)}}
+@keyframes dcSkull{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes dcBlink{0%,100%{filter:brightness(1)}50%{filter:brightness(1.85) saturate(1.4);box-shadow:inset 0 0 10px rgba(255,120,120,.9)}}
+.dswarn{animation:dcWarnIn .5s ease both}
+@keyframes dcWarnIn{0%{opacity:0;filter:brightness(2)}35%{opacity:1}60%{filter:brightness(1.8)}100%{filter:none}}
+body button.dsbtn,.dsbtn{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:3px 8px!important;gap:12px;font-family:'Gaegu','Nanum Pen Script','Do Hyeon','Malgun Gothic',cursive!important;font-weight:700!important;letter-spacing:.5px!important;font-size:clamp(20px,calc(2.3*var(--vw)),30px)!important;-webkit-text-stroke:.8px rgba(0,0,0,.85);text-shadow:-2px 0 #000,2px 0 #000,0 -2px #000,0 2px #000,-1px -1px #000,1px 1px #000,-1px 1px #000,1px -1px #000,0 3px 5px rgba(0,0,0,.7)!important;color:#fff!important}
+.dsbtn.go{color:#ffe9a8!important}.dsbtn.iso{color:#ffc4dc!important}#app.iso .dsbtn.iso{background:none!important}
+.dsbtn:hover:not(:disabled){filter:brightness(1.3) drop-shadow(0 0 6px rgba(255,230,160,.8));transform:translateX(-3px)}
+.dsbtn i{font-size:1.15em}
+.dsbtns{gap:2px!important}
+.dsbtn.go,.dsbtn.iso,.dsbtn.back,#app.iso .dsbtn.iso{background:none!important;border:0!important;box-shadow:none!important}
+.dsbtn i{-webkit-text-stroke:0!important;text-shadow:0 0 3px #000,0 1px 3px #000,0 0 6px #000!important}
+.dsbtn.iso i{color:#ff9ac4}.dsbtn.go i{color:#ffd860}
+.dsbtn:disabled{filter:grayscale(.8) brightness(.8)}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.66';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.67';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4163,6 +4183,7 @@ const SOUNDS={
  burn:()=>{noise(.5,.3,'bandpass',900,450,1.2); noise(.3,.18,'highpass',4000,0,1,.1);},
  click:()=>{tone('sine',420,300,.05,.14);},
  ult:()=>{tone('sine',60,24,1.1,1.0); noise(.9,.5,'lowpass',200,2400); tone('sawtooth',55,220,.8,.12,0,900);},
+ siren:()=>{for(let i=0;i<6;i++){const up=i%2===0; tone('sawtooth',up?620:960,up?960:620,.23,.16,i*.23,2300); tone('square',up?310:480,up?480:310,.23,.07,i*.23,1400);} tone('sine',80,40,.6,.8,0); noise(.12,.4,'lowpass',900,300,1,0);},
  clack:()=>{noise(.05,.55,'highpass',3000,2000,1,0); tone('square',420,170,.07,.2,0,2200); tone('sine',95,42,.2,.9,0); noise(.1,.5,'bandpass',1500,600,3,.075); tone('square',250,110,.09,.18,.075,1600); tone('sine',70,38,.24,.7,.075);},
  start:()=>{[0,.3,.6].forEach((d,i)=>{tone('sine',i===2?62:72,i===2?24:30,.7,1.0,d); noise(.2,.4,'lowpass',900,160,1,d);}); tone('sawtooth',98,98,1.1,.14,.58,700); tone('sawtooth',147,147,1.1,.1,.58,700);},
  win:()=>{[[98,0],[147,0],[196,0],[123,.55],[185,.55],[247,.55]].forEach(([f,d])=>tone('sawtooth',f,f,1.0,.12,d,900)); tone('sine',65,40,1.2,.7,0); tone('sine',65,40,1.4,.7,.55);},
@@ -4186,7 +4207,7 @@ SOUNDS.drink=()=>{ for(let i=0;i<3;i++){ noise(.09,.16,'bandpass',420,260,3,i*.1
 SOUNDS.pick=()=>{tone('sine',1320,1320,.08,.17,0); tone('sine',1760,1760,.08,.15,.055); tone('sine',2350,2350,.16,.13,.11); tone('triangle',2640,2640,.12,.05,.11);};
 SOUNDS.winOpen=()=>{noise(.16,.22,'bandpass',500,2600,1.2); tone('sine',420,640,.12,.07); tone('triangle',900,1200,.1,.04,.04);};
 SOUNDS.winClose=()=>{noise(.14,.2,'bandpass',2400,500,1.2); tone('sine',600,360,.12,.07); tone('triangle',800,520,.09,.04,.03);};
-const SOUND_NAMES={pick:'아이템 줍기',levelup:'레벨 업',drink:'물약 마시기',winOpen:'창 열기',winClose:'창 닫기',clack:'버튼 클릭',swing:'휘두르기',swingH:'대검 휘두르기',charge:'마력 집중',cock:'장전',slash:'베기',heavy:'대검·도끼',punch:'타격·주먹',gun:'총격',magic:'마법',fire:'폭발·화염',ice:'빙결',heal:'회복',shield:'보호막',buff:'강화',mana:'마나 회복',hit:'피격',crit:'치명타',die:'적 처치',herodown:'아군 쓰러짐',step:'발소리',turn:'내 차례',squish:'슬라임',screech:'박쥐',stun:'기절',burn:'화상',ult:'궁극기 발동',start:'전투 시작',win:'승리',lose:'패배'};
+const SOUND_NAMES={siren:'경고 사이렌',pick:'아이템 줍기',levelup:'레벨 업',drink:'물약 마시기',winOpen:'창 열기',winClose:'창 닫기',clack:'버튼 클릭',swing:'휘두르기',swingH:'대검 휘두르기',charge:'마력 집중',cock:'장전',slash:'베기',heavy:'대검·도끼',punch:'타격·주먹',gun:'총격',magic:'마법',fire:'폭발·화염',ice:'빙결',heal:'회복',shield:'보호막',buff:'강화',mana:'마나 회복',hit:'피격',crit:'치명타',die:'적 처치',herodown:'아군 쓰러짐',step:'발소리',turn:'내 차례',squish:'슬라임',screech:'박쥐',stun:'기절',burn:'화상',ult:'궁극기 발동',start:'전투 시작',win:'승리',lose:'패배'};
 document.addEventListener('click',e=>{ if(SCREEN==='battle')return; const b=e.target.closest&&e.target.closest('button,.cs3-frame,.cs2-cell,.sw-it,.wnode'); if(b&&!b.disabled)sfx('clack'); },true);
 function sfx(name){
  if(!name||!sfxCfg().on)return; const c=audio(); if(!c||!SOUNDS[name])return; if(!LVSND.buf&&!LVSND.busy)lvSndLoad();
@@ -6123,14 +6144,14 @@ function renderDSel(app){
   ${z.dungeons.map((d,i)=>{const op=dgOpen(z,i), dn=p.dd[i]||0, cl=dn>=1;
    const nd=i===ZR.sel?ZR.diff:(ZR.dsel[i]!=null?ZR.dsel[i]:dgTop(z,i)), isSel=i===ZR.sel;
    return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${isSel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
-    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${DF_BAND[nd]}">${nd>=3?'<div class="dc-warn">위험! 권장인원 <b>4명</b></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div>`:''}</div></div>`;}).join('')}
+    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${isSel&&nd>=3?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>4명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div>`:''}</div></div>`;}).join('')}
   ${ZR.diff>=3?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso"><i>☠</i>${iso?'경계-이면 끄기':'경계-이면 켜기'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
  $('#dBack').onclick=()=>{ZR.iso=false; go('rest');};
  $('#dIso').onclick=()=>isoErode(()=>{ZR.iso=!ZR.iso; render();});
- $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{ZR.dsel[ZR.sel]=Math.min(dgTop(z,ZR.sel),ZR.diff+1); render();};
+ $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{const nx=Math.min(dgTop(z,ZR.sel),ZR.diff+1); ZR._siren=(ZR.diff===2&&nx===3); ZR.dsel[ZR.sel]=nx; render();};
  app.querySelectorAll('canvas.wth').forEach(cv=>{const d=z.dungeons[+cv.dataset.th], th=themeThumb(d,240,90); cv.width=th.width; cv.height=th.height; cv.getContext('2d').drawImage(th,0,0);});
  app.querySelectorAll('canvas.wbp').forEach(cv=>{const d=z.dungeons[+cv.dataset.bp], key=d.boss||d.named; if(!key||!MONS[key])return; cv.width=160; cv.height=180; const g=cv.getContext('2d'); g.imageSmoothingEnabled=false;
   try{const T=document.createElement('canvas'); T.width=T.height=520; const tg=T.getContext('2d'); tg.imageSmoothingEnabled=false; drawUnitSprite(tg,{kind:'mon',mon:key,face:-1,hp:1,maxhp:1,st:{},buffs:[]},260,470,5.2,{t:0});
@@ -6145,7 +6166,7 @@ function renderDSel(app){
   const tw=Math.min(300,mw-20); tip.style.width=tw+'px';
   let lim=8; tip.innerHTML=mk(lim); while(tip.offsetHeight>mh-16&&lim>0){lim=lim>2?lim-2:0; tip.innerHTML=mk(lim);}
   const th=tip.offsetHeight, loc=e=>{const q=e.getBoundingClientRect(); return {l:(q.left-mr.left)/sc,t:(q.top-mr.top)/sc,r:(q.right-mr.left)/sc,b:(q.bottom-mr.top)/sc};};
-  const rr=(()=>{const A=loc(el), B=el.querySelector('.wpin')?loc(el.querySelector('.wpin')):A, C=el.querySelector('.wplate')?loc(el.querySelector('.wplate')):A; return {l:Math.min(A.l,B.l,C.l),t:Math.min(A.t,B.t,C.t),r:Math.max(A.r,B.r,C.r),b:Math.max(A.b,B.b,C.b)};})(), hide=[]; const sp=app.querySelector('.wnode.sel .wplate'); if(sp&&sp.closest('.wnode')!==el)hide.push(Object.assign(loc(sp),{k:4})); const sb=app.querySelector('.wnode.sel .dc-tab'); if(sb&&sp&&sp.closest('.wnode')!==el){const q=loc(sb); q.b+=8; q.k=6; hide.push(q);}
+  const rr=(()=>{const A=loc(el), B=el.querySelector('.wpin')?loc(el.querySelector('.wpin')):A, C=el.querySelector('.wplate')?loc(el.querySelector('.wplate')):A; return {l:Math.min(A.l,B.l,C.l),t:Math.min(A.t,B.t,C.t),r:Math.max(A.r,B.r,C.r),b:Math.max(A.b,B.b,C.b)};})(), hide=[]; const sp=app.querySelector('.wnode.sel .wplate'); if(sp&&sp.closest('.wnode')!==el)hide.push(Object.assign(loc(sp),{k:4})); const sb=app.querySelector('.wnode.sel .dc-tab'); if(sb){const q=loc(sb); q.b+=8; q.k=6; hide.push(q);}
   ['.dsbtns','.dswarn','.wmtitle'].forEach(q=>{const e=app.querySelector(q); if(e)hide.push(Object.assign(loc(e),{k:4}));}); hide.push(rr);
   const cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,v)), cx=(rr.l+rr.r)/2, cy=(rr.t+rr.b)/2;
   const cand=[[cx-tw/2,rr.t-th-8],[cx-tw/2,rr.b+8],[rr.r+8,cy-th/2],[rr.l-tw-8,cy-th/2]].map(([x,y])=>{x=cl(x,8,mw-tw-8); y=cl(y,6,Math.max(6,mh-th-6)); let ov=0; for(const h of hide){const w=Math.min(x+tw,h.r)-Math.max(x,h.l), hh=Math.min(y+th,h.b)-Math.max(y,h.t); if(w>0&&hh>0)ov+=w*hh*(h.k||1);} return {x,y,ov};});
@@ -6165,6 +6186,7 @@ function renderDSel(app){
    ov.querySelector('#in').onclick=()=>ov.remove();
    ov.querySelector('#iy').onclick=()=>{ov.remove(); S.mats.sirens.n--; save(); enterDungeon(dg);};});};
  drawWorldMap($('#wmcv'),z); dselIntro();
+ if(ZR._siren){ZR._siren=false; try{sfx('siren');}catch(e){}}
 }
 function isoErode(cb){
  if(document.getElementById('erode'))return;
