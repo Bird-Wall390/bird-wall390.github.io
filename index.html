@@ -1903,13 +1903,28 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #dbgPanel button:hover{background:#3d3046!important;border-color:#ffd23a!important}
 #dbgPanel button.off{opacity:.4}
 .st-aug .st-ar{display:flex;gap:9px;align-items:center;padding:7px 8px;margin-bottom:6px;background:rgba(0,0,0,.28);border-left:3px solid #888;border-radius:6px}.st-aug .st-ar>svg,.st-aug .st-ar>span,.st-aug .st-ar>img{flex:none}
+
+/* v0.5.54: 보조 스킬칸(7~12번) · 전투 메뉴 버튼 */
+.sk2wrap{position:relative}
+.sk2row{position:absolute!important;left:0;right:0;bottom:calc(100% + 16px);z-index:7;padding:5px 6px;margin:0 -6px;background:linear-gradient(180deg,rgba(40,30,18,.96),rgba(18,13,8,.96));border:1px solid #8c6e48;border-radius:8px;box-shadow:0 -2px 12px rgba(0,0,0,.6);clip-path:inset(100% 0 0 0);opacity:0;pointer-events:none;transition:clip-path .24s ease,opacity .24s ease}
+.sk2row.open{clip-path:inset(0 0 0 0);opacity:1;pointer-events:auto}
+.sk2row .qcell>em:empty{display:none}
+#bhudB #bhHub>button.sk2b{height:58px!important;font-size:13px!important;flex-direction:column;gap:0;padding-top:6px!important}
+#bhudB #bhHub>button.sk2b small{position:static!important;font-size:10px!important;display:block}
+#bhudB .bh-hub{grid-template-columns:repeat(24,8.2px)!important;align-items:center}
+#bhLoot{display:flex!important;gap:6px;align-items:center}
+#bhLoot .bmenu{margin:0!important}
+#bMenuPop{position:fixed;z-index:9000;display:flex;flex-direction:column;gap:4px;padding:6px;background:linear-gradient(180deg,#2e2416,#140e08);border:1px solid #a8844a;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.7)}
+#bMenuPop button{min-width:120px;padding:6px 12px!important;font-size:13px!important;text-align:left;display:flex;justify-content:space-between;gap:12px}
+#bMenuPop button small{color:#cdb98e;font-size:11px}
+.dk-sl.x2 span{color:#ffb07a}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.53';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.54';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2287,7 +2302,7 @@ function questClaim(id){
  if(q.reward.exp){S.heroes.forEach(h=>grantExp(h,q.reward.exp)); out.push('EXP '+q.reward.exp);}
  if(q.reward.sp){S.heroes.forEach(h=>h.sp=(h.sp||0)+q.reward.sp); out.push('SP '+q.reward.sp);}
  if(q.reward.cons){for(const k in q.reward.cons){addCons(k,q.reward.cons[k]); out.push(CONS[k].name+' '+q.reward.cons[k]+'개');}}
- if(q.reward.skill){const sk=SK[q.reward.skill]; S.heroes.filter(h=>h.cls===sk.cls&&!isComp(h)).forEach(h=>{if(!h.skills.includes(sk.id)){h.skills.push(sk.id); if(h.equip.length<SK_MAX)h.equip.push(sk.id);}}); out.push('스킬 '+sk.name);}
+ if(q.reward.skill){const sk=SK[q.reward.skill]; S.heroes.filter(h=>h.cls===sk.cls&&!isComp(h)).forEach(h=>{if(!h.skills.includes(sk.id)){h.skills.push(sk.id); if(h.equip.length<SK_SLOTS)h.equip.push(sk.id);}}); out.push('스킬 '+sk.name);}
  if(q.reward.title){const T=TITLES[q.reward.title]; S.titles=S.titles||[]; if(!S.titles.includes(q.reward.title))S.titles.push(q.reward.title); S.heroes.forEach(h=>{if(!h.title)h.title=q.reward.title;}); out.push('칭호 「'+T.name+'」');}
  save(); return out;
 }
@@ -4409,7 +4424,7 @@ let KEYS=(()=>{try{const o=JSON.parse(localStorage.getItem('rod_keys')||'null');
 function saveKeys(){try{localStorage.setItem('rod_keys',JSON.stringify(KEYS));}catch(e){}}
 function keyName(code){return !code?'없음':code.startsWith('Key')?code.slice(3):code.startsWith('Digit')?code.slice(5):code.startsWith('Numpad')?'숫자패드 '+code.slice(6):({Space:'스페이스',Backquote:'`',Minus:'-',Equal:'=',BracketLeft:'[',BracketRight:']',Semicolon:';',Quote:"'",Comma:',',Period:'.',Slash:'/',Backslash:'\\',ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→',Tab:'Tab',Enter:'Enter'}[code]||code);}
 const KEY_LABEL={s:'스킬',c:'소모품'};
-function keyHint(t,i){return keyName(KEYS[t+i]);}
+function keyHint(t,i){return KEYS[t+i]?keyName(KEYS[t+i]):'';}
 function keysPanel(el){
  let waiting=null;
  const draw=()=>{el.innerHTML=`<div class="card"><h3>단축키</h3><div class="dim" style="font-size:12.5px;margin-bottom:8px">바꿀 항목의 버튼을 누른 뒤 새로 쓸 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다. Esc를 누르면 취소합니다. 단축키는 전투 중에 작동합니다. M(스탯 창)과 Esc는 바꿀 수 없습니다.</div>
@@ -5038,7 +5053,8 @@ function quickBar(parts){
  const cell=(lab,title,n,on,go,kh,tip,ex)=>`<button class="qcell ${on?'on':''}" data-qgo="${go}" ${ex||''} ${tip?`data-tip="${esc(tip)}"`:`title="${esc(title)}"`}><em>${kh}</em><span class="qi">${lab}</span>${n>1?`<i>${n}</i>`:''}</button>`;
  const row1=Array.from({length:QS_MAX},(_,i)=>{const k=qq[i], c=k&&S.cons&&S.cons[k], ex=`data-qslot="${i}"`; if(!c)return cell('','',0,0,'cons',keyHint('c',i),'',ex); return c.n>0?cell(consIcon(k,26),c.name,c.n,1,'cons',keyHint('c',i),storeTip('cons',k,true),ex):cell(consIcon(k,26),c.name,0,0,'cons',keyHint('c',i),`<b>${esc(c.name)}</b><br>남은 수량이 없습니다.`,ex+' style="opacity:.5"');}).join('');
  const sks=skFix(h), row2=Array.from({length:SK_MAX},(_,i)=>{const id=sks[i], sk=id&&SK[id], ex=`data-sslot="${i}"`; return sk?cell(skIcon(sk,26),sk.name+' — '+sk.desc,0,1,'skill',keyHint('s',i),(()=>{try{return townSkTip(h,sk,true);}catch(e){return '';}})(),ex):cell('','',0,0,'skill',keyHint('s',i),'',ex);}).join('');
- if(parts)return [row1,row2];
+ const row3=Array.from({length:6},(_,j)=>{const i=6+j, id=sks[i], sk=id&&SK[id], ex=`data-sslot="${i}"`; return sk?cell(skIcon(sk,26),sk.name+' — '+sk.desc,0,1,'skill','',(()=>{try{return townSkTip(h,sk,true)+SK2_NOTE;}catch(e){return '';}})(),ex):cell('','',0,0,'skill','',SK2_NOTE,ex);}).join('');
+ if(parts)return [row1,row2,row3];
  return `<div class="qbar"><div class="qrow"><b>소모품</b>${row1}</div><div class="qrow"><b>스킬</b>${row2}</div></div>`;
 }
 
@@ -5118,12 +5134,12 @@ const HUB_IC={
  title:'<path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/>'};
 const HUB_BTN=[['home','마을'],['party','동료'],['gear','인벤토리'],['skill','스킬'],['stat','스탯'],['quest','퀘스트'],['dict','사전'],['multi','멀티플레이'],['set','설정'],['title','캐릭터 선택']];
 function bottomHud(){
- const h=S.heroes[S.selHero]||S.heroes[0]; if(!h)return ''; const st=heroStats(h), need=expNeed(h.lv), pc=Math.min(100,h.exp/need*100), [row1,row2]=quickBar(true), inRest=SCREEN==='rest', curTab=inRest?((S.restTab&&S.restTab!=='rest')?S.restTab:'home'):S.tab, rr=zhp(h);
+ const h=S.heroes[S.selHero]||S.heroes[0]; if(!h)return ''; const st=heroStats(h), need=expNeed(h.lv), pc=Math.min(100,h.exp/need*100), [row1,row2,row3]=quickBar(true), inRest=SCREEN==='rest', curTab=inRest?((S.restTab&&S.restTab!=='rest')?S.restTab:'home'):S.tab, rr=zhp(h);
  const hk={stat:keyName(KEYS.stat||'KeyM'),quest:'L'};
  return `<div class="bhud" id="bhud"><div class="orb hp" style="--f:${Math.round(rr.hpR*100)}%" title="HP ${Math.round(st.hp*rr.hpR)} / ${st.hp}"><b>${Math.round(rr.hpR*100)}%</b></div>
   <div class="bh-l"><div class="bh-exp" title="EXP ${h.exp} / ${need}"><div class="bx"><b>${h.lv}</b><div class="bxt"><i style="width:${pc.toFixed(1)}%"></i></div><span>${pc.toFixed(1)}%</span></div></div><div class="qrow">${row1}</div></div>
   <div class="bh-hub">${HUB_BTN.map(([k,n])=>`<button data-hub="${k}" title="${n}" class="${(k==='home'&&(curTab==='home'||curTab==='zone'))||curTab===k?'sel':''}${k==='quest'&&qAnyReady()?' qblink':''}${inRest&&(k==='party'||k==='multi')?' off':''}"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">${HUB_IC[k]}</svg><small>${inRest&&k==='home'?'성소':n}</small></button>`).join('')}</div>
-  <div class="bh-r"><div class="qrow">${row2}</div></div><div class="bexp10" data-tip="${esc(`<b>Lv.${h.lv}</b> EXP ${h.exp} / ${need} (${pc.toFixed(1)}%)`)}">${exp10Html(pc,0)}</div>
+  <div class="bh-r"><div class="sk2wrap"><div class="qrow sk2row${curTab==='skill'?' open':''}">${row3}</div><div class="qrow">${row2}</div></div></div><div class="bexp10" data-tip="${esc(`<b>Lv.${h.lv}</b> EXP ${h.exp} / ${need} (${pc.toFixed(1)}%)`)}">${exp10Html(pc,0)}</div>
   <div class="orb mp" style="--f:${Math.round(rr.mpR*100)}%" title="MP ${Math.round(st.mp*rr.mpR)} / ${st.mp}"><b>${Math.round(rr.mpR*100)}%</b></div></div>`;
 }
 // 창 열기/닫기 토글: 같은 버튼을 한 번 더 누르면 닫히고, 다른 창이 열려 있으면 그 창을 닫고 새로 엽니다
@@ -5232,7 +5248,8 @@ function gearNorm(){const used=new Set(), bad=[]; S.inv.forEach(it=>{if(Number.i
 function storeLayout(store,cap){const ok=p=>Number.isInteger(p)&&p>=0&&p<BAG_MAX, ks=Object.keys(store).filter(k=>store[k].n>0).sort((a,b)=>(ok(store[a].pos)?store[a].pos:999)-(ok(store[b].pos)?store[b].pos:999)), used=new Set(), out=[], free=()=>{let p=0; while(used.has(p))p++; return p;};
  ks.forEach(k=>{const p=ok(store[k].pos)&&!used.has(store[k].pos)?store[k].pos:free(); store[k].pos=p; used.add(p);});
  ks.forEach(k=>{const cn=Math.ceil(store[k].n/cap); out.push({k,j:0,cn,p:store[k].pos}); for(let j=1;j<cn;j++){const p=free(); used.add(p); out.push({k,j,cn,p});}}); return out;}
-function skFix(h){const eq=(h.equip||[]).filter(id=>!(SK[id]&&SK[id].passive)); let sl=Array.isArray(h.skSlots)?h.skSlots.slice(0,6):[]; while(sl.length<6)sl.push(null); const seen=new Set(); sl=sl.map(id=>{if(!id||!eq.includes(id)||seen.has(id))return null; seen.add(id); return id;}); eq.forEach(id=>{if(!seen.has(id)){const e=sl.indexOf(null); if(e>=0){sl[e]=id; seen.add(id);}}}); h.skSlots=sl; h.equip=sl.filter(Boolean); return sl;}
+function sk2Extra(u,id){ return !!(u&&u.side==='A'&&u.slots&&u.slots.indexOf(id)>=6); } // 보조 스킬칸(7~12번)에 넣은 스킬: 사용 후 재사용 대기 +1턴
+function skFix(h){const eq=(h.equip||[]).filter(id=>!(SK[id]&&SK[id].passive)); let sl=Array.isArray(h.skSlots)?h.skSlots.slice(0,12):[]; while(sl.length<12)sl.push(null); const seen=new Set(); sl=sl.map(id=>{if(!id||!eq.includes(id)||seen.has(id))return null; seen.add(id); return id;}); eq.forEach(id=>{if(!seen.has(id)){const e=sl.indexOf(null); if(e>=0){sl[e]=id; seen.add(id);}}}); h.skSlots=sl; h.equip=sl.filter(Boolean); return sl;}
 function skEquipAt(h,id,j){const sl=skFix(h), at=sl.indexOf(id); if(at>=0){if(at!==j)[sl[at],sl[j]]=[sl[j],sl[at]];} else sl[j]=id; h.equip=sl.filter(Boolean); save(); return true;}
 function skEquipAtOld(h,id,j){const e=h.equip, at=e.indexOf(id); if(at>=0){if(j>=e.length){e.splice(at,1); e.push(id);} else if(j!==at){[e[at],e[j]]=[e[j],e[at]];}} else {if(j<e.length)e[j]=id; else if(e.length<SK_MAX)e.push(id); else return false;} save(); return true;}
 function storeReorder(sub,a,b){const st=sub==='cons'?S.cons:S.mats; if(!st)return false; const ks=Object.keys(st).filter(k=>st[k].n>0), zero=Object.keys(st).filter(k=>!(st[k].n>0)), ia=ks.indexOf(a); if(ia<0)return false;
@@ -5356,7 +5373,7 @@ let INV_EQ=null;
 const INV_DET_GEAR=false; // 인벤토리 아래 장비 설명창은 숨깁니다 (칸 클릭으로 바로 장착·해제, 정보는 커서를 올리면 툴팁으로 표시)
 const TOUCH_UI=(()=>{try{return matchMedia('(hover:none)').matches;}catch(e){return false;}})();
 const SELL_IN_INV=false; // 장비 판매는 마을 대장장이와 성소 대장장이에게서만 가능합니다 (인벤토리 판매 버튼은 숨김)
-const BAG_MAX=40, SK_MAX=6, QS_MAX=6;
+const BAG_MAX=40, SK_MAX=6, SK_SLOTS=12, QS_MAX=6;
 let INV_SEL=-1;
 function storeTip(sub,k,noHint){const it=(sub==='cons'?S.cons:S.mats)[k], d=sub==='cons'?CONS[k]:null, pr=sellPrice(sub,k);
  let h=`<div class="st-h"><b>${esc(it.name)}</b><span class="st-n">× ${it.n}</span></div>${sirenLine(it.name)}`; if(sub!=='cons'&&isQMat(k)){const qid=Object.keys(QUESTS).find(id=>qParts(QUESTS[id]).some(o=>o&&(o.item===k||o.carry===k))), cr=qid&&qParts(QUESTS[qid]).some(o=>o&&o.carry===k); h+=`<div class="st-q"><b>${cr?'퀘스트 전달물':'퀘스트 전용 재료'}</b>${qid?` · 「${esc(QUESTS[qid].name)}」`:''}<br><span>${cr?'의뢰를 마치면 사라집니다':'퀘스트를 진행하는 동안에만 얻을 수 있습니다'} · 버리기·판매 불가</span></div>`;} if(it.desc)h+=`<div class="st-d">${esc(it.desc)}</div>`;
@@ -5401,18 +5418,18 @@ function tabSkillOld(c){ // 이전 골드 습득 방식 (보관)
   const req=learned?`<span class="ok">습득 완료</span><span>MP ${sk.mp||0}</span>${fragBase(sk)?`<span>무의 파편 ${fragBase(sk)}개</span>`:''}<span>대기 ${sk.cd}턴</span>`
    :sk.quest?`<span class="no">● 퀘스트 「${QUESTS[sk.quest].name}」</span>`
    :`<span class="${gOk?'':'no'}">G ${sk.gold}</span><span class="${lvOk?'':'no'}">● 레벨 ${sk.lv} ↑</span>`;
-  const btn=learned?`<button data-tg="${sk.id}" ${!eq&&h.equip.length>=SK_MAX?'disabled':''}>${eq?'해제':'장착'}</button>`:sk.quest?'':`<button class="pri" data-learn="${sk.id}" ${!lvOk||!gOk?'disabled':''}>습득</button>`;
+  const btn=learned?`<button data-tg="${sk.id}" ${!eq&&h.equip.length>=SK_SLOTS?'disabled':''}>${eq?'해제':'장착'}</button>`:sk.quest?'':`<button class="pri" data-learn="${sk.id}" ${!lvOk||!gOk?'disabled':''}>습득</button>`;
   return `<div class="sk-row ${learned?'own':''} ${!learned&&(sk.quest||!lvOk)?'lock':''}" title="${esc(sk.desc)}"><div class="sk-ic" style="background:radial-gradient(circle at 50% 40%,${col},#1a0e08 85%)"><small>Lv.${sk.lv}</small>${SK_GLYPH[sk.t]||'✦'}</div>
    <div class="sk-mid"><div class="sk-nm">${sk.name}${eq?'<em>장착</em>':''}</div><div class="sk-req">${req}</div><div class="sk-ds">${sk.desc} · ${skillDetail(sk)}</div></div>${btn}</div>`;}).join('')||'<div class="dim" style="padding:20px;text-align:center">해당하는 스킬이 없습니다.</div>';
  c.innerHTML=`<div class="lwin inbox"><div class="lw-h">스킬<button class="lw-x" id="skx">✕</button></div>
   <div class="lw-tabs">${[['all','전체'],['eq','장착 중'],['learn','미습득']].map(([k,n])=>`<button data-skt="${k}" class="${sub===k?'sel':''}">${n}</button>`).join('')}</div>
   <div class="lw-body">${false?`<div class="lw-heroes">${S.heroes.map((x,j)=>`<button data-skh="${j}" class="${j===S.selHero?'sel':''}">${esc(x.name)} Lv${x.lv}</button>`).join('')}</div>`:''}${rows}</div>
-  <div class="lw-foot" style="display:flex;justify-content:space-between;align-items:center"><span>${esc(h.name)} · 전투 장착 <b class="gold">${h.equip.length}/${SK_MAX}</b></span><span class="gold">${gI(S.gold)}</span></div></div>`;
+  <div class="lw-foot" style="display:flex;justify-content:space-between;align-items:center"><span>${esc(h.name)} · 전투 장착 <b class="gold">${h.equip.length}/${SK_SLOTS}</b></span><span class="gold">${gI(S.gold)}</span></div></div>`;
  c.querySelector('#skx').onclick=()=>{if(SCREEN==='town'){S.tab='home'; save();} if(SCREEN==='rest')S.restTab='rest'; render();};
  c.querySelectorAll('[data-skt]').forEach(b=>b.onclick=()=>{S.skTab=b.dataset.skt; render();});
  c.querySelectorAll('[data-skh]').forEach(b=>b.onclick=()=>{S.selHero=+b.dataset.skh; render();});
- c.querySelectorAll('[data-learn]').forEach(b=>b.onclick=()=>{const sk=SK[b.dataset.learn]; S.gold-=sk.gold; h.skills.push(sk.id); if(h.equip.length<SK_MAX)h.equip.push(sk.id); save();render();});
- c.querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>{const id=b.dataset.tg; if(h.equip.includes(id))h.equip=h.equip.filter(x=>x!==id); else if(h.equip.length<SK_MAX)h.equip.push(id); save();render();});
+ c.querySelectorAll('[data-learn]').forEach(b=>b.onclick=()=>{const sk=SK[b.dataset.learn]; S.gold-=sk.gold; h.skills.push(sk.id); if(h.equip.length<SK_SLOTS)h.equip.push(sk.id); save();render();});
+ c.querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>{const id=b.dataset.tg; if(h.equip.includes(id))h.equip=h.equip.filter(x=>x!==id); else if(h.equip.length<SK_SLOTS)h.equip.push(id); save();render();});
 }
 let SLOT_PICK=null;
 const SLOT_CONS_UI=false; // 소모품 칸 등록 UI는 인벤토리로 옮겼습니다 (이 창의 소모품 칸은 숨김)
@@ -5494,8 +5511,8 @@ function skCanUp(h,sk){ const learned=h.skills.includes(sk.id), L=skLvOf(h,sk.id
  const need=learned?skNeedLv(sk,L+1):skLearnLv(sk); if(h.lv<need)return `캐릭터 레벨 ${need} 이상이 필요합니다.`;
  if(h.sp<skSP(sk))return `SP가 부족합니다. (필요 ${skSP(sk)})`; return ''; }
 function skDoUp(h,sk){ if(skCanUp(h,sk))return false; const learned=h.skills.includes(sk.id);
- if(!learned){ if(sk.quest&&typeof DBG!=='undefined'&&DBG.on){h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_MAX)h.equip.push(sk.id); return true;}
-  skStage(h,{t:'learn',id:sk.id,cost:skSP(sk)}); h.sp-=skSP(sk); h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_MAX)h.equip.push(sk.id); return true; }
+ if(!learned){ if(sk.quest&&typeof DBG!=='undefined'&&DBG.on){h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_SLOTS)h.equip.push(sk.id); return true;}
+  skStage(h,{t:'learn',id:sk.id,cost:skSP(sk)}); h.sp-=skSP(sk); h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_SLOTS)h.equip.push(sk.id); return true; }
  const L=skLvOf(h,sk.id); skStage(h,{t:'up',id:sk.id,from:L,cost:skSP(sk)}); h.sp-=skSP(sk); h.skLv[sk.id]=L+1; return true; }
 function skPrevAnim(cv,sk,h){
  const g=cv.getContext('2d'), W=cv.width, H=cv.height, PW=76, PH=42, COLS=7, ROWS=5, OX0=Math.round((W-COLS*PW)/2), OY0=H-ROWS*PH-8, t0=performance.now();
@@ -5614,14 +5631,14 @@ function tabSkill(c){
    <div class="dk-sh"><span>●</span><b>${mode==='full'?'상세 설명':'간략 설명'}</b><button id="dkMode" title="간략 설명 / 상세 설명 전환">${mode==='full'?'간략히 보기':'자세히 보기'}</button></div>
    <div class="dk-txt">${mode==='full'?townSkTip(h,sk,ln):`<div>${esc(sk.desc||'')}</div><div style="margin-top:6px">${skillDetail(sk,ln?h:null)}</div>`}</div>`; }
  // 단축키 등록 (스킬 6칸)
- const sl=skFix(h), slots=sl.map((id,i)=>`<div class="dk-sl" data-sslot="${i}" data-dks="${i}"><span>${keyName(KEYS['s'+i]||'')||i+1}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
+ const sl=skFix(h), slots=sl.map((id,i)=>`<div class="dk-sl${i>=6?' x2':''}" data-sslot="${i}" data-dks="${i}" ${i>=6?`data-tip="${esc(SK2_NOTE)}"`:''}><span>${i>=6?'보조 '+(i-5):(keyName(KEYS['s'+i]||'')||i+1)}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
  const pend=skPending(h); const _ot=c.querySelector('.dk-tree'), _st=_ot?_ot.scrollTop:(tabSkill._st||0);
  c.innerHTML=`<div class="lwin inbox dsk"><div class="dk-top"><div class="dk-tabs"><span class="dk-tab on">✔ SP 스킬배우기</span>${false?S.heroes.map((x,j)=>`<button data-skh="${j}" class="dk-hb ${j===S.selHero?'sel':''}">Lv.${x.lv} ${esc(x.name)}</button>`).join(''):''}</div><div class="dk-sp-box"><span>SP</span><b>${h.sp}</b></div><span class="dk-nm">Lv.${h.lv} ${esc(h.name)} · ${esc(CLASSES[h.cls].name)}</span><button class="lw-x" id="skx">✕</button></div>
   <div class="dk-main"><div class="dk-left">
    <div class="dk-cmn"><div class="dk-cml">공용<br>스킬</div><div class="dk-cms">${common}</div><button class="dk-recb ${SK_REC_ON?'on':''}" id="dkRec" title="처음 하는 분을 위한 추천 스킬 표시"><b>👍</b><small>추천</small></button></div>
    <div class="dk-tree"><div class="dk-axh">Lv</div><div class="dk-g" style="width:${gw}px;height:${gh}px">${axis}<svg class="dk-ln" width="${gw}" height="${gh}">${lines}</svg>${cells}${pop}</div></div>
    <div class="dk-btns"><button class="pri" id="skOk" ${skAnyPending()?'':'disabled'}>스킬 적용</button><button id="skRv" ${pend?'':'disabled'}>취소</button><button id="skCl">닫기</button>${pend?'<em class="skpend">적용 전</em>':''}</div>
-  </div><div class="dk-right"><div class="dk-det">${det}</div><div class="dk-keys"><div class="dk-kh">단축키 등록</div><div class="dk-kg">${slots}</div><div class="dim" style="font-size:11px;margin-top:4px">스킬 아이콘을 끌어다 놓거나, 스킬을 고른 뒤 칸을 누르면 등록됩니다.</div></div></div></div></div>`;
+  </div><div class="dk-right"><div class="dk-det">${det}</div><div class="dk-keys"><div class="dk-kh">단축키 등록</div><div class="dk-kg">${slots}</div><div class="dim" style="font-size:11px;margin-top:4px">스킬 아이콘을 끌어다 놓거나, 스킬을 고른 뒤 칸을 누르면 등록됩니다. 아래 줄(보조)에 넣은 스킬은 전투의 [스킬] 버튼으로 펼쳐서 쓰며, 사용 후 재사용 대기가 1턴 늘어납니다.</div></div></div></div></div>`;
  try{const cv=c.querySelector('#dkPv'); if(cv&&sk)skPrevAnim(cv,sk,h);}catch(e){}
  { const tr=c.querySelector('.dk-tree'); if(tr){ tr.scrollTop=_st; const se=tr.querySelector('.dk-c.sel'); if(se){ const top=se.offsetTop, vis=tr.clientHeight; if(top<tr.scrollTop+10||top+70>tr.scrollTop+vis)tr.scrollTop=Math.max(0,top-vis/2+30);} tr.onscroll=()=>{tabSkill._st=tr.scrollTop;}; } }
  const skClose=()=>{SLOT_PICK=null; sfx('winClose'); if(SCREEN==='battle'){closeBW(); return;} if(SCREEN==='town'){S.tab='home'; save();} if(SCREEN==='rest')S.restTab='rest'; render();};
@@ -6700,7 +6717,7 @@ async function perform(u,sk,opt){
  if(bleedTick(u)){await sleep(400); B.busy=false; checkEnd(); return;}
  u.mp-=skCost(u,sk);
  if(u.side==='A'){const fc=fragCost(sk); if(fc&&S.mats&&S.mats.frag_n){S.mats.frag_n.n=Math.max(0,S.mats.frag_n.n-fc); try{floatText(u,'무의 파편 −'+fc,'#9a9ea8');}catch(e){} save();}}
- if(sk.cd&&!(u.side==='A'&&DBG_FREE())){u.cds[sk.id]=Math.max(1,sk.cd-(u.side==='A'?R.mods.cdr:0))+1; u.cdMax=u.cdMax||{}; u.cdMax[sk.id]=u.cds[sk.id]-1;}
+ { const ex2=sk2Extra(u,sk.id), base=sk.cd?Math.max(1,sk.cd-(u.side==='A'?R.mods.cdr:0)):0, tot=base+(ex2?1:0); if(tot>0&&!(u.side==='A'&&DBG_FREE())){u.cds[sk.id]=tot+1; u.cdMax=u.cdMax||{}; u.cdMax[sk.id]=tot;} }
  if(sk.cd&&u.fx&&u.fx.cdReset&&Math.random()*100<u.fx.cdReset){u.cds[sk.id]=0; bto(()=>floatText(u,'재사용 초기화!','#9fe6ff'),300);}
  if(opt.ax!==u.x)u.face=opt.ax>u.x?1:-1;
  if(sk.awaken&&u.h){ awakenCut(u); await sleep(230); }
@@ -6988,7 +7005,7 @@ function renderBattleScreen(app){
    <div class="card" id="infocard"><div id="log"></div></div><button id="infoTog" type="button"></button><div class="card" id="einfo"><div id="uinfo"><div class="ei-none">유닛을 누르면 정보가 보입니다.</div></div></div><button id="einfoTog" type="button"></button>
   </div>
  </div>`;
- app.insertAdjacentHTML('beforeend',`<div class="bhud bt" id="bhudB"><div class="orb hp" id="boH"></div><div class="bh-l"><div class="bh-buf" id="bhBuf"></div><div class="bh-exp" id="bhExp"></div><div class="qrow" id="bhCons"></div></div><div class="bh-hub" id="bhHub"></div><div class="bh-r"><div class="bh-tags" id="bhWho"></div><div class="qrow" id="bhSk"></div></div><div class="bh-loot" id="bhLoot"></div><div class="bexp10" id="bhX10"></div><div class="orb mp" id="boM"></div><div class="bh-hint" id="bhHint"></div></div>`);
+ app.insertAdjacentHTML('beforeend',`<div class="bhud bt" id="bhudB"><div class="orb hp" id="boH"></div><div class="bh-l"><div class="bh-buf" id="bhBuf"></div><div class="bh-exp" id="bhExp"></div><div class="qrow" id="bhCons"></div></div><div class="bh-hub" id="bhHub"></div><div class="bh-r"><div class="bh-tags" id="bhWho"></div><div class="sk2wrap"><div class="qrow sk2row" id="bhSk2"></div><div class="qrow" id="bhSk"></div></div></div><div class="bh-loot" id="bhLoot"></div><div class="bexp10" id="bhX10"></div><div class="orb mp" id="boM"></div><div class="bh-hint" id="bhHint"></div></div>`);
  const cv=$('#cv');
  const toTile=e=>{const r=cv.getBoundingClientRect(); const px=(e.clientX-r.left)*CW/r.width, py=(e.clientY-r.top)*CH/r.height; const x=Math.floor((px-OX)/TW), y=Math.floor((py-OY)/TH); return inB(x,y)?[x,y]:null;};
  cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return; const Lh=lootAt(e,cv); B.lootHover=Lh||null; cv.style.cursor=Lh?'pointer':''; if(Lh){B.hover=null; return;} const t=toTile(e); if(t)onTile(t[0],t[1],false); else B.hover=null;});
@@ -7195,6 +7212,16 @@ function bhudOrbs(){const e=$('#bhudB'); if(!e||!B)return; const u=bhudHu(); if(
  { const fl=(el,c)=>{ el.classList.remove('dmg','heal','use'); void el.offsetWidth; el.classList.add(c); clearTimeout(el._ft); el._ft=setTimeout(()=>el.classList.remove('dmg','heal','use'),800); }; const hE=$('#boH'), mE=$('#boM'); if(e._hp!=null){ if(hp<e._hp)fl(hE,'dmg'); else if(hp>e._hp)fl(hE,'heal'); if(mp<e._mp)fl(mE,'use'); else if(mp>e._mp)fl(mE,'heal'); } e._hp=hp; e._mp=mp; }
  const H=$('#boH'), M=$('#boM'); H.style.setProperty('--f',clamp(hp/u.maxhp*100,0,100)+'%'); M.style.setProperty('--f',clamp(mp/u.maxmp*100,0,100)+'%'); H.style.setProperty('--t',clamp(hp/u.maxhp*100,0,100)+'%'); M.style.setProperty('--t',clamp(mp/u.maxmp*100,0,100)+'%');
  H.style.setProperty('--sh',clamp(Math.min(hp+(u.shield||0),u.maxhp*1)/u.maxhp*100,0,100)+'%'); H.innerHTML=`${(u.shield||0)>0?'<i class="osh"></i>':''}<b>${Math.round(hp/u.maxhp*100)}%</b>`; M.innerHTML=`<b>${Math.round(mp/u.maxmp*100)}%</b>`; const tp=(n,c,m)=>`<div class="tipcard"><b class="gold">${n}</b><div style="margin-top:4px;line-height:1.6;font-size:13px">현재 ${n}: <b>${c}</b><br>최대 ${n}: <b>${m}</b></div></div>`; H.removeAttribute('title'); M.removeAttribute('title'); H.setAttribute('data-tip',tp('HP',hp,u.maxhp)); M.setAttribute('data-tip',tp('MP',mp,u.maxmp));}
+const SK2_NOTE='<div style="margin-top:4px;color:#ffb07a;font-size:12px">보조 스킬칸 · 사용 후 재사용 대기 +1턴</div>';
+function bMenuPop(btn){ // 전투 하단: 각인·퀘스트·스탯·설정·장비·스킬창을 버튼 하나로 묶은 메뉴
+ let p=$('#bMenuPop'); if(p){p.remove(); return;}
+ p=document.createElement('div'); p.id='bMenuPop';
+ const it=[['aug',`각인 <small>${R.augs.length}</small>`,()=>toggleWin('aug',()=>$('#bAugB').click())],['quest',`퀘스트 <small>L</small>`,()=>toggleWin('quest',openQuestLog),qAnyReady()],['stat',`스탯 <small>${keyName(KEYS.stat||'KeyM')}</small>`,()=>toggleWin('stat',()=>$('#bStatB').click())],['set','설정',()=>toggleWin('set',()=>$('#bSetB').click())],['gear',`장비 <small>${keyName(KEYS.inv||'KeyI')}</small>`,()=>openBW('gear')],['skill',`스킬창 <small>${keyName(KEYS.skw||'KeyK')}</small>`,()=>{openBW('skill'); bhudRefresh();}]];
+ p.innerHTML=it.map(([k,h,f,bl],i)=>`<button type="button" data-mi="${i}" class="${bl?'qblink':''}">${h}</button>`).join('');
+ document.body.appendChild(p); const rc=btn.getBoundingClientRect(); p.style.left=Math.round(rc.left+rc.width/2-p.offsetWidth/2)+'px'; p.style.top=Math.round(rc.top-p.offsetHeight-6)+'px';
+ p.querySelectorAll('[data-mi]').forEach(b=>b.onclick=e=>{e.stopPropagation(); p.remove(); it[+b.dataset.mi][2]();});
+ setTimeout(()=>{const off=e=>{if(!p.contains(e.target)&&e.target!==btn){p.remove(); document.removeEventListener('pointerdown',off,true);}}; document.addEventListener('pointerdown',off,true);},0);
+}
 function bhudRefresh(){
  const root=$('#bhudB'); if(!root||!B||SCREEN!=='battle')return; const u=bhudHu(), acts=$('#acts'); if(!u||!acts)return;
  root._ok=null; bhudOrbs(); updateBexp();
@@ -7215,14 +7242,15 @@ function bhudRefresh(){
  const sm=src.find(b=>b.classList.contains('bt-move')), sa=src.find(b=>b.classList.contains('bt-basic')), se=src.find(b=>b.classList.contains('bt-end'));
  const clone=(sb,span,fallback)=>{if(!sb){hb(fallback,'idle','',null,span); return;} const off=sb.classList.contains('dis')||sb.disabled; hb(sb.innerHTML,sb.className.replace(/\bdis\b/,'')+(off?' off':''),sb.getAttribute('data-tip')||'',()=>{if(!off)sb.click();},span);};
  clone(sm,6,`<em class="kh">${keyName(KEYS.bmov)}</em>이동`); clone(sa,6,`<em class="kh">${keyName(KEYS.batk)}</em>공격`); clone(se,6,`<em class="kh">${keyName(KEYS.bend)}</em>턴 종료`);
- const sn=$('#bSnd'), on=sn&&sn.textContent.indexOf('🔊')>=0;
- hb(`각인<small>${R.augs.length}</small>`,'u','현재 보유한 각인을 확인합니다.',()=>toggleWin('aug',()=>$('#bAugB').click()),3);
- hb(`퀘스트<small>L</small>`,'u qb'+(qAnyReady()?' qblink':''),'퀘스트',()=>toggleWin('quest',openQuestLog),3);
- hb(`스탯<small>${keyName(KEYS.stat||'KeyM')}</small>`,'u','스탯',()=>toggleWin('stat',()=>$('#bStatB').click()),3);
- hb('설정<small>&nbsp;</small>','u','설정',()=>toggleWin('set',()=>$('#bSetB').click()),3);
- hb('장비','u tx'+(BW==='gear'?' sel':''),`인벤토리·장비창 (${keyName(KEYS.inv||'KeyI')})`,()=>openBW('gear'),3);
- hb('스킬','u tx'+(BW==='skill'?' sel':''),`스킬창 (${keyName(KEYS.skw||'KeyK')})`,()=>openBW('skill'),3);
- const w=$('#bhLoot')||$('#bhWho'); w.innerHTML=`<button type="button" class="lootall" id="lootAll" data-tip="바닥의 아이템을 모두 줍습니다 (Q)" ${B&&B.loot&&B.loot.length?'':'disabled'}>모두<br>줍기</button>`; lootPosApply(); {const la=$('#lootAll'); if(la)la.onclick=lootAllRun; const bi=$('#bwInv'); if(bi)bi.onclick=()=>openBW('gear'); const bs=$('#bwSkill'); if(bs)bs.onclick=()=>openBW('skill');}
+ const sk2on=!!((S.opt&&S.opt.sk2)||BW==='skill');
+ hb(`<em class="kh">${sk2on?'▼':'▲'}</em>스킬<small>${sk2on?'접기':'펼치기'}</small>`,'tx sk2b'+(sk2on?' sel':''),'보조 스킬칸(7~12번)을 펼치거나 접습니다.<br>보조 칸의 스킬은 사용 후 재사용 대기가 1턴 늘어납니다.',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
+ { const r2=$('#bhSk2'); if(r2){ r2.innerHTML=''; r2.classList.toggle('open',sk2on);
+   for(let j=0;j<6;j++){const i=6+j, id=(u.slots||[])[i], sk=id&&SK[id];
+    if(!sk){r2.appendChild(mk('<em></em>','',SK2_NOTE)); continue;}
+    const sb=my&&u===B.cur?src[2+u.skills.indexOf(id)]:null, off=!sb||sb.classList.contains('dis')||sb.disabled, go=sb&&sb.classList.contains('pri'), sel=sb&&sb.classList.contains('sel'), cd=u.cds[id]||0, cost=skCost(u,sk);
+    r2.appendChild(mk(`<em></em><span class="qi">${go?`<span class="gowrap">${skIcon(sk,26)}<b class="gox">시전</b></span>`:skIcon(sk,26)}</span>${cd>0?cdSeg(u,id):(go?'':`<i class="mpc">${cost}</i>`)}`,'on'+(off?' off':'')+(sel?' selk':'')+(go?' gok':''),btnTip(u,sk)+SK2_NOTE,()=>{if(sb&&!off)sb.click();}));}
+ } }
+ const w=$('#bhLoot')||$('#bhWho'); w.innerHTML=`<button type="button" class="lootall" id="lootAll" data-tip="바닥의 아이템을 모두 줍습니다 (Q)" ${B&&B.loot&&B.loot.length?'':'disabled'}>모두<br>줍기</button><button type="button" class="lootall bmenu${qAnyReady()?' qblink':''}" id="bMenu" data-tip="각인 · 퀘스트 · 스탯 · 설정 · 장비 · 스킬창">메뉴 ▴</button>`; lootPosApply(); { const mb=$('#bMenu'); if(mb)mb.onclick=e=>{e.stopPropagation(); bMenuPop(mb);}; } {const la=$('#lootAll'); if(la)la.onclick=lootAllRun; const bi=$('#bwInv'); if(bi)bi.onclick=()=>openBW('gear'); const bs=$('#bwSkill'); if(bs)bs.onclick=()=>openBW('skill');}
  const ci=$('#curinfo'), dm=ci&&ci.querySelector('.dim'), bd=ci&&ci.querySelector('b'), ht=$('#bhHint'); if(ht&&ht.closest('#bhudB')&&$('#app'))$('#app').appendChild(ht); ht.innerHTML=ci?`<b>${bd?bd.textContent:''}</b>${dm&&dm.textContent.trim()?' · '+esc(dm.textContent.replace(/\s+/g,' ').trim()):''}`:''; ht.style.display=ht.textContent.trim()?'':'none'; try{ const bn=$('#banner'), bw=$('#bwrap'); let top=46, cx=null; if(bn&&bn.style.display!=='none'&&bn.offsetWidth){const r=bn.getBoundingClientRect(); top=r.bottom+4; cx=r.left+r.width/2;} else if(bw){const r=bw.getBoundingClientRect(); top=r.top+42; cx=r.left+r.width/2;} ht.style.top=Math.round(top)+'px'; if(cx!=null)ht.style.left=Math.round(cx)+'px'; }catch(e){}
 }
 function updateInfo(){
