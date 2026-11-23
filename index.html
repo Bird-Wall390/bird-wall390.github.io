@@ -1930,13 +1930,17 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 /* v0.5.56: 스킬 확장 버튼은 나머지 3개보다 작게 */
 #bhudB #bhHub>button.sk2b{height:50px!important;width:76%!important;justify-self:center}
 #bhudB #bhHub>button.sk2b .kh{font-size:11px!important;left:7px!important;top:4px!important}
+/* v0.5.58: 랭크 정보 글자 작게 · 항상 MP 구슬 옆 */
+#liveRk{font-size:12px!important;line-height:1.1!important}
+#liveRk .lr-rkl b{font-size:15px!important}
+#liveRk .lr-pop span{font-size:15px!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.57';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.58';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7109,8 +7113,8 @@ function liveRk(){ const app=$('#app'); let el=$('#liveRk'); if(!B||!R||!app||SC
    P.style=res.style; P.tech=res.tech; el._k=key;
    el.querySelector('.lr-s').textContent=sp+'%'; el.querySelector('.lr-t').textContent=tp+'%'; el.querySelector('.lr-h').textContent=hit; const rb=el.querySelector('.lr-r'); rb.textContent=res.rk; } }
  if(!el._pt||now-el._pt>300){ el._pt=now; try{ const A=app.getBoundingClientRect(), o=$('#boM'), hb=$('#bhudB'); if(!o||!hb)return; const O=o.getBoundingClientRect(), H=hb.getBoundingClientRect();
-   const sp=A.right-O.right; el.classList.toggle('side',sp>=120);
-   if(sp>=120){ el.style.left=(O.right-A.left+12)+'px'; el.style.right='auto'; el.style.bottom=(A.bottom-O.bottom+2)+'px'; }
+   const sp=A.right-O.right; el.classList.toggle('side',sp>=84);
+   if(sp>=84){ el.style.left=(O.right-A.left+12)+'px'; el.style.right='auto'; el.style.bottom=(A.bottom-O.bottom+2)+'px'; }
    else{ const L=$('#bhLoot'), ic=$('#infocard'); let x=L?L.getBoundingClientRect().left:O.left; if(ic&&ic.offsetParent){const I=ic.getBoundingClientRect(); if(I.width>0)x=Math.min(x,I.left);} el.style.left='auto'; el.style.right=(A.right-x+10)+'px'; el.style.bottom=(A.bottom-H.top+6)+'px'; }
   }catch(e){} }
 }
@@ -7255,7 +7259,7 @@ function bhudRefresh(){
  const clone=(sb,span,fallback)=>{if(!sb){hb(fallback,'idle','',null,span); return;} const off=sb.classList.contains('dis')||sb.disabled; hb(sb.innerHTML,sb.className.replace(/\bdis\b/,'')+(off?' off':''),sb.getAttribute('data-tip')||'',()=>{if(!off)sb.click();},span);};
  clone(sm,6,`<em class="kh">${keyName(KEYS.bmov)}</em>이동`); clone(sa,6,`<em class="kh">${keyName(KEYS.batk)}</em>공격`); clone(se,6,`<em class="kh">${keyName(KEYS.bend)}</em>턴 종료`);
  const sk2on=!!((S.opt&&S.opt.sk2)||BW==='skill');
- hb(`<em class="kh">${sk2on?'▼':'▲'}</em><svg class="sk2ic" viewBox="0 0 32 32"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2" opacity=".55"/><rect x="18" y="18" width="11" height="11" rx="2" opacity=".55"/><path d="M16 21.5l-3.2 3.2M16 21.5l3.2 3.2" stroke-width="2.4" stroke-linecap="round" fill="none" style="display:none"/></svg>`,'tx sk2b'+(sk2on?' sel':''),'보조 스킬칸(7~12번)을 펼치거나 접습니다.<br>보조 칸의 스킬은 사용 후 재사용 대기가 1턴 늘어납니다.',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
+ hb(`<em class="kh">${sk2on?'▼':'▲'}</em><svg class="sk2ic" viewBox="0 0 32 32"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2" opacity=".55"/><rect x="18" y="18" width="11" height="11" rx="2" opacity=".55"/><path d="M16 21.5l-3.2 3.2M16 21.5l3.2 3.2" stroke-width="2.4" stroke-linecap="round" fill="none" style="display:none"/></svg>`,'tx sk2b'+(sk2on?' sel':''),'',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
  { const r2=$('#bhSk2'); if(r2){ r2.innerHTML=''; r2.classList.toggle('open',sk2on);
    for(let j=0;j<6;j++){const i=6+j, id=(u.slots||[])[i], sk=id&&SK[id];
     if(!sk){r2.appendChild(mk('<em></em>','',SK2_NOTE)); continue;}
