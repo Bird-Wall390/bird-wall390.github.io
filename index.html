@@ -1782,9 +1782,9 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.55';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.56';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
-const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
+const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
 const STW=()=>ST.on?ST.w:window.innerWidth, STH=()=>ST.on?ST.h:window.innerHeight;
 const ST_COARSE=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
@@ -1797,7 +1797,7 @@ const ST_DH=540;   // 작은 화면(스마트폰 등)에서 UI를 설계하는 �
  function media(on){ for(const sh of document.styleSheets){ let rs; try{rs=sh.cssRules;}catch(e){continue;} (function walk(list){ for(const r of list){ if(r.type===CSSRule.MEDIA_RULE){ if(!orig.has(r))orig.set(r,r.media.mediaText); const t=orig.get(r); try{ r.media.mediaText=on?(ev(t,ST.w,ST.h)?'all':'not all'):t; }catch(e){} } } })(rs); } }
  window.fitNames=function(){ document.querySelectorAll('.pn b,.phn b').forEach(b=>{ const p=b.parentElement; if(!p)return; const key=b.textContent+'|'+p.clientWidth; if(b._fk===key)return; b._fk=key; b.style.fontSize=''; b.style.display='inline-block'; b.style.whiteSpace='nowrap'; const sib=[...p.children].filter(c=>c!==b&&!c.matches('svg')).reduce((a,c)=>a+c.offsetWidth+6,0)+(p.querySelectorAll('svg').length*18); let fs=parseFloat(getComputedStyle(b).fontSize)||13; const avail=Math.max(20,p.clientWidth-sib-2); let n=0; while(b.scrollWidth>avail&&fs>8&&n++<24){fs-=.5; b.style.fontSize=fs+'px';} }); };
  { let t=0; new MutationObserver(()=>{ if(t)return; t=requestAnimationFrame(()=>{t=0; try{fitNames();}catch(e){}}); }).observe(document.documentElement,{childList:true,subtree:true}); }
- window.stApply=function(){ const b=document.body, rt=document.documentElement; if(!b)return; let key=ST_COARSE?'ph20':'auto'; try{key=localStorage.getItem('rod_ratio')||key;}catch(e){} const d=RATIOS.find(x=>x[0]===key)||RATIOS[0], ra=d[2], RW=window.innerWidth, RH=window.innerHeight; let W=RW, H=RH, s=1;
+ window.stApply=function(){ const b=document.body, rt=document.documentElement; if(!b)return; let key=ST_COARSE?'ph195':'pc195'; try{key=localStorage.getItem('rod_ratio')||key;}catch(e){} const d=RATIOS.find(x=>x[0]===key)||RATIOS[0], ra=d[2], RW=window.innerWidth, RH=window.innerHeight; let W=RW, H=RH, s=1;
   // 스마트폰: 상단 상태바가 내려와 화면 높이가 잠깐 줄어도 화면 비율·배치는 그대로 두고 살짝 축소만 함
   if(ST_COARSE){ const B=window.__stB; if(!B||RW!==B.w||RH>B.h) window.__stB={w:RW,h:RH}; else if(RH<B.h&&RH>=B.h*.8){ s=RH/B.h; H=B.h; } }
   let w=W,h=H; if(ra){ h=Math.round(W/ra); w=W; if(h>H){h=H;w=Math.round(H*ra);} }
@@ -3770,7 +3770,7 @@ function soundPanel(el){
  el.querySelectorAll('[data-snd]').forEach(b=>b.onclick=()=>{const on=cfg.on; cfg.on=true; SFX.last={}; sfx(b.dataset.snd); cfg.on=on;});
 }
 function screenPanel(el){
- let cur=ST_COARSE?'ph20':'auto'; try{cur=localStorage.getItem('rod_ratio')||cur;}catch(e){}
+ let cur=ST_COARSE?'ph195':'pc195'; try{cur=localStorage.getItem('rod_ratio')||cur;}catch(e){}
  const grp=(t,g)=>`<div class="card" style="margin-bottom:10px"><h3>${t}</h3><div class="row" style="flex-wrap:wrap;gap:6px">${RATIOS.filter(r=>r[3]===g||(g==='pc'&&r[0]==='auto')&&false||r[3]===g).map(r=>`<button data-rt="${r[0]}" class="${cur===r[0]?'sel pri':''}" style="padding:10px 14px">${r[1]}</button>`).join('')}</div></div>`;
  el.innerHTML=`<div class="card" style="margin-bottom:10px"><h3>화면 비율</h3><div class="dim" style="font-size:13px;margin-bottom:8px">고른 비율로 게임 화면을 맞추고 남는 곳은 검은 띠로 채웁니다. 현재: <b>${(RATIOS.find(r=>r[0]===cur)||RATIOS[0])[1]}</b></div><button data-rt="auto" class="${cur==='auto'?'sel pri':''}" style="padding:10px 14px">자동 (창 크기에 맞춤)</button></div>`+grp('PC용','pc').replace(/<button data-rt="auto"[^>]*>[^<]*<\/button>/,'')+grp('스마트폰용 (가로 화면)','ph')+`<div class="dim" style="font-size:12px;margin-bottom:10px">스마트폰은 가로로 돌려서 플레이하세요. 화면 비율은 이 기기에만 저장됩니다.</div>`+`<div class="card" style="margin-bottom:10px"><h3>전투 연출</h3><label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" data-opt="critZoom" ${optOn('critZoom')?'checked':''}> 크리티컬 시 피격 대상 줌인</label><label class="row" style="gap:8px;cursor:pointer;margin-top:6px"><input type="checkbox" data-opt="bossFx" ${optOn('bossFx')?'checked':''}> 보스 처치 연출 (붉은 화면 + 천천히 줌인/줌아웃)</label></div>`;
  el.querySelectorAll('[data-opt]').forEach(c=>c.onchange=()=>{S.opt=S.opt||{}; S.opt[c.dataset.opt]=c.checked; save();});
