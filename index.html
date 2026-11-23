@@ -1782,7 +1782,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.58';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.59';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4345,11 +4345,14 @@ const TOWNS={
 function townOpen(id){ if(id==='salv')return true; const p=zprog('a1z3'); return Math.max(0,...DIFFS.map(d=>p.clr[d.id]||0))>=10; }
 function curTown(){ if(!S.town||!TOWNS[S.town]||!townOpen(S.town))S.town='salv'; return TOWNS[S.town]; }
 const TOWN_K={mage:.68}; // 마을·선택창에서 직업별 그림 크기 보정 (마법사는 양산과 치마 때문에 크게 보여 줄임)
-function heroStand(g,cls,x,y,w,h,t,f,bot){
+function heroStand(g,cls,x,y,w,h,t,f,bot,minTop){
  const spec=CLASSES[cls].spec, I=spec.img&&SPRITE_IMG[spec.img.key];
  if(I&&I.ready){
-  const shH=6, P0=imgPlace(spec,w,h,shH,f), d=spec.img, k=P0.k, H=P0.H, W=P0.W, X=x+P0.X, Y=bot!=null?bot-(1-d.footY)*H+P0.fl:y+P0.Y;   // bot: 그림의 맨 아래를 놓을 화면 높이
-  g.fillStyle='#0006'; g.beginPath(); g.ellipse(x+w/2,bot!=null?bot:Math.min(y+h-shH,Y-P0.fl+4),Math.min(w*.3,W*.22),Math.min(7,W*.06),0,0,7); g.fill();
+  const shH=6; let P0=imgPlace(spec,w,h,shH,f);
+  // 머리가 화면 위로 잘리지 않게: 발밑(bot)에서 위쪽 여유(minTop)까지 들어오도록 캐릭터 크기를 줄임
+  if(bot!=null&&minTop!=null&&bot-P0.H<minTop){ const k2=Math.max(.3,(bot-minTop)/P0.H); f=(f||.52)*k2; P0=imgPlace(spec,w,h,shH,f); }
+  const d=spec.img, k=P0.k, H=P0.H, W=P0.W, X=x+P0.X, Y=bot!=null?bot-(1-d.footY)*H+P0.fl:y+P0.Y;   // bot: 그림의 맨 아래를 놓을 화면 높이
+  { const rx=Math.min(w*.3,h*.085); g.fillStyle='#0006'; g.beginPath(); g.ellipse(x+w/2,bot!=null?bot:Math.min(y+h-shH,Y-P0.fl+4),rx,Math.min(9,rx*.24),0,0,7); g.fill(); }
   drawImgSprite(g,X,Y,P0.sc,spec,{t,pose:'idle'});
   return Y-d.footY*H-(d.float||0)*k;
  } else { g.save(); drawHumanoid(g,x+w*.5,y+h-6,Math.max(1,h/70),spec,{t,pose:'idle'}); g.restore(); return y+h*.12; }
@@ -4722,7 +4725,7 @@ function tabHome(c){
   }
   // 파티
   const hs=[S.heroes[S.selHero]||S.heroes[0]], n=1, bh=H*.5*2, bw=Math.min(bh*1.2,W*.9/n), tot=bw*n, cxh=(S.tab==='gear'&&cv.clientWidth>700)?W*.25:(S.tab==='skill'&&cv.clientWidth>700)?W*.72:(S.tab==='home'&&cv.clientWidth>900)?W*.42:W/2, ox=cxh-tot/2;
-  hs.forEach((h,i)=>{const hy=H*.9-bh-(i%2)*H*.03; const rEdge=cxh+tot*.3, bot=H-(cv.clientWidth>900?148:270)*(H/Math.max(1,cv.clientHeight)), top=heroStand(g,h.cls,ox+i*bw,hy,bw,bh,t+i,n===1?.36:.5,bot); try{ window.TOWN_HP={x:cxh*cv.clientWidth/W,y:bot*cv.clientHeight/H,top:(typeof top==='number'?top:hy)*cv.clientHeight/H,at:performance.now()}; }catch(e){}
+  hs.forEach((h,i)=>{const hy=H*.9-bh-(i%2)*H*.03; const rEdge=cxh+tot*.3, bot=H-(cv.clientWidth>900?148:270)*(H/Math.max(1,cv.clientHeight)), top=heroStand(g,h.cls,ox+i*bw,hy,bw,bh,t+i,n===1?.36:.5,bot,Math.max(12,Math.round(H*.024))*3.4); try{ window.TOWN_HP={x:cxh*cv.clientWidth/W,y:bot*cv.clientHeight/H,top:(typeof top==='number'?top:hy)*cv.clientHeight/H,at:performance.now()}; }catch(e){}
    g.save(); const fs=Math.max(12,Math.round(H*.024)); g.font=`bold ${fs}px sans-serif`; g.textAlign='center'; g.textBaseline='middle'; const nx=ox+i*bw+bw/2, ny=Math.max(fs*2.4,(top||hy)-fs*1.1), nm=`Lv.${h.lv} ${h.name}`, nw=g.measureText(nm).width+fs*1.2;
    g.fillStyle='rgba(0,0,0,.62)'; g.beginPath(); g.roundRect?g.roundRect(nx-nw/2,ny-fs*.75,nw,fs*1.5,fs*.4):g.rect(nx-nw/2,ny-fs*.75,nw,fs*1.5); g.fill(); g.strokeStyle='rgba(255,216,138,.55)'; g.lineWidth=1; g.stroke(); g.fillStyle='#fff3d2'; g.fillText(nm,nx,ny+1); g.restore();});
   // 떠다니는 입자 (잎사귀 / 반딧불)
@@ -5302,7 +5305,7 @@ function renderCharSel(app){
   const cx=w/2, cy=h-h*.07, rx=Math.min(w*.3,h*.38), on=ENABLED_CLS.includes(sel);
   g.save(); g.translate(cx,cy); g.scale(1,.28); g.fillStyle='rgba(110,240,225,.18)'; g.beginPath(); g.arc(0,0,rx,0,7); g.fill(); g.strokeStyle='rgba(110,240,225,.9)'; g.lineWidth=4; g.beginPath(); g.arc(0,0,rx,0,7); g.stroke(); g.lineWidth=2; g.beginPath(); g.arc(0,0,rx*.72,0,7); g.stroke(); g.setLineDash([10,14]); g.lineDashOffset=-t*18; g.beginPath(); g.arc(0,0,rx*.88,0,7); g.stroke(); g.restore();
   if(!on)g.globalAlpha=.55;
-  heroStand(g,sel,cx-w*.62,h*.02,w*1.24,h*.96,t); g.globalAlpha=1;
+  heroStand(g,sel,cx-w*.62,h*.02,w*1.24,h*.96,t,undefined,cy,h*.02); g.globalAlpha=1;
   requestAnimationFrame(loop);};
  requestAnimationFrame(loop);
  $('#csBack').onclick=()=>go('slots');

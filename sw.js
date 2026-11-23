@@ -1,4 +1,4 @@
-// build v0.0.58
+// build v0.0.59
 // 항상 인터넷의 최신 파일을 먼저 가져오고, 인터넷이 안 될 때만 저장해 둔 파일을 씁니다.
 const C='rod-cache';
 self.addEventListener('install',e=>self.skipWaiting());
