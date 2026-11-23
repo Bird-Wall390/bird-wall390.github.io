@@ -1451,6 +1451,8 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 #rEnter{position:relative;color:#fff3c8!important;font-weight:900!important;font-size:1.08em;letter-spacing:.5px;text-shadow:0 1px 2px #1a0502,0 0 6px rgba(255,190,70,.9)!important;padding-left:20px!important;padding-right:20px!important;animation:rEnP 1.6s ease-in-out infinite}
 #rEnter:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,210,90,.95))!important}
 #rEnter{color:#ffe9a8!important}
+#tZone{position:relative;color:#ffe9a8!important;font-weight:900!important;font-size:1.08em;letter-spacing:.5px;text-shadow:0 1px 2px #1a0502,0 0 6px rgba(255,190,70,.9)!important;animation:rEnP 1.6s ease-in-out infinite}
+#tZone:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,210,90,.95))!important}
 @keyframes rEnP{0%,100%{filter:brightness(1.05) drop-shadow(0 0 5px rgba(255,190,60,.75))}50%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,220,110,1))}}
 #qy{filter:hue-rotate(-24deg) saturate(1.9) brightness(.95);color:#fff!important;font-weight:800!important;text-shadow:0 0 4px #300,0 1px 2px #000}
 #app .bhud .orb{pointer-events:none}#app .bhud .orb::after{display:none!important}
@@ -1794,7 +1796,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.63';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.64';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4712,7 +4714,7 @@ function tabHome(c){
  const T=curTown();
  c.innerHTML=`<div class="restwrap townwrap"><canvas id="towncv" class="restcv"></canvas>
   <div class="townname"><span>${T.actName}</span><div class="tnm"><b>${T.name}</b><small>${sirenHtml(T.latin)}</small><small class="tsub">〈${T.sub}〉</small></div><div class="townside"><button id="tSel">지역 선택</button><button id="tNpc">NPC</button></div></div><div></div>
-  <div class="townmenu"><button class="pri" data-go="zone">경계 선택</button></div>${S.tab==='home'?quickBar()+partyHud():''}${expBar()}</div>`;
+  <div class="townmenu"><button class="pri" data-go="zone" id="tZone">⚔ 경계 선택</button></div>${S.tab==='home'?quickBar()+partyHud():''}${expBar()}</div>`;
  if(S.tab==='home'){drawPartyFaces(c); c.querySelectorAll('.phr[data-ph]').forEach(e=>e.onclick=()=>togglePartyStatus(+e.dataset.ph));}
  c.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(b.dataset.go==='zone')toggleWin('zone',openZoneSelect); else {S.tab=b.dataset.go; save(); render();}});
  c.querySelectorAll('[data-qgo]').forEach(b=>b.onclick=()=>{if(b.dataset.qgo==='cons'){S.tab='gear'; S.invTab='cons';} else S.tab='skill'; save(); render();});
