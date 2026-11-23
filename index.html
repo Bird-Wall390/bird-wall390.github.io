@@ -2101,13 +2101,14 @@ html body #app .dc-tab button#dfPrev:disabled{background-image:url("data:image/s
 html body #app .dc-tab button#dfNext:disabled{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 34'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23a0a0a0'/><stop offset='.55' stop-color='%23686868'/><stop offset='1' stop-color='%23282828'/></linearGradient></defs><path d='M0 1.5 H31.5 L42.2 17 L31.5 32.5 H0 Z' fill='url(%23g)' stroke='%23000' stroke-width='3' stroke-linejoin='round'/><path d='M0 4 H30 L38.5 17 H0 Z' fill='rgba(255,255,255,.12)'/></svg>")!important;opacity:1!important;filter:none!important}
 html body #app .dc-tab button:hover:not(:disabled){filter:brightness(1.08)!important}
 html body #app .wqm{background:none!important;box-shadow:none!important;border:0!important;width:auto!important;height:auto!important;border-radius:0!important;color:var(--qc,#ffd860)!important;font:900 38px/1 'Malgun Gothic',sans-serif!important;-webkit-text-stroke:3px #1a1208;paint-order:stroke fill;text-shadow:0 0 10px var(--qc,#ffd860),0 2px 3px #000!important;top:2px!important}
+html body .navb:hover,html body .navb:focus,html body .navb:active{background:transparent!important;box-shadow:none!important;outline:none!important;filter:none!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.95';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.96';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
