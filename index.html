@@ -1909,7 +1909,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.48';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.49';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2686,7 +2686,7 @@ for(const k in CLASSES)CLASSIC_SPEC[k]=CLASSES[k].spec;
 }
 const MAGE_ILLUST={face:[.435,.27,.14],key:'mage',cx:.46,eyeY:.275,footY:.99,unit:52,faceLeft:true,float:0,grounded:true,tip:[.84,.01],hand:[.15,.33],animU:73.76};
 CLASSIC_SPEC.mage.img=MAGE_ILLUST; ANIME_SPEC.mage.img=MAGE_ILLUST; CLASSIC_SPEC.mage.barH=124; ANIME_SPEC.mage.barH=124;
-const BLADE_ILLUST={face:[.54,.11,.14],key:'blade',cx:.53,eyeY:.097,footY:.985,unit:52,faceLeft:true,float:0,tip:[.78,.985],hand:[.78,.30],animU:54.66,grounded:true,slash:true,col:'#ffd870'};
+const BLADE_ILLUST={face:[.654,.105,.11],key:'blade',cx:.62,eyeY:.09,footY:.985,unit:52,faceLeft:true,float:0,tip:[.66,.975],hand:[.305,.355],animU:54.66,grounded:true,slash:true,col:'#ffd870'};
 CLASSIC_SPEC.blade.img=BLADE_ILLUST; ANIME_SPEC.blade.img=BLADE_ILLUST; CLASSIC_SPEC.blade.barH=112; ANIME_SPEC.blade.barH=112;
 const BRAWLER_ILLUST={face:[.663,.15,.13],key:'brawler',cx:.57,eyeY:.16,footY:.98,unit:50,faceLeft:true,float:0,tip:[.325,.22],hand:[.33,.22],animU:59.88,grounded:true,col:'#ffd870'};
 const GUNNER_ILLUST={face:[.49,.135,.13],key:'gunner',cx:.52,eyeY:.13,footY:.985,unit:52,faceLeft:true,float:4,tip:[.66,.77],hand:[.70,.49],grounded:true,col:'#ffd870'};
@@ -6609,8 +6609,8 @@ async function moveUnit(u,[x,y]){
    0.07~1.00초  일러스트가 아주 천천히 오른쪽으로 흐르며 확대 (전투 이펙트는 뒤에서 계속 진행)
    0.22초       화면 전체 주황빛 섬광
    1.03~1.26초  일러스트가 다시 왼쪽으로 빠르게 빨려 들어가며 퇴장 ---- */
-const AWK_ART={blade:'img/blade2.webp',brawler:'img/brawler3.webp',gunner:'img/gunner2.webp',mage:'img/mage4.webp',priest:'img/priest3.webp'};
-const AWK_HAND={blade:[.78,.30],brawler:[.33,.22],gunner:[.22,.2],mage:[.15,.33],priest:[.377,.565]}; // 가시 폭발 위치(일러스트 박스 비율)
+const AWK_ART={blade:'img/blade3.webp',brawler:'img/brawler3.webp',gunner:'img/gunner2.webp',mage:'img/mage4.webp',priest:'img/priest3.webp'};
+const AWK_HAND={blade:[.305,.355],brawler:[.33,.22],gunner:[.22,.2],mage:[.15,.33],priest:[.377,.565]}; // 가시 폭발 위치(일러스트 박스 비율)
 const AWK_MS=1260;
 function awkBurstSvg(){ const n=17, pts=[]; let seed=7; const rn=()=>{seed=(seed*9301+49297)%233280; return seed/233280;};
  for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2, r=i%2?28+rn()*8:44+rn()*6; pts.push((50+Math.cos(a)*r).toFixed(1)+','+(50+Math.sin(a)*r).toFixed(1));}
@@ -8510,7 +8510,7 @@ function planAugs(){const idx=shuffle([...Array(10).keys()]).slice(0,5); return 
 
 /* ================= 시작 ================= */
 loadSpriteImg('mage','img/mage4.webp');
-loadSpriteImg('blade','img/blade2.webp','#ffd890');
+loadSpriteImg('blade','img/blade3.webp','#ffd890');
 loadSpriteImg('brawler','img/brawler3.webp','#ffe090');
 loadSpriteImg('gunner','img/gunner2.webp','#ffd890');
 loadSpriteImg('priest','img/priest3.webp','#ffe39a');
