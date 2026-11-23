@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.bird_wall390.twa",
+        "sha256_cert_fingerprints": ["F8:D2:A8:DB:18:77:8A:70:9F:F6:69:6C:A2:A6:F0:D8:3E:C3:4F:D7:F0:BC:E6:4D:8B:CA:90:18:C3:83:53:C7"]
+      }
+    }]
