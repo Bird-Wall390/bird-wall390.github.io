@@ -2106,7 +2106,7 @@ html body #app .dc-tab button:hover:not(:disabled){filter:brightness(1.08)!impor
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.92';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.93';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6224,6 +6224,7 @@ function renderDSel(app){
  ZR.dsel=ZR.dsel||{}; {let mx=0; while(mx<9&&dgOpen(z,mx+1))mx++; ZR.sel=Math.min(ZR.sel,mx);}
  ZR.diff=ZR.dsel[ZR.sel]!=null?ZR.dsel[ZR.sel]:dgTop(z,ZR.sel); ZR.keepSel=false; const selOpen=dgDiffOpen(z,ZR.sel,ZR.diff);   // 난이도는 던전마다 따로 고릅니다
  const pWk=ZR._wk, pWh=ZR._wh;
+ const CK=z.id+'|'+(iso?1:0)+'|'+innerWidth+'x'+innerHeight, KEEP=[...app.querySelectorAll('#wmcv,canvas.wth,canvas.wbp')].filter(c=>c.dataset.k===CK);
  const stB=(ZR._bi===ZR.sel&&ZR._biso===iso), stW=stB&&!!ZR._bw, ph=(n)=>'animation-delay:-'+(Date.now()%n)+'ms'; ZR._bi=ZR.sel; ZR._biso=iso; ZR._bw=ZR.diff>=2;
  app.innerHTML=`<div class="topbar"><div class="logo">던전 선택 · ${z.name}${iso?' · 경계-이면':''}</div><div class="row"><span class="tag isostone" data-tip="${esc('<div class="tipcard"><b style="color:#ff6a8a">'+MATS.sirens.name+'</b><div style="margin-top:3px">'+MATS.sirens.desc+'</div><div class="dim" style="margin-top:3px">보유 수량 '+((S.mats&&S.mats.sirens&&S.mats.sirens.n)||0)+'개</div></div>')}">${consIcon('sirens',18)} ${(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0}</span></div></div>
  <div class="wmapwrap"><div class="wmap" id="wmap"><canvas id="wmcv"></canvas><div class="wmtitle"><span>${z.name}${iso?' · 경계-이면':''}</span><small>${sirenHtml(z.latin)}</small></div>
@@ -6235,6 +6236,7 @@ function renderDSel(app){
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso">${iso?'<i class="peace"><svg viewBox="0 0 24 24" width="1.15em" height="1.15em" style="vertical-align:-.2em"><path d="M12 22V11" stroke="#e8d08a" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M12 12C6 12 3 8 3 3c6 0 9 3 9 9z" fill="#e8d08a"/><path d="M12 14c0-5 3-8 9-8 0 5-3 8-9 8z" fill="#f4e2a8"/></svg></i>경계':'<i>☠</i>경계-이면'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
+ KEEP.forEach(o=>{const sel=o.id==='wmcv'?'#wmcv':o.classList.contains('wth')?'canvas.wth[data-th="'+o.dataset.th+'"]':'canvas.wbp[data-bp="'+o.dataset.bp+'"]'; const n=app.querySelector(sel); if(n)n.replaceWith(o);});
  {const ni=app.querySelector('.dswarn.isow'), nd2=app.querySelector('.dswarn.dwn'), mp=app.querySelector('#wmap'), ph=pWh||{}; ZR._wh={i:ni?ni.outerHTML:'',d:nd2?nd2.outerHTML:''};
   [['i',ni],['d',nd2]].forEach(([k,e])=>{ if(ph[k]&&!e&&mp){const g=document.createElement('div'); g.innerHTML=ph[k]; const ge=g.firstChild; ge.classList.remove('still'); ge.classList.add('out'); mp.appendChild(ge); setTimeout(()=>ge.remove(),560);} });}
  $('#dBack').onclick=()=>{ZR._wk='';ZR._wh=null;ZR._bi=-1;ZR.iso=false; go('rest');};
@@ -6242,8 +6244,8 @@ function renderDSel(app){
  $('#dIso').onclick=()=>isoErode(()=>{ZR.iso=!ZR.iso; render();});
  $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{const nx=Math.min(dgTop(z,ZR.sel),ZR.diff+1); ZR._siren=false; ZR.dsel[ZR.sel]=nx; render();};
  const DC=(window._dsC=window._dsC||{}), cpy=(cv,k)=>{const c=document.createElement('canvas'); c.width=cv.width; c.height=cv.height; c.getContext('2d').drawImage(cv,0,0); DC[k]=c;}, fromC=(cv,c)=>{cv.width=c.width; cv.height=c.height; cv.getContext('2d').drawImage(c,0,0);};
- app.querySelectorAll('canvas.wth').forEach(cv=>{const k='th'+z.id+'_'+cv.dataset.th; if(DC[k]){fromC(cv,DC[k]); return;} const d=z.dungeons[+cv.dataset.th], th=themeThumb(d,240,90); cv.width=th.width; cv.height=th.height; cv.getContext('2d').drawImage(th,0,0); cpy(cv,k);});
- app.querySelectorAll('canvas.wbp').forEach(cv=>{const d=z.dungeons[+cv.dataset.bp], key=d.boss||d.named; if(!key||!MONS[key])return; const kb='bp'+z.id+'_'+cv.dataset.bp; if(DC[kb]){fromC(cv,DC[kb]); return;} cv.width=160; cv.height=180; const g=cv.getContext('2d'); g.imageSmoothingEnabled=false;
+ app.querySelectorAll('canvas.wth').forEach(cv=>{if(cv.dataset.k===CK)return; cv.dataset.k=CK; const k='th'+z.id+'_'+cv.dataset.th; if(DC[k]){fromC(cv,DC[k]); return;} const d=z.dungeons[+cv.dataset.th], th=themeThumb(d,240,90); cv.width=th.width; cv.height=th.height; cv.getContext('2d').drawImage(th,0,0); cpy(cv,k);});
+ app.querySelectorAll('canvas.wbp').forEach(cv=>{const d=z.dungeons[+cv.dataset.bp], key=d.boss||d.named; if(!key||!MONS[key])return; if(cv.dataset.k===CK)return; cv.dataset.k=CK; const kb='bp'+z.id+'_'+cv.dataset.bp; if(DC[kb]){fromC(cv,DC[kb]); return;} cv.width=160; cv.height=180; const g=cv.getContext('2d'); g.imageSmoothingEnabled=false;
   try{const T=document.createElement('canvas'); T.width=T.height=520; const tg=T.getContext('2d'); tg.imageSmoothingEnabled=false; drawUnitSprite(tg,{kind:'mon',mon:key,face:-1,hp:1,maxhp:1,st:{},buffs:[]},260,470,5.2,{t:0});
    const id=tg.getImageData(0,0,520,520).data; let x0=520,x1=0,y0=520,y1=0; for(let y=0;y<520;y++)for(let x=0;x<520;x++)if(id[(y*520+x)*4+3]>16){if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y;}
    if(x1>x0&&y1>y0){const bw=x1-x0+1, bh=y1-y0+1, k=Math.min(156/bw,(180*1.3)/bh,1), dw=bw*k, dh=bh*k, dy=dh<=180?180-dh:2; g.drawImage(T,x0,y0,bw,bh,(160-dw)/2,dy,dw,dh);}   // 키 큰 몬스터는 얼굴이 보이도록 위쪽을 맞춥니다
@@ -6276,7 +6278,7 @@ function renderDSel(app){
   modal(`<h3>경계-이면에 진입하시겠습니까?</h3><p class="dim">시렌스의 경계석 1개를 사용해 「${esc(dg.name)}」의 경계-이면에 진입합니다. 몬스터가 훨씬 강해지고 골드와 EXP, 장비 드랍이 크게 늘어납니다. 경계-이면의 기록은 일반 던전의 진행에 반영되지 않습니다.</p><div class="row"><button class="pri" id="iy">진입</button><button id="in">취소</button></div>`,ov=>{
    ov.querySelector('#in').onclick=()=>ov.remove();
    ov.querySelector('#iy').onclick=()=>{ov.remove(); S.mats.sirens.n--; save(); enterDungeon(dg);};});};
- {const mc=$('#wmcv'), km='map'+z.id+'_'+mc.clientWidth+'x'+mc.clientHeight+'_'+(devicePixelRatio||1); if(DC[km])fromC(mc,DC[km]); else {drawWorldMap(mc,z); cpy(mc,km);}}
+ {const mc=$('#wmcv'); if(mc.dataset.k!==CK){mc.dataset.k=CK; const km='map'+z.id+'_'+mc.clientWidth+'x'+mc.clientHeight+'_'+(devicePixelRatio||1); if(DC[km])fromC(mc,DC[km]); else {drawWorldMap(mc,z); cpy(mc,km);}}}
  dselIntro();
  if(ZR._siren){ZR._siren=false; try{sfx('siren');}catch(e){}}
 }
