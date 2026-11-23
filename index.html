@@ -1781,11 +1781,12 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.51';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.52';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
 const STW=()=>ST.on?ST.w:window.innerWidth, STH=()=>ST.on?ST.h:window.innerHeight;
+const ST_COARSE=!!(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
 const ST_DH=540;   // 작은 화면(스마트폰 등)에서 UI를 설계하는 기준 높이: 이보다 낮은 화면은 이 높이에 맞춰 축소해서 보여줍니다
 (function(){
  const g0=Element.prototype.getBoundingClientRect; Element.prototype.getBoundingClientRect=function(){const r=g0.call(this); return ST.on?new DOMRect((r.left-ST.x)/ST.k,(r.top-ST.y)/ST.k,r.width/ST.k,r.height/ST.k):r;};
@@ -1795,13 +1796,15 @@ const ST_DH=540;   // 작은 화면(스마트폰 등)에서 UI를 설계하는 �
  function media(on){ for(const sh of document.styleSheets){ let rs; try{rs=sh.cssRules;}catch(e){continue;} (function walk(list){ for(const r of list){ if(r.type===CSSRule.MEDIA_RULE){ if(!orig.has(r))orig.set(r,r.media.mediaText); const t=orig.get(r); try{ r.media.mediaText=on?(ev(t,ST.w,ST.h)?'all':'not all'):t; }catch(e){} } } })(rs); } }
  window.fitNames=function(){ document.querySelectorAll('.pn b,.phn b').forEach(b=>{ const p=b.parentElement; if(!p)return; const key=b.textContent+'|'+p.clientWidth; if(b._fk===key)return; b._fk=key; b.style.fontSize=''; b.style.display='inline-block'; b.style.whiteSpace='nowrap'; const sib=[...p.children].filter(c=>c!==b&&!c.matches('svg')).reduce((a,c)=>a+c.offsetWidth+6,0)+(p.querySelectorAll('svg').length*18); let fs=parseFloat(getComputedStyle(b).fontSize)||13; const avail=Math.max(20,p.clientWidth-sib-2); let n=0; while(b.scrollWidth>avail&&fs>8&&n++<24){fs-=.5; b.style.fontSize=fs+'px';} }); };
  { let t=0; new MutationObserver(()=>{ if(t)return; t=requestAnimationFrame(()=>{t=0; try{fitNames();}catch(e){}}); }).observe(document.documentElement,{childList:true,subtree:true}); }
- window.stApply=function(){ const b=document.body, rt=document.documentElement; if(!b)return; let key='auto'; try{key=localStorage.getItem('rod_ratio')||'auto';}catch(e){} const d=RATIOS.find(x=>x[0]===key)||RATIOS[0], ra=d[2], W=window.innerWidth, H=window.innerHeight;
+ window.stApply=function(){ const b=document.body, rt=document.documentElement; if(!b)return; let key='auto'; try{key=localStorage.getItem('rod_ratio')||'auto';}catch(e){} const d=RATIOS.find(x=>x[0]===key)||RATIOS[0], ra=d[2], RW=window.innerWidth, RH=window.innerHeight; let W=RW, H=RH, s=1;
+  // 스마트폰: 상단 상태바가 내려와 화면 높이가 잠깐 줄어도 화면 비율·배치는 그대로 두고 살짝 축소만 함
+  if(ST_COARSE){ const B=window.__stB; if(!B||RW!==B.w||RH>B.h) window.__stB={w:RW,h:RH}; else if(RH<B.h&&RH>=B.h*.8){ s=RH/B.h; H=B.h; } }
   let w=W,h=H; if(ra){ h=Math.round(W/ra); w=W; if(h>H){h=H;w=Math.round(H*ra);} }
   const k=(d[3]==='ph'||h<ST_DH)?h/ST_DH:1;
-  if(!ra&&k===1){ if(ST.on||rt.classList.contains('stg')){ ST.on=false; ST.x=ST.y=0; ST.k=1; rt.style.setProperty('--vw','1vw'); rt.style.setProperty('--vh','1vh'); rt.style.setProperty('--vhf','100vh'); rt.classList.remove('stg'); ['left','top','width','height','transform','transform-origin'].forEach(p=>b.style.removeProperty(p)); media(false); } return; }
-  const lw=Math.round(w/k*100)/100, lh=Math.round(h/k*100)/100; ST.on=true; ST.k=k; ST.w=lw; ST.h=lh; ST.x=Math.round((W-w)/2); ST.y=Math.round((H-h)/2);
+  if(!ra&&k===1&&s===1){ if(ST.on||rt.classList.contains('stg')){ ST.on=false; ST.x=ST.y=0; ST.k=1; rt.style.setProperty('--vw','1vw'); rt.style.setProperty('--vh','1vh'); rt.style.setProperty('--vhf','100vh'); rt.classList.remove('stg'); ['left','top','width','height','transform','transform-origin'].forEach(p=>b.style.removeProperty(p)); media(false); } return; }
+  const lw=Math.round(w/k*100)/100, lh=Math.round(h/k*100)/100, K=k*s; w*=s; h*=s; ST.on=true; ST.k=K; ST.w=lw; ST.h=lh; ST.x=Math.round((RW-w)/2); ST.y=Math.round((RH-h)/2);
   rt.style.setProperty('--vw',(lw/100)+'px'); rt.style.setProperty('--vh',(lh/100)+'px'); rt.style.setProperty('--vhf',lh+'px'); rt.classList.add('stg');
-  b.style.left=ST.x+'px'; b.style.top=ST.y+'px'; b.style.width=lw+'px'; b.style.height=lh+'px'; b.style.transform='scale('+k+')'; b.style.transformOrigin='0 0'; media(true); };
+  b.style.left=ST.x+'px'; b.style.top=ST.y+'px'; b.style.width=lw+'px'; b.style.height=lh+'px'; b.style.transform='scale('+K+')'; b.style.transformOrigin='0 0'; media(true); };
  { const e0=document.elementFromPoint.bind(document); document.elementFromPoint=(x,y)=>ST.on?e0(x*ST.k+ST.x,y*ST.k+ST.y):e0(x,y); }
  window.addEventListener('resize',()=>{ try{stApply();}catch(e){} });
  if(document.body)stApply(); else document.addEventListener('DOMContentLoaded',()=>stApply());
@@ -7698,12 +7701,19 @@ load(); setArt('anime',false); render();
   if(SCREEN==='town'&&S&&S.tab&&S.tab!=='home'){ S.tab='home'; save(); render(); try{sfx('winClose');}catch(e){} return true; }
   if(SCREEN==='rest'&&S&&S.restTab&&S.restTab!=='rest'&&S.restTab!=='home'){ S.restTab='rest'; render(); try{sfx('winClose');}catch(e){} return true; }
   return false; };
- addEventListener('popstate',()=>{
+ const onBack=viaFs=>{
   if(arm&&performance.now()-arm<2000){ arm=0; history.back(); return; }   // 2초 안에 한 번 더: 실제로 나감
   let closed=false; try{ closed=backClose(); }catch(e){}
-  history.pushState({rod:1},'');
-  if(!closed){ arm=performance.now(); toast('뒤로가기를 한 번 더 누르면 게임이 종료됩니다.',1800); } else arm=0;
- });
+  if(!viaFs)history.pushState({rod:1},'');
+  if(!closed){ arm=performance.now(); toast('뒤로가기를 한 번 더 누르면 게임이 종료됩니다.',1800); } else arm=0; };
+ addEventListener('popstate',()=>onBack(false));
+ /* 스마트폰: 화면을 누르면 전체화면(상단 상태바 숨김)으로 들어가고, 뒤로가기로 전체화면이 풀리면
+    그 뒤로가기도 창 닫기로 처리한 뒤 다음 터치에서 다시 전체화면으로 돌아감.
+    전체화면에서는 상단바를 내려도 화면 위에 겹쳐서만 보이고 화면 크기는 바뀌지 않음 */
+ if(ST_COARSE&&document.documentElement.requestFullscreen){ let was=false, ours=false;
+  document.addEventListener('pointerdown',()=>{ if(document.fullscreenElement)return; try{ const p=document.documentElement.requestFullscreen({navigationUI:'hide'}); if(p&&p.catch)p.catch(()=>{}); }catch(e){} },{capture:true,passive:true});
+  document.addEventListener('fullscreenchange',()=>{ const now=!!document.fullscreenElement; if(was&&!now&&!ours)onBack(true); was=now; ours=false; });
+ }
 })();
 
 /* ---- 화면 왼쪽 맨 위에 현재 게임 버전 항상 표시 (GAME_VER를 그대로 읽으므로 패치하면 자동으로 바뀜) ---- */
