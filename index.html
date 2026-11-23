@@ -232,21 +232,21 @@ body.bt{overflow:hidden;height:var(--vhf)}
 .overlay.dict .modal{width:min(900px,calc(96*var(--vw)));max-width:none;height:min(calc(92*var(--vh)),920px);max-height:none;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box}
 .setl{margin-top:4px;padding:5px 8px;border-left:3px solid #6a9a5a;background:rgba(60,90,50,.18);border-radius:4px;font-size:11.5px;color:#d8e8c8;line-height:1.5}.setl b{color:#b8f0a0}.dsel{padding:8px;border-radius:8px;border:1px solid var(--line);background:#15101c;color:var(--txt);font:inherit}
 .npcl-bang{position:absolute;top:8px;right:10px;background:#ffd860;color:#3a1a08;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;padding:0;font:900 15px/1 'Malgun Gothic',sans-serif;font-style:normal;box-shadow:0 0 0 2px #7a5a14,0 0 10px rgba(255,216,96,.7)}
-.nq{position:relative;width:min(1000px,100%);height:min(640px,calc(96*var(--vh)));display:flex;flex-direction:column;gap:8px}
+.nq{position:relative;width:min(1000px,100%);height:min(660px,calc(97*var(--vh)));display:flex;flex-direction:column;gap:8px}
 .nq-top{flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:10px;min-height:0}
 .nq-left,.nq-right{background:linear-gradient(180deg,#26211a,#16130e);border:2px solid #8a6a38;border-radius:10px;padding:12px;overflow:auto;min-height:0;scrollbar-gutter:stable}
 .nq-ttl{background:#10151a;border:1px solid #5a6a50;border-radius:6px;padding:8px 12px;color:#e8f4d8;font-weight:700;margin-bottom:8px}
 .nq-sheet{background:linear-gradient(180deg,#e2cf9e,#cdb67c);color:#3a2a14;border-radius:6px;padding:12px 14px;font-size:14px;line-height:1.6}.nq-sheet b{color:#6a3a14}.nq-sheet p{margin:2px 0 8px}
 .nq-st{font-size:11px;padding:1px 8px;border-radius:99px;margin-left:6px;background:#3a3a30;color:#cfc}.nq-st.ready{background:#2a6a3a}.nq-st.going{background:#6a5a1a}.nq-st.done{background:#444}
-.nq-dlg[style*="hidden"]{pointer-events:none}.nq-sheet{padding:10px 14px!important;line-height:1.5!important}.nq-ph{height:100%;display:flex;align-items:center;justify-content:center}
+.nq-dlg[style*="hidden"]{pointer-events:none}.nq-dlg[style*="hidden"] *{visibility:hidden!important}.nq-sheet{padding:10px 14px!important;line-height:1.5!important}.nq-ph{height:100%;display:flex;align-items:center;justify-content:center}
 .nq-rh{text-align:center;color:#f4e2b8;font-weight:700;padding:6px;border-bottom:1px solid #6a5030;margin-bottom:8px}
 .nq-row{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin-bottom:5px;background:#0a120c;border:1px solid #2a4a2a;color:#8fe08a;padding:9px 10px}
 .nq-row.sel{border-color:#4aa8ff;box-shadow:0 0 0 1px #4aa8ff inset;color:#cfe8ff}.nq-row.done{opacity:.55;filter:grayscale(1)}
 .nq-b{font-size:11px;padding:1px 7px;border-radius:5px;background:#2a5a2a;color:#d8ffd0;white-space:nowrap}.nq-b.going{background:#6a5a1a}.nq-b.ready{background:#1a6a8a}.nq-b.done{background:#444}
-.nq-dlg{position:relative;display:flex;gap:14px;height:230px;flex:none;background:rgba(12,10,8,.94);border:2px solid #8a6a38;border-radius:10px;padding:12px 16px 12px 190px;cursor:pointer}
+.nq-dlg{position:relative;display:flex;gap:14px;height:196px;flex:none;background:rgba(12,10,8,.94);border:2px solid #8a6a38;border-radius:10px;padding:12px 16px 12px 190px;cursor:pointer}
 .nq-face{position:absolute;left:10px;bottom:0}.nq-face canvas{display:block;border-radius:10px 10px 0 0;border:2px solid #8a6a38;border-bottom:0;margin-top:-52px;background:#10161f}
 .nq-body{flex:1;position:relative;min-width:0}.nq-name{color:#ffd860;font-weight:700;border-bottom:1px solid #5a4a30;padding-bottom:6px;margin-bottom:8px}
-.nq-text{color:#f4ecd8;font-size:16px;line-height:1.7;height:112px;overflow:auto;white-space:pre-wrap}
+.nq-text{color:#f4ecd8;font-size:16px;line-height:1.6;height:92px;overflow:auto;white-space:pre-wrap}
 .nq-more{position:absolute;right:4px;top:44px;color:#ffd860;animation:tBlink 1s infinite;visibility:hidden}
 .nq-btns{display:flex;gap:8px;align-items:center;margin-top:8px;visibility:hidden}.nq-btns .pri{padding:8px 26px}
 .nq-x,.nq-back{position:absolute;top:-2px;right:0;transform:translateY(-100%);padding:4px 12px;font-size:13px}.nq-back{right:84px}
@@ -1892,7 +1892,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.38';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.39';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
