@@ -1988,13 +1988,21 @@ body button.dsbtn,.dsbtn{display:flex!important;align-items:center;gap:11px;just
 .wnode.sel .wplate.dcard{height:auto!important}
 .dswarn{top:7.5%!important}
 @media(max-height:640px){.wnode .wplate.dcard{zoom:.76}.wnode .wpin{zoom:.8}.dsbtns{zoom:.8}.dswarn{zoom:.85}}
+/* v0.5.66 */
+.dc-tab{bottom:-26px!important}
+.dc-tab button{width:48px!important;height:30px!important;line-height:30px!important;font-size:15px!important;font-weight:900}
+.dc-tab button#dfPrev{background:linear-gradient(180deg,#fffbe8,#d4c48e)!important;color:#3a2606!important}
+.dc-tab button#dfNext{background:linear-gradient(180deg,#d8c98e,#a8955a)!important;color:#3a2606!important}
+.dc-tab button:disabled{opacity:.55!important;filter:grayscale(.6)}
+.dc-tab{filter:drop-shadow(0 0 3px #000) drop-shadow(0 2px 4px rgba(0,0,0,.8))!important}
+.wtip{z-index:12!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.65';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.66';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6131,12 +6139,18 @@ function renderDSel(app){
   }catch(e){}});
  const tip=$('#wtip'), wmap=$('#wmap');
  const showTip=(i,el)=>{const d=z.dungeons[i], op=dgOpen(z,i), ex=dgExclusive(d);
-  tip.innerHTML=`${d.lv?`<div class="wt-h">추천레벨 : Lv. ${d.lv[0]}~${d.lv[1]}</div>`:''}<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${lvTxt(d.lv)}${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?` <span style="color:#ffb070">· 현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,8).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>8?`<div class="dim">외 ${ex.length-8}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
-  tip.style.display='block'; const r=el.getBoundingClientRect(), mr=wmap.getBoundingClientRect(); let x=r.left-mr.left+r.width/2, y=r.top-mr.top;
-  const tw=Math.min(300,mr.width-20); tip.style.width=tw+'px'; x=clamp(x-tw/2,8,mr.width-tw-8); tip.style.left=x+'px';
-  const ws=$('#wsel'); let top=y>mr.height*.5?Math.max(6,y-tip.offsetHeight-10):y+r.height+10;
-  if(i===ZR.sel&&ws&&top>=y){top=y-tip.offsetHeight-10; if(top<6)top=ws.offsetTop+ws.offsetHeight+8;}  // 선택된 던전은 아래 입장 상자를 가리지 않도록
-  tip.style.top=top+'px';};
+  const mk=lim=>`${d.lv?`<div class="wt-h">추천레벨 : Lv. ${d.lv[0]}~${d.lv[1]}</div>`:''}<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${lvTxt(d.lv)}${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?` <span style="color:#ffb070">· 현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,lim).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>lim?`<div class="dim">외 ${ex.length-lim}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
+  tip.style.display='block'; tip.style.visibility='hidden'; tip.style.maxHeight='';
+  const mr=wmap.getBoundingClientRect(), sc=(mr.width/wmap.offsetWidth)||1, mw=wmap.offsetWidth, mh=wmap.offsetHeight;
+  const tw=Math.min(300,mw-20); tip.style.width=tw+'px';
+  let lim=8; tip.innerHTML=mk(lim); while(tip.offsetHeight>mh-16&&lim>0){lim=lim>2?lim-2:0; tip.innerHTML=mk(lim);}
+  const th=tip.offsetHeight, loc=e=>{const q=e.getBoundingClientRect(); return {l:(q.left-mr.left)/sc,t:(q.top-mr.top)/sc,r:(q.right-mr.left)/sc,b:(q.bottom-mr.top)/sc};};
+  const rr=(()=>{const A=loc(el), B=el.querySelector('.wpin')?loc(el.querySelector('.wpin')):A, C=el.querySelector('.wplate')?loc(el.querySelector('.wplate')):A; return {l:Math.min(A.l,B.l,C.l),t:Math.min(A.t,B.t,C.t),r:Math.max(A.r,B.r,C.r),b:Math.max(A.b,B.b,C.b)};})(), hide=[]; const sp=app.querySelector('.wnode.sel .wplate'); if(sp&&sp.closest('.wnode')!==el)hide.push(Object.assign(loc(sp),{k:4})); const sb=app.querySelector('.wnode.sel .dc-tab'); if(sb&&sp&&sp.closest('.wnode')!==el){const q=loc(sb); q.b+=8; q.k=6; hide.push(q);}
+  ['.dsbtns','.dswarn','.wmtitle'].forEach(q=>{const e=app.querySelector(q); if(e)hide.push(Object.assign(loc(e),{k:4}));}); hide.push(rr);
+  const cl=(v,lo,hi)=>Math.max(lo,Math.min(hi,v)), cx=(rr.l+rr.r)/2, cy=(rr.t+rr.b)/2;
+  const cand=[[cx-tw/2,rr.t-th-8],[cx-tw/2,rr.b+8],[rr.r+8,cy-th/2],[rr.l-tw-8,cy-th/2]].map(([x,y])=>{x=cl(x,8,mw-tw-8); y=cl(y,6,Math.max(6,mh-th-6)); let ov=0; for(const h of hide){const w=Math.min(x+tw,h.r)-Math.max(x,h.l), hh=Math.min(y+th,h.b)-Math.max(y,h.t); if(w>0&&hh>0)ov+=w*hh*(h.k||1);} return {x,y,ov};});
+  cand.sort((u,v)=>u.ov-v.ov); const best=cand[0];
+  tip.style.left=best.x+'px'; tip.style.top=best.y+'px'; tip.style.maxHeight=(mh-12)+'px'; tip.style.overflow='hidden'; tip.style.visibility='';};
  app.querySelectorAll('.wnode').forEach(el=>{const i=+el.dataset.i;
   el.onmouseenter=()=>showTip(i,el); el.onmouseleave=()=>{tip.style.display='none';};
   el.onclick=()=>{if(!dgOpen(z,i)){showTip(i,el); return;} const nw=Date.now(), dbl=ZR._dc&&ZR._dc.i===i&&nw-ZR._dc.t<500; ZR._dc={i,t:nw};
