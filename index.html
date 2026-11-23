@@ -1815,7 +1815,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.70';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.71';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4282,6 +4282,8 @@ let TITLE_SEEN=false; // 이번 접속에서 메인화면 첫 진입을 지났�
 const DBG={on:false,prev:1,god:false,open:false};
 function dbgStart(cls){ DBG.on=true; DBG.prev=(typeof CUR_SLOT==='number'?CUR_SLOT:1); CUR_SLOT='dbg'; ZR=null; R=null; try{ if(typeof B!=='undefined')B=null; }catch(e){}
  S=defaultState(); S.gold=500000; S.ayaneRestored=true; const h=newHero(cls||'mage','P1'); h.lv=10; S.heroes.push(h); S.selHero=0;
+ { const all=Object.values(SK).filter(s=>s.cls===h.cls); h.skLv=h.skLv||{}; all.forEach(s=>{ if(!h.skills.includes(s.id))h.skills.push(s.id); h.skLv[s.id]=h.skLv[s.id]||1; });
+   const act=all.filter(s=>!s.passive), aw=act.find(s=>s.awaken), uq=act.find(s=>s.quest); h.equip=[aw,uq].filter(Boolean).map(s=>s.id).concat(h.equip.filter(id=>SK[id]&&!SK[id].passive)).filter((v,i,a)=>a.indexOf(v)===i).slice(0,SK_MAX); h.skSlots=null; }
  try{ for(const k in CONS)addCons(k,10); }catch(e){} save(); document.querySelectorAll('.overlay').forEach(o=>o.remove()); go('town'); dbgUi(); toast('디버그 모드 시작 (실제 세이브와 분리된 임시 데이터)'); }
 function dbgEnd(){ DBG.on=false; DBG.god=false; DBG.open=false; try{localStorage.removeItem(slotKey('dbg'));}catch(e){} CUR_SLOT=DBG.prev||1; S=null; ZR=null; R=null; try{ B=null; }catch(e){}
  document.querySelectorAll('#dbgBtn,#dbgPanel,#dbgTag,.overlay,#dres,.lvfx2,.lvfx2-s').forEach(e=>e.remove()); go('title'); }
@@ -6123,6 +6125,53 @@ function awakenCut(u){
   return AWK_MS;
  }catch(e){ return 0; }
 }
+
+/* ---- 각성기 연출 (전투 속도 1x 기준 약 7.5초: 컷신 0.35 → 기 모으기 1.0 → 연속 공격 3.7 → 피니시 1.2 → 여운 1.2) ----
+   배속 설정은 sleep/vnow 가 그대로 따르므로 2배속이면 절반 시간에 끝납니다 */
+const AWK_SHOW={
+ blade:  {aura:26,wave:[0,35,4,0,5],fin:5,  beam:null},
+ brawler:{aura:10,wave:[6,11,7,6,9],fin:9,  beam:null},
+ gunner: {aura:27,wave:[13,14,16,13,14],fin:14,beam:[12,15,17]},
+ mage:   {aura:23,wave:[20,21,22,23,14],fin:21,beam:null},
+ priest: {aura:24,wave:[25,24,29,27,24],fin:29,beam:null}};
+async function awakenShow(u,sk,opt,style,color){
+ const cfg=AWK_SHOW[u.h.cls]||AWK_SHOW.blade, vfxOk=VFX_ON&&VFX.ready, tiles=(opt.tiles&&opt.tiles.length)?opt.tiles:[[opt.ax,opt.ay]];
+ const support=isSupport(sk), aoe=tiles.length>1, HITS=Math.max(1,sk.hits||1);
+ const T0=vnow(), TOTAL=4300, Q=ms=>sleep(ms*.62); // 1배속(전투 속도 1x)에서는 실제 시간이 1.5배로 늘어나 약 6.5초 B.dimUntil=T0+TOTAL; B.cut={txt:sk.name,color,t0:T0};
+ const swing=(p)=>{u.atkStyle=style; u.atkDur=900; u.atkPow=60; u.atkColor=color; u.atkT=vnow()-900*(p||0);};
+ const pickTiles=n=>{ const occ=tiles.filter(([x,y])=>{const t=unitAt(x,y); return t&&!t.dead&&t.side!==u.side;}); const rest=shuffle(tiles.slice()).slice(0,n); return occ.concat(rest).slice(0,Math.max(n,occ.length)); };
+ const vfx=(i,a,s,d,o)=>{ if(vfxOk)vfxAdd({i,m:'tile',a,s,dur:d||760,...(o||{})}); };
+ // 1) 기 모으기 (1.1초): 캐릭터 주변으로 기운이 모이며 점점 커짐
+ sfx('ult'); swing(0);
+ for(let k=0;k<4;k++){ vfx(cfg.aura,[u.x,u.y],1.6+k*.45,700); sparks(u.px||0,(u.py||0)-40,color,10+k*4,1+k*.25,0); B.shake=Math.max(B.shake,2+k*1.5); await Q(275); }
+ // 2) 연속 공격 (4.0초): 피해 타수를 시간에 나눠 넣고, 사이사이 장식 이펙트
+ const steps=Math.max(HITS*2,10), gap=4000/steps; let h=0;
+ const targetsNow=()=>tiles.map(([x,y])=>unitAt(x,y)).filter(t=>t&&!t.dead);
+ for(let s=0;s<steps;s++){
+  const wi=cfg.wave[s%cfg.wave.length], big=s%2===0;
+  if(cfg.beam&&big){ const b=pickTiles(1)[0]; if(b&&vfxOk)vfxAdd({i:cfg.beam[(s/2|0)%cfg.beam.length],m:'beam',a:[u.x,u.y],b,s:1.4,dur:420}); }
+  pickTiles(big?3:2).forEach((a,j)=>vfx(wi,a,(big?1.7:1.3)+Math.random()*.4,700,{delay:j*40,flip:Math.random()<.5}));
+  if(big){ swing(.3); sfx(attackSound(u,sk)); }
+  // 피해(또는 회복) 타이밍: 연속 공격 구간에 고르게
+  const due=Math.floor((s+1)*HITS/steps);
+  while(h<due&&h<HITS-1){ if(!support){ let landed=false; for(const t of targetsNow()){ if(t.side===u.side)continue; applyHit(u,t,sk,aoe,h); landed=true; } if(landed){B.shake=Math.max(B.shake,6); B.zoom=Math.max(B.zoom,.035);} } h++; }
+  await Q(gap);
+ }
+ // 3) 피니시 (1.3초): 화면을 당겨 모은 뒤 가장 큰 일격
+ const fc=tileC(opt.ax!=null?opt.ax:tiles[0][0],opt.ay!=null?opt.ay:tiles[0][1]);
+ B.cz={x:fc.cx,y:fc.cy-30,t0:vnow(),dur:1250,mag:.22};
+ swing(0); vfx(cfg.aura,[u.x,u.y],3.2,900); B.shake=Math.max(B.shake,5);
+ await Q(520);
+ sfx('ult'); sfx(attackSound(u,sk)); swing(.46);
+ const cx=opt.ax!=null?opt.ax:tiles[0][0], cy=opt.ay!=null?opt.ay:tiles[0][1];
+ vfx(cfg.fin,[cx,cy],4.6,1100); tiles.forEach(([x,y],j)=>{ if(j%2===0)vfx(cfg.wave[j%cfg.wave.length],[x,y],1.5,900,{delay:60+(j%6)*35}); });
+ B.zoom=Math.max(B.zoom,.09); B.shake=16;
+ if(support){ for(const t of targetsNow())if(t.side===u.side)applySupport(u,t,sk); }
+ else { while(h<HITS){ for(const t of targetsNow()){ if(t.side===u.side)continue; applyHit(u,t,sk,aoe,h); } h++; } }
+ await Q(780);
+ // 남은 시간을 채워 1배속 기준 약 6.9초에 맞춤
+ const left=TOTAL-(vnow()-T0); if(left>0)await sleep(left);
+}
 async function perform(u,sk,opt){
  B.busy=true; B.mode=null; B.preview=null; updatePanel();
  if(bleedTick(u)){await sleep(400); B.busy=false; checkEnd(); return;}
@@ -6138,6 +6187,7 @@ async function perform(u,sk,opt){
  const color=sk.heal?'#5dff9a':sk.shield?'#7fe9ff':sk.buff?'#ffd23f':sk.burn?'#ff7a2a':sk.stat==='mag'?'#c77dff':'#e8f0ff';
  const style=atkStyle(u,sk), ult=!!sk.pow&&(sk.cd>=5||sk.pow>=2);
  const dur=ult?1000:sk.basic?560:740;
+ if(sk.awaken&&u.h){ await awakenShow(u,sk,opt,style,color); } else {
  // 1) 예비 동작(기 모으기/치켜들기)
  u.atkStyle=style; u.atkDur=dur; u.atkPow=ult?60:sk.basic?36:48; u.atkColor=color; u.atkT=vnow();
  if(ult){B.dimUntil=vnow()+dur*.62; B.cut={txt:sk.name,color,t0:vnow()}; sfx('ult');}
@@ -6166,6 +6216,7 @@ async function perform(u,sk,opt){
   }
   if(landed&&h===0)await sleep(ult?150:sk.basic?55:90); // 타격 정지(힛스톱)
   if((sk.hits||1)>1){ if(h<(sk.hits||1)-1){u.atkT=vnow()-dur*.46; sfx(attackSound(u,sk));} await sleep(150); }
+ }
  }
  await hitObjects(u,sk,opt);
  if(sk.t==='self'||sk.t==='allies'){ if(sk.mpGain){const mg=Math.round(sk.mpGain*(u.h?skMul(u.h,sk):1)); u.mp=Math.min(u.maxmp,u.mp+mg);floatText(u,'+'+mg+' MP','#5db4ff');} }
