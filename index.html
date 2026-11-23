@@ -1768,6 +1768,8 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #dbgTag{position:fixed;left:50%;bottom:2px;transform:translateX(-50%);z-index:2600;pointer-events:none;font:900 10px/1 Arial,sans-serif;letter-spacing:2px;color:#ffd23a;text-shadow:0 0 3px #000,0 1px 2px #000;opacity:.8}
 #dbgPanel{position:fixed;right:52px;top:8px;bottom:8px;width:min(330px,calc(100*var(--vw) - 64px));overflow-y:auto;z-index:2600;background:rgba(14,10,18,.96);border:2px solid #ffd23a;border-radius:10px;padding:8px 10px;box-shadow:0 6px 24px #000c;font-size:12px;color:#eee}
 #dbgPanel .dbg-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}#dbgPanel .dbg-h b{color:#ffd23a;font-size:14px}#dbgPanel .dbg-h span{flex:1;color:#aaa;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app.battle #phud{margin-top:7px!important}
+#gameVer{position:fixed;left:16px;top:1px;z-index:99999;pointer-events:none;font:700 9.5px/12px system-ui,sans-serif;letter-spacing:.3px;color:rgba(255,236,190,.78);text-shadow:0 0 2px #000,0 1px 1px #000,0 0 4px #000;white-space:nowrap}
 #dbgPanel .dbg-s{display:flex;flex-wrap:wrap;gap:4px;padding:6px 0;border-top:1px solid #ffffff1c}
 #dbgPanel .dbg-s i{width:100%;font-style:normal;color:#ffd860;font-weight:700;font-size:11px;margin-bottom:2px}
 #dbgPanel button{padding:4px 8px!important;font-size:11.5px!important;min-height:0!important;border-image:none!important;background:#2a2230!important;border:1px solid #5a4a66!important;border-radius:5px!important;color:#eee!important;text-shadow:none!important}
@@ -1779,7 +1781,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.50';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.51';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7703,6 +7705,10 @@ load(); setArt('anime',false); render();
   if(!closed){ arm=performance.now(); toast('뒤로가기를 한 번 더 누르면 게임이 종료됩니다.',1800); } else arm=0;
  });
 })();
+
+/* ---- 화면 왼쪽 맨 위에 현재 게임 버전 항상 표시 (GAME_VER를 그대로 읽으므로 패치하면 자동으로 바뀜) ---- */
+(()=>{ const put=()=>{ if(!document.body)return; let v=document.getElementById('gameVer'); if(!v){ v=document.createElement('div'); v.id='gameVer'; } v.textContent='v'+GAME_VER; if(v.parentNode!==document.body||v.nextSibling)document.body.appendChild(v); };
+ put(); setInterval(put,1500); })();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script></body>
 </html>
