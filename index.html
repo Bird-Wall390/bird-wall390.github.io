@@ -1457,6 +1457,20 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 .skic:has(.skimg),.sk-ic:has(.skimg){border:none!important;background:#000!important;box-shadow:none!important;padding:0!important;overflow:hidden;border-radius:5px}
 .skimg{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
 .sk-ic small{z-index:2;background:rgba(0,0,0,.55);border-radius:0 0 4px 0;padding:0 2px}
+
+/* ---- 각성 컷신 ---- */
+.awk{position:fixed;left:0;top:0;width:calc(100*var(--vw));height:calc(100*var(--vh));z-index:880;pointer-events:none;overflow:hidden}
+.awk-dim{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 45%,rgba(20,6,0,.28),rgba(0,0,0,.62));opacity:0;animation:awkDim var(--awd) linear forwards}
+.awk-flash{position:absolute;inset:0;background:radial-gradient(ellipse at 62% 50%,rgba(255,214,120,.95),rgba(255,120,30,.75) 45%,rgba(160,40,0,.55));mix-blend-mode:screen;opacity:0;animation:awkFlash var(--awd) linear forwards}
+.awk-art{position:absolute;left:calc(-3*var(--vw));bottom:calc(-36*var(--vh));height:calc(88*var(--vh));width:auto;transform-origin:0% 100%;opacity:0;animation:awkArt var(--awd) cubic-bezier(.15,.9,.3,1) forwards}
+.awk-art img{position:relative;display:block;height:100%;width:auto;max-width:none;filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 calc(1.2*var(--vh)) rgba(0,0,0,.85)) contrast(1.06) saturate(1.12)}
+.awk-burst{position:absolute;width:calc(30*var(--vh));height:calc(30*var(--vh));transform:translate(-50%,-50%);animation:awkBurst var(--awd) linear forwards}
+.awk-burst svg{width:100%;height:100%;display:block;overflow:visible}
+.awk-edge{position:absolute;left:0;bottom:0;height:100%;width:calc(70*var(--vw));background:linear-gradient(90deg,rgba(255,170,60,.0),rgba(255,170,60,0));}
+@keyframes awkArt{0%{opacity:0;transform:translateX(-16%) scale(.93)}7%{opacity:1;transform:translateX(0) scale(1)}94%{opacity:1;transform:translateX(2.6%) scale(1.035)}95.5%,100%{opacity:0;transform:translateX(2.6%) scale(1.035)}}
+@keyframes awkBurst{0%,4%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(-8deg)}9%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(0)}14%{transform:translate(-50%,-50%) scale(1) rotate(0)}94%{opacity:1;transform:translate(-50%,-50%) scale(1.04) rotate(3deg)}95.5%,100%{opacity:0}}
+@keyframes awkDim{0%{opacity:0}6%{opacity:1}92%{opacity:1}100%{opacity:0}}
+@keyframes awkFlash{0%,19%{opacity:0}22%{opacity:.55}27%{opacity:.3}36%,100%{opacity:0}}
 #tZone:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,210,90,.95))!important}
 @keyframes rEnP{0%,100%{filter:brightness(1.05) drop-shadow(0 0 5px rgba(255,190,60,.75))}50%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,220,110,1))}}
 #qy{filter:hue-rotate(-24deg) saturate(1.9) brightness(.95);color:#fff!important;font-weight:800!important;text-shadow:0 0 4px #300,0 1px 2px #000}
@@ -1801,7 +1815,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.66';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.67';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -3706,6 +3720,10 @@ const SOUNDS={
  win:()=>{[[98,0],[147,0],[196,0],[123,.55],[185,.55],[247,.55]].forEach(([f,d])=>tone('sawtooth',f,f,1.0,.12,d,900)); tone('sine',65,40,1.2,.7,0); tone('sine',65,40,1.4,.7,.55);},
  lose:()=>{[[196,0],[165,.38],[131,.76],[98,1.14]].forEach(([f,d])=>{tone('sawtooth',f,f*.96,.6,.14,d,700); tone('sine',f/2,f/2.3,.7,.35,d);});},
 };
+SOUNDS.awaken=()=>{ // 각성: 짧은 '쉭' 진입 → 0.22초 묵직한 충격 + 금속성 울림
+ noise(.16,.32,'bandpass',900,5200,1.4,0); tone('sawtooth',180,720,.14,.07,0,2400);
+ tone('sine',95,30,.9,.95,.21); noise(.6,.55,'lowpass',2600,300,1,.21); tone('square',62,40,.5,.25,.21,500);
+ [392,523,784,1047].forEach((f,i)=>tone('triangle',f,f*1.01,.9,.07,.23+i*.025,4200)); noise(.8,.12,'highpass',5000,9000,1,.26); };
 SOUNDS.augopen=()=>{tone('sine',523,523,.5,.12); tone('sine',784,784,.6,.1,.09); tone('sine',1047,1047,.8,.08,.18); noise(.5,.18,'highpass',3000,6000,1,.02); tone('sine',110,60,.4,.4);};
 SOUNDS.augepic=()=>{tone('sine',70,26,1.2,1.0); noise(.9,.5,'lowpass',300,4000); [523,659,784,1047,1319,1568,2093].forEach((f,i)=>{tone('triangle',f,f,1.6,.13,.12+i*.11,5000); tone('sine',f*2,f*2,1.2,.05,.12+i*.11);}); [0,.5,1.0,1.5].forEach(d=>{noise(.35,.22,'highpass',5000,9000,2,.9+d*.4); tone('sine',2637+d*400,2637+d*400,.5,.06,1.0+d*.4);}); [262,330,392,523].forEach(f=>tone('sawtooth',f,f,2.0,.07,.9,1800)); tone('sine',65,40,1.6,.7,.9);};
 SOUNDS.augpick=()=>{tone('sine',392,392,.25,.14); tone('sine',587,587,.3,.12,.06); tone('triangle',784,1175,.4,.1,.12); noise(.18,.3,'bandpass',2500,900,2); tone('sine',90,45,.3,.6); tone('sine',1568,1568,.5,.05,.2);};
@@ -4292,7 +4310,7 @@ function dbgPanel(){ let p=document.getElementById('dbgPanel'); if(!DBG.on||!DBG
  const h=dbgHero(), inB=SCREEN==='battle'&&!!B, inD=!!(R&&R.map);
  const btn=(id,t,dis)=>`<button type="button" data-d="${id}"${dis?' class="off"':''}>${t}</button>`;
  p.innerHTML=`<div class="dbg-h"><b>디버그</b><span>${h?esc(h.name)+' Lv.'+h.lv:''} · ${esc(String(SCREEN))}</span><button type="button" data-d="x">✕</button></div>
- <div class="dbg-s"><i>연출</i>${btn('lvfx','레벨업 연출만')}${btn('lv1','레벨 +1 (연출 포함)')}${btn('lv5','레벨 +5')}${btn('lvmax','최대 레벨')}${btn('boss','보스 처치 연출',!inB)}</div>
+ <div class="dbg-s"><i>연출</i>${btn('lvfx','레벨업 연출만')}${btn('lv1','레벨 +1 (연출 포함)')}${btn('lv5','레벨 +5')}${btn('lvmax','최대 레벨')}${btn('boss','보스 처치 연출',!inB)}${btn('awk','각성 컷신')}</div>
  <div class="dbg-s"><i>Results 화면 (랭크 지정)</i>${['SSS','SS','S','A','B','C','D','E','F'].map(r=>btn('res_'+r,r,!inD)).join('')}</div>
  <div class="dbg-s"><i>전투</i>${btn('enter','던전 바로 입장')}${btn('bossroom','보스방으로 이동',!inD)}${btn('kill','적 전부 처치',!inB)}${btn('hp1','적 HP 1',!inB)}${btn('heal','HP·MP 회복',!inB)}${btn('shield','보호막 +50',!inB)}${btn('god',DBG.god?'무적: 켜짐':'무적: 꺼짐')}</div>
  <div class="dbg-s"><i>아이템·재화</i>${btn('gold','골드 +10만')}${btn('cons','소모품 10개씩')}${[0,1,2,3,4,5].map(r=>btn('gear_'+r,RAR[r].n+' 장비 5개')).join('')}${btn('sp','SP +10')}</div>
@@ -4301,6 +4319,7 @@ function dbgPanel(){ let p=document.getElementById('dbgPanel'); if(!DBG.on||!DBG
  p.querySelectorAll('[data-d]').forEach(e=>e.onclick=()=>{ const d=e.dataset.d; try{
   if(d==='x'){DBG.open=false; dbgPanel(); return;}
   if(d==='lvfx'){ if(h)levelUpFx(h); }
+  if(d==='awk'){ if(h)awakenCut({h}); }
   else if(d==='lv1')dbgLv(1); else if(d==='lv5')dbgLv(5); else if(d==='lvmax')dbgLv(99);
   else if(d==='boss'){ if(dbgNeedBattle())return; const bu=B.units.find(u=>u.side==='E'&&!u.dead&&isBossU(u)); if(!bu){toast('보스방에서 쓸 수 있습니다. [보스방으로 이동]을 먼저 누르십시오.'); return;} dbgUnits('E').filter(u=>u!==bu).forEach(u=>{u.hp=0; try{kill(u,dbgUnits('A')[0]);}catch(e){}}); bu.hp=0; kill(bu,dbgUnits('A')[0]); try{checkEnd();}catch(e){} DBG.open=false; dbgPanel(); }
   else if(d.startsWith('res_')){ DBG.open=false; dbgPanel(); dbgResults(d.slice(4)); }
@@ -6080,6 +6099,31 @@ async function moveUnit(u,[x,y]){
  for(const[px,py]of path){const c=tileC(px,py); if(px!==u.x)u.face=px>u.x?1:-1; u.x=px;u.y=py; sfx('step'); await tweenTo(u,c.cx,c.cy+8,110); {const ob=objAt(px,py); if(ob&&ob.t==='bramble')thornHit(u);}}
  if(path.length&&bleedTick(u))checkEnd();
 }
+
+/* ---- 각성 컷신: 각성기를 쓸 때 화면 왼쪽 아래에서 캐릭터 일러스트가 튀어나오는 연출 (참고 영상 기준)
+   0.00~0.07초  일러스트가 왼쪽에서 밀려 들어오며 커짐 · 화면 어두워짐 · 주먹(무기) 쪽에 검은 가시 폭발
+   0.07~1.00초  일러스트가 아주 천천히 오른쪽으로 흐르며 확대 (전투 이펙트는 뒤에서 계속 진행)
+   0.22초       화면 전체 주황빛 섬광
+   1.00초       일러스트가 한 번에 사라짐 (페이드 없이 끊김) ---- */
+const AWK_ART={blade:'img/blade.webp',brawler:'img/brawler.webp',gunner:'img/gunner.webp',mage:'img/mage2.webp',priest:'img/priest.webp'};
+const AWK_HAND={blade:[.80,.30],brawler:[.74,.34],gunner:[.82,.30],mage:[.78,.30],priest:[.6,.34]}; // 가시 폭발 위치(일러스트 박스 비율)
+const AWK_MS=1050;
+function awkBurstSvg(){ const n=17, pts=[]; let seed=7; const rn=()=>{seed=(seed*9301+49297)%233280; return seed/233280;};
+ for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2, r=i%2?28+rn()*8:44+rn()*6; pts.push((50+Math.cos(a)*r).toFixed(1)+','+(50+Math.sin(a)*r).toFixed(1));}
+ return `<svg viewBox="0 0 100 100"><polygon points="${pts.join(' ')}" fill="#0a0604" stroke="#ff8a2a" stroke-width="1.1" stroke-linejoin="miter"/><polygon points="${pts.join(' ')}" fill="none" stroke="#3a0c00" stroke-width="3" opacity=".6" transform="translate(50 50) scale(.86) translate(-50 -50)"/></svg>`; }
+function awakenCut(u){
+ try{ const cls=u&&u.h&&u.h.cls; if(!cls||!AWK_ART[cls])return 0;
+  document.querySelectorAll('.awk').forEach(e=>e.remove());
+  const d=document.createElement('div'); d.className='awk'; d.style.setProperty('--awd',AWK_MS+'ms');
+  const hp=AWK_HAND[cls]||[.78,.3];
+  d.innerHTML=`<div class="awk-dim"></div><div class="awk-art"><div class="awk-burst" style="left:${hp[0]*100}%;top:${hp[1]*100}%">${awkBurstSvg()}</div><img src="${AWK_ART[cls]}" alt=""></div><div class="awk-flash"></div>`;
+  document.body.appendChild(d);
+  try{sfx('awaken');}catch(e){}
+  setTimeout(()=>{ try{ if(B)B.shake=Math.max(B.shake||0,9); }catch(e){} },220);
+  setTimeout(()=>d.remove(),AWK_MS+60);
+  return AWK_MS;
+ }catch(e){ return 0; }
+}
 async function perform(u,sk,opt){
  B.busy=true; B.mode=null; B.preview=null; updatePanel();
  if(bleedTick(u)){await sleep(400); B.busy=false; checkEnd(); return;}
@@ -6088,6 +6132,7 @@ async function perform(u,sk,opt){
  if(sk.cd){u.cds[sk.id]=Math.max(1,sk.cd-(u.side==='A'?R.mods.cdr:0))+1; u.cdMax=u.cdMax||{}; u.cdMax[sk.id]=u.cds[sk.id]-1;}
  if(sk.cd&&u.fx&&u.fx.cdReset&&Math.random()*100<u.fx.cdReset){u.cds[sk.id]=0; bto(()=>floatText(u,'재사용 초기화!','#9fe6ff'),300);}
  if(opt.ax!==u.x)u.face=opt.ax>u.x?1:-1;
+ if(sk.awaken&&u.h){ awakenCut(u); await sleep(230); }
  floatText(u,sk.name,sk.basic?'#cfc6ff':'#ffd23f');
  addLog(`${u.name} ▸ ${sk.name}`);
  if(sk.t==='dash'){const[lx,ly]=opt.land; if(lx!==u.x||ly!==u.y){u.x=lx;u.y=ly; const c=tileC(lx,ly); await tweenTo(u,c.cx,c.cy+8,200);}}
