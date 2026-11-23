@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&family=Gaegu:wght@700&family=Black+Han+Sans&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Do+Hyeon&family=Gaegu:wght@700&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
 <title>Risk Of Dungeon — 턴제 액션 로그라이크 (데모)</title>
 <style>
 :root{--bg:#0d0b14;--panel:#1a1626;--panel2:#241f35;--line:#3a3352;--txt:#ece6ff;--dim:#9a90b8;--gold:#ffcc4d;--red:#ff5d5d;--blue:#5db4ff;--green:#5dff9a;--acc:#ff8a3d}
@@ -2065,13 +2065,15 @@ body button.dsbtn,.dsbtn{font-family:-apple-system,BlinkMacSystemFont,"Apple SD 
 .dg-d.a{left:-12px;top:-12px}.dg-d.b{right:-12px;top:-12px}.dg-d.c{left:-12px;bottom:-12px}.dg-d.d{right:-12px;bottom:-12px}
 .dg-gate{position:absolute;left:22px;top:-26px;width:34px;height:27px;z-index:7;pointer-events:none;filter:drop-shadow(0 1px 2px #000)}
 .wnode.sel .dg-gate{left:26px;top:-28px;width:38px;height:30px}
+/* v0.5.80 */
+.dswarn.isow{font-family:'Gowun Batang','Batang','Noto Serif KR',serif!important;font-weight:700!important;font-size:clamp(14px,calc(1.6*var(--vw)),21px)!important;letter-spacing:.5px!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.79';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.80';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
