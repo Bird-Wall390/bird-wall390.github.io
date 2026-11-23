@@ -1881,13 +1881,14 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #dbgPanel button{padding:4px 8px!important;font-size:11.5px!important;min-height:0!important;border-image:none!important;background:#2a2230!important;border:1px solid #5a4a66!important;border-radius:5px!important;color:#eee!important;text-shadow:none!important}
 #dbgPanel button:hover{background:#3d3046!important;border-color:#ffd23a!important}
 #dbgPanel button.off{opacity:.4}
+.st-aug .st-ar{display:flex;gap:9px;align-items:center;padding:7px 8px;margin-bottom:6px;background:rgba(0,0,0,.28);border-left:3px solid #888;border-radius:6px}.st-aug .st-ar>svg,.st-aug .st-ar>span,.st-aug .st-ar>img{flex:none}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.26';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.27';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2785,7 +2786,7 @@ function fixDur(it){if(it&&it.durMax==null){it.durMax=durMaxOf(it); it.dur=it.du
 function allItems(){const a=[...(S.inv||[])]; (S.heroes||[]).forEach(h=>Object.values(h.gear||{}).forEach(it=>it&&a.push(it))); return a;}
 const repairCost=it=>(it.durMax-it.dur)*Math.max(1,Math.round((it.price||10)*.04));
 // 장착한 장비의 내구도를 깎습니다. 새로 파손된 장비 이름을 돌려줍니다.
-function wearGear(h,n){const out=[]; Object.values(h.gear||{}).forEach(it=>{if(!it)return; fixDur(it); if(it.dur<=0)return; it.dur=Math.max(0,it.dur-n); if(it.dur===0)out.push(it.name);}); return out;}
+function wearGear(h,n){const out=[]; Object.values(h.gear||{}).forEach(it=>{if(!it||it.auto)return; fixDur(it); if(it.dur<=0)return; it.dur=Math.max(0,it.dur-n); if(it.dur===0)out.push(it.name);}); return out;}
 /* ---- 장비 레벨 체계: 1레벨, 그 뒤로 5레벨 단위 · 레전더리 이상은 20레벨부터 ---- */
 const ITEM_LVS=[1,5,10,15,20,25,30,35,40,45,50];
 const LV_PRE={1:['수련생의','견고한','이끼','대나무'],5:['병사의','정예','들꽃','바람결'],10:['용병의','숙련자의','이슬빛','반딧불'],15:['순찰대의','수호자의','은빛 버섯','떡갈나무','정령목의','대수호자의'],
@@ -2971,7 +2972,7 @@ function itemCard(it){
   ${(it.fx||[]).length?`<div class="dnf-sec">${fxLines(it)}</div>`:''}
   ${setKey(it)?`<div class="dnf-sec">${setLines(it,h)}</div>`:''}
   ${(()=>{ if(!h||!it.at||!ARMOR.includes(it.slot)||!MASTERY[h.cls])return ''; const M=MASTERY[h.cls], A=ATYPES[M.at].n, my=ATYPES[it.at].n; return it.at===M.at?`<div class="dnf-ms ok">◆ ${A} 마스터리 적용 (${esc(CLASSES[h.cls].name||h.cls)})</div>`:`<div class="dnf-ms bad">⚠ 마스터리 불일치 — ${esc(CLASSES[h.cls].name||h.cls)}은(는) ${A} 방어구 마스터리입니다.<br>${my} 방어구 착용 시 부위마다 공격속도 -1 · 회피율 -1, 2부위 이상이면 이동속도 -1</div>`; })()}
-  <div class="dnf-dur" style="color:${it.dur===0?'#ff6a5a':lo<=.25?'#ffb070':'#a89c84'}">내구도 ${it.dur} / ${it.durMax}${it.dur===0?' — 파손되어 능력치가 적용되지 않습니다':''}</div>
+  ${it.auto?'<div class="dnf-dur" style="color:#8fe39a">동료 전용 장비 · CPU 자동 관리 (내구도 소모 없음)</div>':''}<div class="dnf-dur" style="color:${it.dur===0?'#ff6a5a':lo<=.25?'#ffb070':'#a89c84'};${it.auto?'display:none':''}">내구도 ${it.dur} / ${it.durMax}${it.dur===0?' — 파손되어 능력치가 적용되지 않습니다':''}</div>
  </div>`;
 }
 
@@ -4266,7 +4267,7 @@ let STATUS_IDX=0;
 function openStatus(i){
  if(!S||!S.heroes.length)return;
  document.querySelectorAll('.overlay.status').forEach(o=>o.remove());
- S.selHero=0; STATUS_IDX=0; // 동료는 CPU가 관리 (내 정보만)
+ S.selHero=0; STATUS_IDX=(i!=null&&S.heroes[i])?i:0; // 동료는 보기만 가능 (장비·각인 관리는 CPU)
  const tab=openStatus.tab==='fx'?'char':(openStatus.tab||'char');
  const h=S.heroes[STATUS_IDX], o=heroStatObj(h), C=CLASSES[h.cls];
  const fx=SLOTS.map(sl=>h.gear[sl]).filter(it=>it&&it.fx&&it.fx.length).map(it=>`<div class="fxl r${it.r}">◆ <b>${esc(it.name)}</b> — ${it.fx.map(a=>FX_TXT[a.k](a.v,a.e)).join(' / ')}</div>`).join('');
@@ -4289,12 +4290,15 @@ function openStatus(i){
     ${sr('#6a4a8a','☗','상태이상저항',o.sres+'%')}${sr('#c8a03a','✪','항마력',o.anti)}
    </div>`;
  } else if(tab==='detail') body=statRows(o);
+ else if(tab==='aug'){ const L=(ZR&&ZR.augs)||[], ok=!!ZR;
+  body=`<div class="st-aug"><div class="dim" style="font-size:12px;margin-bottom:8px">${ok?`이번 경계에서 얻은 각인 ${L.length}개 · 아군 전체에 적용 · 경계를 떠나면 초기화`:'경계에 들어가면 얻은 각인이 여기에 표시됩니다.'}${STATUS_IDX?'<br>동료의 각인 선택은 CPU가 알아서 합니다.':''}</div>
+   ${L.length?L.map(a=>{const g=AUG_G[a.g||1]||AUG_G[1]; return `<div class="st-ar" style="border-left-color:${g[1]}" data-tip="${esc(augTip(a))}">${augIcon(a,38)}<div><b style="color:${g[1]}">[${g[0]}] ${esc(a.name)}</b><div class="dim" style="font-size:12px;white-space:pre-line">${esc(a.desc)}</div></div></div>`;}).join(''):(ok?'<div class="dim" style="padding:16px;text-align:center">아직 얻은 각인이 없습니다.</div>':'')}</div>`; }
  else {const ss=activeSets(h); body=`<div style="font-size:13px">${ss.length?`<div class="setl" style="margin-bottom:8px"><b>적용 중인 세트 효과</b>${ss.map(x=>`<div style="color:#9ef0a0">${x.def.name} (${x.n}/3) — ${setTxt(x.def.b2)}${x.n>=3?' · '+setTxt(x.def.b3):''}</div>`).join('')}</div>`:''}${fx||(ss.length?'':'<div class="dim" style="font-size:12px">레어 이상 장비를 장착하면 고유 효과와 세트 효과가 여기에 표시됩니다.</div>')}</div>`;}
  const ov=document.createElement('div'); ov.className='overlay status'; ov.style.cssText='background:none;pointer-events:none';
- ov.innerHTML=`<div class="lwin" style="pointer-events:auto"><div class="lw-h">${STATUS_IDX===(S.selHero||0)?'내 정보 (M)':esc(h.name)+' 정보'}<button class="lw-x" id="sX">✕</button></div>
-  <div class="lw-tabs">${[['char','캐릭터'],['detail','상세 능력치']].map(([k,n])=>`<button data-st="${k}" class="${tab===k?'sel':''}">${n}</button>`).join('')}</div>
+ ov.innerHTML=`<div class="lwin" style="pointer-events:auto"><div class="lw-h">${STATUS_IDX===0?'내 정보 (M)':esc(h.name)+' 정보 (동료)'}<button class="lw-x" id="sX">✕</button></div>
+  <div class="lw-tabs">${[['char','캐릭터'],['detail','상세 능력치'],['aug','각인']].map(([k,n])=>`<button data-st="${k}" class="${tab===k?'sel':''}">${n}</button>`).join('')}</div>
   <div class="lw-body">${body}</div>
-  <div class="lw-foot"><div style="display:flex;justify-content:space-between"><span>EXP</span><span>Lv.${h.lv} (${h.exp} / ${expNeed(h.lv)})</span></div><div class="bar" style="height:6px;margin-top:4px;background:#000;border:1px solid #4a3a28;border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100,h.exp/expNeed(h.lv)*100)}%;background:linear-gradient(90deg,#3f9a52,#92e49c)"></div></div></div></div>`;
+  ${STATUS_IDX?`<div class="lw-foot"><div style="display:flex;justify-content:space-between"><span>동료 · CPU 자동 관리</span><span>Lv.${h.lv} (내 레벨을 따라감)</span></div></div>`:''}<div class="lw-foot" ${STATUS_IDX?'style="display:none"':''}><div style="display:flex;justify-content:space-between"><span>EXP</span><span>Lv.${h.lv} (${h.exp} / ${expNeed(h.lv)})</span></div><div class="bar" style="height:6px;margin-top:4px;background:#000;border:1px solid #4a3a28;border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100,h.exp/expNeed(h.lv)*100)}%;background:linear-gradient(90deg,#3f9a52,#92e49c)"></div></div></div></div>`;
  document.body.appendChild(ov);
  const sp=ov.querySelector('#sPort'); if(sp)sp.appendChild(heroPortrait(h.cls,96,108,4));
  ov.querySelector('#sX').onclick=()=>ov.remove();
@@ -5003,9 +5007,9 @@ function openZoneSelect(){
 const CROWN_SVG='<svg viewBox="0 0 24 18" width="16" height="12" style="vertical-align:-1px"><path d="M2 15l-1-10 6 5 5-8 5 8 6-5-1 10z" fill="#ffc93a" stroke="#8a5a10" stroke-width="1.2" stroke-linejoin="round"/><circle cx="12" cy="3" r="1.6" fill="#fff2b0"/></svg>';
 function zhp(h){ const src=ZR?ZR.hp:(S&&S.zoneSave&&S.zoneSave.hp); return (src&&h&&src[h.id])||{hpR:1,mpR:1}; }
 function partyHud(){
- return `<div class="phud">${S.heroes.slice(0,4).map((h,i)=>`<div class="phr ${i===S.selHero?'cur':''}" data-ph="${i}" title="${i?'동료 · CPU가 알아서 싸웁니다':'클릭하면 능력치와 장비를 확인합니다'}"><canvas data-pf="${i}" width="88" height="88"></canvas><div class="phm"><div class="phn">${i===0?CROWN_SVG+' ':''}<b>${esc(h.name)}</b></div><div class="phb hp"><i style="width:${Math.round(zhp(h).hpR*100)}%"></i></div><div class="phb mp"><i style="width:${Math.round(zhp(h).mpR*100)}%"></i></div></div></div>`).join('')}</div>`;
+ return `<div class="phud">${S.heroes.slice(0,4).map((h,i)=>`<div class="phr ${i===S.selHero?'cur':''}" data-ph="${i}" title="${i?'동료 · 클릭하면 장착 장비와 각인을 볼 수 있습니다':'클릭하면 능력치와 장비를 확인합니다'}"><canvas data-pf="${i}" width="88" height="88"></canvas><div class="phm"><div class="phn">${i===0?CROWN_SVG+' ':''}<b>${esc(h.name)}</b></div><div class="phb hp"><i style="width:${Math.round(zhp(h).hpR*100)}%"></i></div><div class="phb mp"><i style="width:${Math.round(zhp(h).mpR*100)}%"></i></div></div></div>`).join('')}</div>`;
 }
-function togglePartyStatus(i){ if(i>0){toast('동료는 CPU가 장비·스킬·각인을 알아서 관리합니다.'); return;}const ex=document.querySelector('.overlay.status'); if(ex&&STATUS_IDX===i){ex.remove(); return;} closeAllWins(); openStatus(i);}
+function togglePartyStatus(i){const ex=document.querySelector('.overlay.status'); if(ex&&STATUS_IDX===i){ex.remove(); return;} closeAllWins(); openStatus(i);}
 function drawFacePt(g,W,spec){ const d=spec&&spec.img, I=d&&SPRITE_IMG[d.key]; g.fillStyle='#1a1428'; g.fillRect(0,0,W,W);
  if(I&&I.ready&&d.face){const im=I.im, ss=d.face[2]*im.naturalHeight*1.25, sx=Math.max(0,Math.min(im.naturalWidth-ss,d.face[0]*im.naturalWidth-ss/2)), sy=Math.max(0,Math.min(im.naturalHeight-ss,d.face[1]*im.naturalHeight-ss*.42)); g.imageSmoothingQuality='high'; g.drawImage(im,sx,sy,ss,ss,0,0,W,W); return true;}
  return false; }
