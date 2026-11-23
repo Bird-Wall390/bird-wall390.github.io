@@ -1524,6 +1524,7 @@ html body .lwin.inbox.dsk,html body .skhost .lwin.inbox.dsk.dsk.dsk{left:0!impor
 .dk-awk{position:absolute;right:-6px;top:-7px;font-style:normal;font-size:9px;background:#a01a4a;color:#fff;padding:0 3px;border-radius:2px}.dk-awk.q{background:#7a2ac8}
 .dk-ctl{position:static!important;width:auto!important;margin:0 0 6px}.dk-msv{display:flex;gap:10px;align-items:center;padding:10px;background:#15110c}.dk-msi{width:56px;height:56px;flex:none;border:2px solid #3a8a4a;border-radius:4px;overflow:hidden}.dk-msi .skimg{width:100%;height:100%}
 .dk-sh button{margin-left:auto;padding:2px 10px!important;font-size:11.5px!important;min-height:0!important}.dk-sh b{color:#8fd0ff;font-size:12.5px}
+.dk-tp{width:196px!important;pointer-events:none}.dk-tp button{pointer-events:auto}
 .dk-pop{position:absolute;z-index:5;width:190px;background:linear-gradient(180deg,#3a2c16,#1a130a);border:2px solid #e8963a;border-radius:4px;box-shadow:0 4px 14px #000;padding:4px 6px}
 .dk-pn{font-weight:800;font-size:13px;color:#ffe2a0;text-align:center;border-bottom:1px solid #6a4a20;padding-bottom:3px;margin-bottom:4px}
 .dk-pr{display:flex;align-items:center;gap:4px}.dk-sp{min-width:26px;text-align:center;color:#ffd24a;font-weight:800;font-size:13px}
@@ -1883,7 +1884,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.3';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.4';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5372,7 +5373,15 @@ function tabSkill(c){
  // 선택 스킬 팝업 (아이콘 옆 + − M)
  let pop='', ctl='';
  if(sk&&!SK_SEL_MS){ const ln=h.skills.includes(sk.id), L=ln?skLvOf(h,sk.id):0, can=!skCanUp(h,sk), canDn=!!(SK_SNAP[h.id]&&SK_SNAP[h.id].log.some(e=>e.id===sk.id));
-  ctl=`<div class="dk-pop dk-ctl"><div class="dk-pr"><span class="dk-sp" title="한 번 올릴 때 드는 SP">${skSP(sk)}</span><button data-dkp="+" ${can?'':'disabled'} title="레벨 올리기">+</button><button data-dkp="-" ${canDn?'':'disabled'} title="적용 전에 올린 레벨만 내릴 수 있습니다">−</button><button data-dkp="M" ${can?'':'disabled'} title="올릴 수 있는 만큼 올리기">M</button><span class="dk-pl">Lv <b>${L}</b>/${SK_MAXLV}</span></div></div>`; }
+  ctl=`<div class="dk-pop dk-ctl"><div class="dk-pr"><span class="dk-sp" title="한 번 올릴 때 드는 SP">${skSP(sk)}</span><button data-dkp="+" ${can?'':'disabled'} title="레벨 올리기">+</button><button data-dkp="-" ${canDn?'':'disabled'} title="적용 전에 올린 레벨만 내릴 수 있습니다">−</button><button data-dkp="M" ${can?'':'disabled'} title="올릴 수 있는 만큼 올리기">M</button><span class="dk-pl">Lv <b>${L}</b>/${SK_MAXLV}</span></div></div>`;
+  if(T.pos[sk.id]){ // 트리 스킬: 아이콘 옆 작은 창 — 다른 스킬 아이콘을 가리지 않는 빈자리를 골라 띄움
+   const PWd=196, PHd=64, rc=id=>{const p=T.pos[id]; return {x:PADX+p.c*CW+(CW-50)/2, y:PADY+p.r*RH, w:50, h:64};}, me=rc(sk.id), cx=me.x+25;
+   const cand=[[me.x+56,me.y-2],[me.x-6-PWd,me.y-2],[cx-PWd/2,me.y+66],[cx-PWd/2,me.y-PHd-2],[me.x+56,me.y+40],[me.x-6-PWd,me.y+40],[me.x+56,me.y-PHd+20],[me.x-6-PWd,me.y-PHd+20],[me.x,me.y+66],[me.x+50-PWd,me.y+66],[me.x,me.y-PHd-2],[me.x+50-PWd,me.y-PHd-2],[me.x+56,me.y+66],[me.x-6-PWd,me.y+66]];
+   const ov=(x,y)=>{ let a=0; if(x<0||y<0||x+PWd>gw||y+PHd>gh)a+=1e6; for(const s2 of T.all){ const r2=rc(s2.id); const ix=Math.max(0,Math.min(x+PWd,r2.x+r2.w+4)-Math.max(x,r2.x-4)), iy=Math.max(0,Math.min(y+PHd,r2.y+r2.h+2)-Math.max(y,r2.y-2)); a+=ix*iy; } return a; };
+   let best=cand[0], bv=Infinity; for(const [x,y] of cand){ const v=ov(x,y); if(v<bv){bv=v; best=[x,y];} if(v===0)break; }
+   const left=Math.round(Math.max(2,Math.min(gw-PWd-2,best[0]))), top=Math.round(Math.max(2,Math.min(gh-PHd-2,best[1])));
+   pop=`<div class="dk-pop dk-tp" style="left:${left}px;top:${top}px"><div class="dk-pn">${esc(sk.name)}</div>${ctl.replace('<div class="dk-pop dk-ctl">','<div>')}</div>`; ctl=''; }
+ }
  // 공용 스킬 줄: 방어구 마스터리 + 패시브
  const M=MASTERY[h.cls], pas=Object.values(SK).filter(s=>s.cls===h.cls&&s.passive);
  const common=(M?[`<div class="dk-cm on${SK_SEL_MS?' sel':''}" data-dkm="1" title="${esc(ATYPES[M.at].n+' 마스터리 · 기본 습득 · '+masteryDesc(h.cls).replace(/<[^>]+>/g,''))}"><div class="dk-ic k-passive">${SK_IMG['ms_'+h.cls]?`<img class="skimg" src="${SK_IMG['ms_'+h.cls]}" alt="">`:'⛨'}</div><b class="dk-ms">Master</b></div>`]:[]).concat(pas.map(s=>`<div class="dk-cm${h.skills.includes(s.id)?' on':''}${s.id===sel?' sel':''}" data-dk="${s.id}"><div class="dk-ic k-passive">${skGlyph(s)}</div>${lvBox(s)}</div>`)).join('');
