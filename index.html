@@ -1471,6 +1471,14 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 @keyframes awkBurst{0%,3%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(-8deg)}8%{opacity:1;transform:translate(-50%,-50%) scale(1.08) rotate(0)}12%{transform:translate(-50%,-50%) scale(1) rotate(0)}82%{opacity:1;transform:translate(-50%,-50%) scale(1.04) rotate(3deg)}92%{opacity:1;transform:translate(-50%,-50%) scale(.6) rotate(8deg)}96%,100%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(10deg)}}
 @keyframes awkDim{0%{opacity:0}5%{opacity:1}82%{opacity:1}100%{opacity:0}}
 @keyframes awkFlash{0%,16%{opacity:0}18.5%{opacity:.55}22.5%{opacity:.3}30%,100%{opacity:0}}
+/* 시전 대기 상태: 스킬 아이콘은 그대로 보이고, 금빛 테두리가 맥박치며 아래에 '시전' 띠 */
+.gowrap{position:relative;display:inline-flex;width:100%;height:100%;align-items:center;justify-content:center}
+.gowrap .skic{width:100%!important;height:100%!important;filter:brightness(1.18) saturate(1.15)}
+.gowrap .gox{position:absolute;left:-1px;right:-1px;bottom:-1px;font-size:10.5px;line-height:1.35;font-weight:900;letter-spacing:1px;text-align:center;color:#2a1600;background:linear-gradient(180deg,#fff2b0,#ffc83a 55%,#d98a10);border-top:1px solid #fff6d0;text-shadow:0 1px 0 rgba(255,255,255,.5);border-radius:0 0 4px 4px;pointer-events:none}
+.qcell.gok{animation:goPulse .9s ease-in-out infinite}
+.qcell.gok::before{content:'';position:absolute;inset:0;border:2px solid #ffe27a;border-radius:6px;box-shadow:0 0 10px #ffc83a,inset 0 0 8px rgba(255,200,58,.6);pointer-events:none;animation:goRing .9s ease-in-out infinite;z-index:5}
+@keyframes goPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes goRing{0%,100%{opacity:.65}50%{opacity:1}}
 #tZone:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,210,90,.95))!important}
 @keyframes rEnP{0%,100%{filter:brightness(1.05) drop-shadow(0 0 5px rgba(255,190,60,.75))}50%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,220,110,1))}}
 #qy{filter:hue-rotate(-24deg) saturate(1.9) brightness(.95);color:#fff!important;font-weight:800!important;text-shadow:0 0 4px #300,0 1px 2px #000}
@@ -1815,7 +1823,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.72';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.73';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6681,7 +6689,7 @@ function bhudRefresh(){
  for(let i=0;i<SK_MAX;i++){const id=(u.slots||u.skills)[i], sk=id&&SK[id], kh=`<em>${keyHint('s',i)}</em>`;
   if(!sk){rs.appendChild(mk(kh,'')); continue;}
   const sb=my&&u===B.cur?src[2+u.skills.indexOf(id)]:null, off=!sb||sb.classList.contains('dis')||sb.disabled, go=sb&&sb.classList.contains('pri'), sel=sb&&sb.classList.contains('sel'), cd=u.cds[id]||0, cost=skCost(u,sk);
-  rs.appendChild(mk(`${kh}<span class="qi">${go?'<b class="gox">시전</b>':skIcon(sk,26)}</span>${cd>0?cdSeg(u,id):(go?'':`<i class="mpc">${cost}</i>`)}`,'on'+(off?' off':'')+(sel?' selk':'')+(go?' gok':''),btnTip(u,sk),()=>{if(sb&&!off)sb.click();}));}
+  rs.appendChild(mk(`${kh}<span class="qi">${go?`<span class="gowrap">${skIcon(sk,26)}<b class="gox">시전</b></span>`:skIcon(sk,26)}</span>${cd>0?cdSeg(u,id):(go?'':`<i class="mpc">${cost}</i>`)}`,'on'+(off?' off':'')+(sel?' selk':'')+(go?' gok':''),btnTip(u,sk),()=>{if(sb&&!off)sb.click();}));}
  const hub=$('#bhHub'); hub.innerHTML='';
  const hb=(html,cls,tip,on,span)=>{const b=document.createElement('button'); b.className=cls||''; b.style.gridColumn='span '+span; b.innerHTML=html; if(tip)b.setAttribute('data-tip',tip); if(on)b.onclick=on; hub.appendChild(b);};
  const sm=src.find(b=>b.classList.contains('bt-move')), sa=src.find(b=>b.classList.contains('bt-basic')), se=src.find(b=>b.classList.contains('bt-end'));
