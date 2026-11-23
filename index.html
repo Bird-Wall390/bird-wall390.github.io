@@ -1887,7 +1887,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.25';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.26';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -1949,7 +1949,7 @@ const CLASSES={
  brawler:{name:'격투가',desc:'연타·기절·자기 강화. 단단한 근접 딜러.',base:{hp:145,mp:32,atk:16,mag:3,def:8,mdef:4,spd:11,mov:3,pcrit:11,mcrit:3,vit:4,spi:2,acc:10,eva:9,sres:12},rng:1,stat:'atk',basic:'정권'},
  gunner:{name:'거너',desc:'원거리 저격·연사·폭발. 이동력은 낮음.',base:{hp:100,mp:40,atk:14,mag:5,def:4,mdef:5,spd:12,mov:2,pcrit:15,mcrit:4,vit:2,spi:3,acc:16,eva:7,sres:6},rng:4,stat:'atk',basic:'사격'},
  mage:{name:'마법사',desc:'광역 마법·화상·빙결. 마력이 높지만 연약함.',base:{hp:85,mp:80,atk:5,mag:17,def:3,mdef:9,spd:9,mov:2,pcrit:3,mcrit:12,vit:1,spi:6,acc:10,eva:3,sres:8},rng:3,stat:'mag',basic:'마력탄'},
- priest:{name:'사제',desc:'치유·보호막·축복. 파티 생존의 핵심.',base:{hp:115,mp:70,atk:9,mag:13,def:6,mdef:10,spd:8,mov:2,pcrit:4,mcrit:9,vit:3,spi:5,acc:8,eva:3,sres:15},rng:1,stat:'atk',basic:'타격'},
+ priest:{name:'사제',desc:'치유·보호막·축복. 아군 생존의 핵심.',base:{hp:115,mp:70,atk:9,mag:13,def:6,mdef:10,spd:8,mov:2,pcrit:4,mcrit:9,vit:3,spi:5,acc:8,eva:3,sres:15},rng:1,stat:'atk',basic:'타격'},
 };
 const GROW={hp:14,mp:5,atk:2,mag:2,def:1,mdef:1};   /* 예전 공통 성장치 (참고용) */
 /* 직업별 레벨당 성장치: 주력 능력치만 조금씩 오르고, 장비·스킬이 성장의 중심이 되도록 완만하게 */
@@ -2660,7 +2660,7 @@ const AUGS=[
  {id:'inc',name:'파괴 본능',desc:'데미지 증가 +25% (가장 높은 데미지 증가 1개만 적용)',f:m=>m.inc=Math.max(m.inc,25)},
  {id:'cinc',name:'처형인',desc:'크리티컬 데미지 증가 +50% (가장 높은 1개만 적용)',f:m=>m.cinc=Math.max(m.cinc,50)},
  {id:'add',name:'연쇄 충격',desc:'추가 데미지 +12%',f:m=>m.add+=12},
- {id:'hp',name:'강철 육체',desc:'파티 최대 HP +20%',f:m=>m.hp+=.2},
+ {id:'hp',name:'강철 육체',desc:'아군 최대 HP +20%',f:m=>m.hp+=.2},
  {id:'crit',name:'급소 포착',desc:'물리·마법 크리티컬 +15%',f:m=>m.crit+=15},
  {id:'ls',name:'흡혈',desc:'가한 피해의 15%만큼 HP 회복',f:m=>m.ls+=.15},
  {id:'mov',name:'질주',desc:'이동력 +1',f:m=>m.mov+=1},
@@ -3005,7 +3005,7 @@ function load(){
    (S.inv||[]).forEach(conv); (S.heroes||[]).forEach(h=>{const g=h.gear||{}; h.gear={weapon:conv(g.weapon)||null,top:conv(g.top||g.armor)||null,bottom:conv(g.bottom)||null,shoes:conv(g.shoes)||null,ring:conv(g.ring||g.acc)||null,bracelet:conv(g.bracelet)||null,necklace:conv(g.necklace)||null};}); S.itemV2=true;}
   { // 비활성 직업 용사는 지우지 않고 따로 보관합니다
    S.parked=(S.parked||[]).concat((S.heroes||[]).filter(h=>!ENABLED_CLS.includes(h.cls))); S.heroes=(S.heroes||[]).filter(h=>ENABLED_CLS.includes(h.cls));
-   if(!S.heroes.length){S.heroes.push(newHero(ENABLED_CLS[0],'P1'));} if(!S.heroes.some(h=>h.ctrl!=='AI'))S.heroes[0].ctrl='P1'; }
+   if(!S.heroes.length){S.heroes.push(newHero(ENABLED_CLS[0],'P1'));} if(!S.heroes.some(h=>h.ctrl!=='AI'))S.heroes[0].ctrl='P1'; compMigrate(); }
   if(!S.itemV6){const DW={blade:'great',brawler:'knuckle',gunner:'revolver',mage:'staff',priest:'mace'}, AT=Object.keys(ATYPES); let n=0;
    const re=it=>{if(!it)return; const q=it.q!=null?it.q:2, tier=it.tier||1; ['pw','def','mdef','hp','mp','pcrit','mcrit','acc','eva','eres','sres','anti','atk','mag','spd','mov'].forEach(k=>delete it[k]);
     if(it.slot==='weapon')it.wt=it.wt||DW[it.cls]||'great'; if(ARMOR.includes(it.slot))it.at=it.at||AT[(n++)%3];
@@ -3035,6 +3035,64 @@ const TITLES={
 const TSTAT_N={hp:'HP',mp:'MP',atk:'물리공격력',mag:'마법공격력',def:'물리방어력',mdef:'마법방어력',acc:'적중률',eva:'회피율',spd:'공격속도',mov:'이동속도'};
 const titleBonusText=t=>Object.keys(t.b).map(k=>`${TSTAT_N[k]||k} +${t.b[k]}`).join(' · ');
 const titleOwned=id=>!!(S&&S.titles&&S.titles.includes(id));
+/* ================= 동료 (CPU가 조작하는 같이 싸우는 캐릭터) =================
+   · 나 = S.heroes[0] (ctrl 'P1'), 동료 = 나머지 (ctrl 'AI', comp:true) · 나 + 동료 + 온라인 파티원 합쳐 최대 4명
+   · 동료의 레벨·스킬·장비는 CPU가 알아서 맞춤 (내 레벨을 따라감, 인벤토리·각인·스킬 조작 불가) */
+const TEAM_MAX=4;
+function isComp(h){return !!h&&!!S&&!!S.heroes&&h!==S.heroes[0];}
+function compSlotsLeft(){return Math.max(0,TEAM_MAX-S.heroes.length-(typeof NET!=='undefined'?NET.remoteCount():0));}
+function compGearFor(h,slot){ const L=bandOf(h.lv||1), at=(MASTERY[h.cls]||{}).at, arm=['top','bottom','shoes'].includes(slot);
+ let list=TPL.filter(t=>t.lv===L&&t.slot===slot&&t.r<=1&&(slot!=='weapon'||t.cls===h.cls)&&(!arm||!t.at||t.at===at));
+ if(!list.length)list=TPL.filter(t=>t.slot===slot&&t.r<=1&&(slot!=='weapon'||t.cls===h.cls)&&t.lv<=L);
+ if(!list.length)return null; list.sort((a,b)=>b.r-a.r||b.lv-a.lv); const top=list.filter(t=>t.r===list[0].r&&t.lv===list[0].lv);
+ const it=makeItem(top[(Math.random()*top.length)|0],2,true); it.auto=true; it.id='c'+h.id+slot; it.dur=it.durMax=9999; return it; }
+function compAuto(h){ if(!isComp(h))return; const me=S.heroes[0]; h.comp=true; h.ctrl='AI'; h.lv=me?me.lv:h.lv; h.exp=0; h.sp=0; h.bonus={}; h.title=null;
+ // 스킬: 레벨에 맞는 스킬을 모두 익히고(고유 퀘스트 스킬 제외), 레벨에 맞춰 강화
+ const all=Object.values(SK).filter(s=>s.cls===h.cls&&!s.quest&&skLearnLv(s)<=h.lv); h.skills=all.map(s=>s.id); h.skLv={};
+ all.forEach(s=>{let L=1; while(L<SK_MAXLV&&skNeedLv(s,L+1)<=h.lv)L++; h.skLv[s.id]=Math.max(1,Math.round(L*.7));});
+ const act=all.filter(s=>!s.passive).sort((a,b)=>skLearnLv(b)-skLearnLv(a)).slice(0,6).map(s=>s.id); h.equip=act; h.skSlots=act.slice();
+ // 장비: 내 레벨 구간에 맞는 언커먼 이하 장비를 CPU가 자동으로 착용 (레벨 구간이 바뀌면 교체)
+ h.gear=h.gear||{}; for(const sl of SLOTS){const g=h.gear[sl]; if(!g||(g.auto&&g.lv!==bandOf(h.lv)))h.gear[sl]=compGearFor(h,sl);} }
+function compSyncAll(){ (S.heroes||[]).forEach(compAuto); }
+function compMigrate(){ if(!S.heroes.length)return; let mi=S.heroes.findIndex(h=>h.ctrl==='P1'); if(mi<0)mi=S.heroes.findIndex(h=>h.ctrl!=='AI'); if(mi<0)mi=0; if(mi>0)S.heroes.unshift(S.heroes.splice(mi,1)[0]);
+ S.heroes[0].ctrl='P1'; delete S.heroes[0].comp; S.selHero=0; let back=0;
+ S.heroes.slice(1).forEach(h=>{ h.ctrl='AI'; if(!h.comp){ for(const sl in (h.gear||{})){const it=h.gear[sl]; if(it&&!it.auto&&S.inv.length<BAG_MAX){S.inv.push(it); h.gear[sl]=null; back++;}} } compAuto(h); });
+ if(S.heroes.length>TEAM_MAX)S.heroes.length=TEAM_MAX; if(back)S.compGearBack=(S.compGearBack||0)+back; }
+function ctlName(u){return u.ctrl==='AI'?'동료':u.ctrl==='NET'?'파티원':'나';}
+
+/* ================= 온라인 멀티플레이 (파티) 뼈대 — 서버 연동 전 =================
+   · 파티 = 온라인으로 함께하는 다른 플레이어 (최대 4명, 동료와 합쳐 4명)
+   · 지금은 서버 주소가 없어 항상 오프라인. 서버를 붙일 때 NET.SERVER_URL만 넣고 아래 메시지 규격대로 주고받으면 됨
+   · 전투는 턴 단위라, 각 행동(이동·공격·스킬·턴 끝)을 'act' 메시지로 보내고 받으면 동기화됨
+   · 파티원 유닛은 ctrl 'NET' — 그 차례에는 서버에서 온 행동을 실행하고, 연결이 끊기면 CPU가 대신 조작 */
+const NET={
+ SERVER_URL:'', PROTO:1, state:'offline', ws:null, me:null, room:null, members:[], _h:{}, _q:[],
+ MSG:{HELLO:'hello', ROOM_CREATE:'room.create', ROOM_JOIN:'room.join', ROOM_LEAVE:'room.leave', ROOM_STATE:'room.state', READY:'ready',
+      RUN_START:'run.start', ACT:'act', SYNC:'sync', CHAT:'chat', PING:'ping'},
+ live(){return this.state==='online'&&!!this.ws;},
+ remoteCount(){return this.room?Math.max(0,this.members.length-1):0;},
+ on(t,f){(this._h[t]=this._h[t]||[]).push(f); return this;},
+ emit(t,d){(this._h[t]||[]).forEach(f=>{try{f(d);}catch(e){console.warn('[NET]',t,e);}});},
+ connect(url){ url=url||this.SERVER_URL; if(!url){this.state='offline'; this.emit('state',this.state); return false;}
+  try{ this.state='connecting'; this.emit('state',this.state); const ws=new WebSocket(url); this.ws=ws;
+   ws.onopen=()=>{this.state='online'; this.send(this.MSG.HELLO,{proto:this.PROTO,ver:GAME_VER,hero:this.heroCard()}); this.emit('state',this.state);};
+   ws.onmessage=e=>{let m; try{m=JSON.parse(e.data);}catch(x){return;} if(m.t===this.MSG.ROOM_STATE){this.room=m.d.room; this.members=m.d.members||[];} this.emit(m.t,m.d);};
+   ws.onclose=()=>{this.ws=null; this.state='offline'; this.room=null; this.members=[]; this.emit('state',this.state);};
+   ws.onerror=()=>{};
+  }catch(e){this.state='offline'; this.ws=null;} return true; },
+ disconnect(){ try{this.ws&&this.ws.close();}catch(e){} this.ws=null; this.state='offline'; this.room=null; this.members=[]; },
+ send(t,d){ if(!this.live())return false; try{this.ws.send(JSON.stringify({t,d}));}catch(e){return false;} return true; },
+ heroCard(){const h=S&&S.heroes&&S.heroes[0]; return h?{cls:h.cls,name:h.name,lv:h.lv,stats:heroStats(h)}:null;},
+ createRoom(opt){return this.send(this.MSG.ROOM_CREATE,opt||{max:TEAM_MAX});},
+ joinRoom(code){return this.send(this.MSG.ROOM_JOIN,{code});},
+ leaveRoom(){return this.send(this.MSG.ROOM_LEAVE,{});},
+ sendAct(a){return this.send(this.MSG.ACT,a);},       // 내 행동 → 서버
+ waitAct(u){ return new Promise(res=>{ if(!this.live())return res(null); const f=d=>{ if(d&&d.uid===u.id){ this._h[this.MSG.ACT]=(this._h[this.MSG.ACT]||[]).filter(x=>x!==f); res(d);} }; this.on(this.MSG.ACT,f); }); }
+};
+async function netTurn(u){ // 파티원 차례: 서버 행동을 기다리고, 오프라인이면 CPU가 대신
+ if(!NET.live()){ showBanner(`파티원 — ${u.name} (연결 끊김 · CPU 대신 조작)`); return runAI(u); }
+ showBanner(`파티원 — ${u.name}`); const a=await NET.waitAct(u); if(!a)return runAI(u); return endTurn(); }
+
 function heroStats(h){
  const b=CLASSES[h.cls].base, L=h.lv-1, G=GROW_C[h.cls]||GROW, g=k=>Math.round(G[k]*L);
  const s={hp:b.hp+g('hp'),mp:b.mp+g('mp'),atk:b.atk+g('atk'),mag:b.mag+g('mag'),def:b.def+g('def'),mdef:(b.mdef||4)+g('mdef'),
@@ -4008,10 +4066,10 @@ const STAT_HELP=[
  ["물리 크리티컬",`<div class="sh-t">물리 공격이 치명타가 될 <em class="y">확률</em></div><ul class="sh-l"><li>치명타 시 <em class="g">데미지 ×1.6</em></li><li>장비로 배율을 더 올릴 수 있음</li><li>대상: 무기 기본 공격·물리 스킬</li></ul>`],
  ["마법 크리티컬",`<div class="sh-t">마법 공격이 치명타가 될 <em class="b">확률</em></div><ul class="sh-l"><li>치명타 시 <em class="g">데미지 ×1.6</em></li><li>대상: 마법 스킬·마법 기본 공격</li></ul>`],
  ["상태이상저항",`<div class="sh-t">기절·화상·중독·출혈에 <em class="y">덜 걸림</em></div><ul class="sh-l"><li>걸릴 확률이 저항 %만큼 감소</li><li>지속 턴도 저항 %만큼 감소 (최소 1턴)</li><li>최대 <em class="b">80%</em></li></ul>`],
- ["항마력",`<div class="sh-t">장비로 올리는 수치</div><ul class="sh-l"><li>파티 평균 항마력이 높아야 <em class="y">상위 던전 입장</em> 가능</li></ul>`],
+ ["항마력",`<div class="sh-t">장비로 올리는 수치</div><ul class="sh-l"><li>아군 평균 항마력이 높아야 <em class="y">상위 던전 입장</em> 가능</li></ul>`],
 ];
 const GUIDE={
- '기본 안내':`<p>· PC는 마우스, 모바일은 터치로 똑같이 플레이할 수 있습니다.</p><p>· 파티는 최대 4명입니다. 각 용사를 P1~P4 또는 AI에게 맡길 수 있습니다 (한 기기 로컬 협동).</p><p>· 던전 안에서 얻는 <b class="gold">각인</b>은 던전을 나가면 초기화되고, 장비는 계속 남습니다.</p>`,
+ '기본 안내':`<p>· PC는 마우스, 모바일은 터치로 똑같이 플레이할 수 있습니다.</p><p>· [동료] 탭에서 CPU가 조작하는 동료를 최대 3명까지 데려갈 수 있습니다 (나 포함 4명). 동료의 장비·스킬·각인은 CPU가 알아서 관리합니다.</p><p>· 함께하는 인원(동료·온라인 파티원)이 많을수록 던전 난이도가 올라갑니다.</p><p>· 던전 안에서 얻는 <b class="gold">각인</b>은 던전을 나가면 초기화되고, 장비는 계속 남습니다.</p>`,
  '게임 진행':`<p>마을의 <b>경계 탐험</b>에서 경계를 고르면 그 경계의 <b>성소</b>에서 시작합니다. 성소의 던전 입구로 들어가면 던전 선택창이 열리고, 난이도(Normal·Expert·Master Lord·King's Road)와 던전을 고를 수 있습니다.</p><p>한 경계는 던전 10개로 이루어지며, 처음에는 1번 던전부터 시작합니다. 클리어한 기록이 있는 던전까지는 중간부터 다시 시작할 수 있고, 클리어하지 않은 던전은 흐리게 표시됩니다. 10번째 던전의 경계 보스를 쓰러뜨리면 다음 난이도가 열립니다.</p><p>던전 지도에서는 통로로 이어진 방으로만 이동할 수 있습니다. 마지막 방에는 네임드(8×8 전장) 또는 경계 보스(10×10 전장)가 있습니다.</p><p><b>각인</b>은 경계 하나를 도는 동안 유지되고, 경계를 떠나면 초기화됩니다. 던전을 클리어하면 성소로 돌아와 HP·MP가 모두 회복되며, 여기서 저장할 수 있습니다. 던전에서 전멸하면 그 경계의 저장 기록과 각인이 사라지지만, 얻은 장비와 골드는 남습니다.</p>`,
  '조작':`<p>내 차례에는 <b>이동 1번 + 행동 1번</b>을 할 수 있습니다. 스킬 버튼을 누르면 범위가 표시되고, 같은 버튼(▶ 시전)을 한 번 더 누르면 시전됩니다.</p><p><b>M 키</b> 또는 [스탯] 버튼으로 스테이터스 창을 열 수 있습니다. PC는 마우스, 모바일은 터치로 똑같이 플레이합니다.</p>`,
  '상태이상':`<p><b style="color:#ffe066">기절</b>: 다음 자기 턴을 통째로 쉽니다.<br><b style="color:#ff7a2a">화상</b>: 턴 시작마다 최대 HP의 6% 피해 (보스 2.5%), 3턴.<br><b style="color:#a6e84a">중독</b>: 턴 시작마다 최대 HP의 4% 피해 (보스 1.5%), 4턴.<br><b style="color:#ff4a5a">출혈</b>: 이동하거나 행동할 때마다 최대 HP의 5% 피해 (보스 2%), 3턴.</p><p>상태이상저항이 높을수록 덜 걸리고, 걸려도 빨리 풀립니다.</p>`,
@@ -4208,7 +4266,7 @@ let STATUS_IDX=0;
 function openStatus(i){
  if(!S||!S.heroes.length)return;
  document.querySelectorAll('.overlay.status').forEach(o=>o.remove());
- STATUS_IDX=i!=null?i:Math.min(S.selHero||0,S.heroes.length-1);
+ S.selHero=0; STATUS_IDX=0; // 동료는 CPU가 관리 (내 정보만)
  const tab=openStatus.tab==='fx'?'char':(openStatus.tab||'char');
  const h=S.heroes[STATUS_IDX], o=heroStatObj(h), C=CLASSES[h.cls];
  const fx=SLOTS.map(sl=>h.gear[sl]).filter(it=>it&&it.fx&&it.fx.length).map(it=>`<div class="fxl r${it.r}">◆ <b>${esc(it.name)}</b> — ${it.fx.map(a=>FX_TXT[a.k](a.v,a.e)).join(' / ')}</div>`).join('');
@@ -4589,7 +4647,7 @@ function renderTitleOld(app){
    <div class="ta-stage" id="tstage"><div class="ta-logo"><div class="t1">Risk <b>Of</b><br>Dungeon</div><div class="t2">RISK OF DUNGEON</div><div class="bd"><span>BETA</span>v0.1</div></div></div>
    <div class="ta-row" id="trow"></div>
    <div class="ta-menu"><button class="pri" id="bStart">${load()?'이어하기':'새 게임'}</button><button id="bNew">처음부터 (저장 초기화)</button><button id="bGuide">게임 설정</button><button id="bArt">그림체: 애니 ⇄ 클래식(이전)</button></div>
-   <div class="card dim ta-note">· PC는 마우스, 모바일은 터치로 똑같이 플레이할 수 있습니다.<br>· 파티는 최대 4명. 각 용사를 P1~P4 또는 AI에게 맡길 수 있습니다 (한 기기 로컬 협동).<br>· 던전 안에서 얻는 <b class="gold">각인</b>은 던전을 나가면 초기화되고, 장비는 계속 남습니다.</div>
+   <div class="card dim ta-note">· PC는 마우스, 모바일은 터치로 똑같이 플레이할 수 있습니다.<br>· 동료(CPU)를 최대 3명까지 데려갈 수 있습니다 (나 포함 4명). 인원이 많을수록 던전이 어려워집니다.<br>· 던전 안에서 얻는 <b class="gold">각인</b>은 던전을 나가면 초기화되고, 장비는 계속 남습니다.</div>
   </div></div>`;
   drawTitleBg($('#tbg'));
   const st=$('#tstage'); const L=heroPortrait('mage',340,400,6.6); L.style.marginRight='auto'; st.insertBefore(L,st.firstChild); const sp=document.createElement('div'); sp.style.cssText='width:30%;flex:none'; st.appendChild(sp);
@@ -4607,7 +4665,7 @@ function renderTitleOld(app){
   </div>
   <div class="card dim" style="max-width:560px;margin:0 auto;text-align:left;font-size:13px;line-height:1.6">
    · PC는 마우스, 모바일은 터치로 똑같이 플레이할 수 있습니다.<br>
-   · 파티는 최대 4명. 각 용사를 P1~P4 또는 AI에게 맡길 수 있습니다 (한 기기 로컬 협동).<br>
+   · 동료(CPU)를 최대 3명까지 데려갈 수 있습니다 (나 포함 4명). 인원이 많을수록 던전이 어려워집니다.<br>
    · 던전 안에서 얻는 <b class="gold">각인</b>은 던전을 나가면 초기화되고, 장비는 계속 남습니다.
   </div></div>`;
  if(ART!=='anime'){const tc=$('#tchars'); for(const c of activeCls()) tc.appendChild(heroPortrait(c,128,176,3.9));}
@@ -4621,7 +4679,7 @@ function renderTitleOld(app){
 function renderTown(app){
  if(S.selHero>=S.heroes.length)S.selHero=0;
  if(!S.tab||S.tab==='sound'||S.tab==='dungeon')S.tab='home';
- const tabs=[['home','마을'],['party','파티'],['gear','인벤토리'],['skill','스킬']], home=S.tab==='home'||S.tab==='gear'||S.tab==='skill';
+ const tabs=[['home','마을'],['party','동료'],['gear','인벤토리'],['skill','스킬']], home=S.tab==='home'||S.tab==='gear'||S.tab==='skill';
  app.className=(home?'townfs':'townfs tpage')+' tab-'+S.tab;
  app.innerHTML=(home?'<div id="tabc"></div><div class="townhead">':`<div class="fsbg" style="background-image:url(${(TOWN_IMG[S.town]||TOWN_IMG.salv).src})"></div><div class="townhead">`)+`<div class="thead"><div class="tabs">${tabs.map(([k,n])=>`<button data-tab="${k}" class="${S.tab===k||(k==='home'&&S.tab==='zone')?'sel':''}">${n}</button>`).join('')}</div>
   <div class="tright"><span class="tag gold">${gI(S.gold)}</span><span class="tag">항마력 <b>${partyAnti()}</b></span><button id="bStat">스탯 (M)</button><button id="bQuest">퀘스트 (L)</button><button id="bDict">사전</button><button data-tab="multi" class="${S.tab==='multi'?'sel':''}">멀티플레이</button><button id="bGuide2">설정</button><button id="bTitle">타이틀</button></div></div>`+(home?'</div>':'</div><div id="tabc" class="fspanel"></div>');
@@ -4770,7 +4828,7 @@ function openRestNpc(){
   const rows=[]; S.heroes.forEach(h=>Object.entries(h.gear||{}).forEach(([sl,it])=>{if(it){fixDur(it); rows.push({it,where:`${h.name} 장착`});}})); (S.inv||[]).forEach(it=>{fixDur(it); rows.push({it,where:'가방'});});
   const dmg=rows.filter(x=>x.it.dur<x.it.durMax), total=dmg.reduce((a,x)=>a+repairCost(x.it),0);
   root.innerHTML=`<div class="npcl-box rp-box"><div class="npcl-h"><span><b>${n[0]}</b> · 장비 수리</span><span class="tag gold">${gI(S.gold)}</span></div>
-   <div class="rp-top"><span class="rp-face"></span><div class="rp-say">${n[2]}<div class="dim" style="font-size:12px;margin-top:6px">장비는 전투를 치를 때마다 내구도가 줄어들며, 전투불능이 되거나 파티가 전멸하면 더 크게 줄어듭니다. 내구도가 0이 되면 파손되어 능력치가 적용되지 않습니다.</div></div></div>
+   <div class="rp-top"><span class="rp-face"></span><div class="rp-say">${n[2]}<div class="dim" style="font-size:12px;margin-top:6px">장비는 전투를 치를 때마다 내구도가 줄어들며, 전투불능이 되거나 아군이 전멸하면 더 크게 줄어듭니다. 내구도가 0이 되면 파손되어 능력치가 적용되지 않습니다.</div></div></div>
    <div class="rp-list">${dmg.length?dmg.map((x,i)=>{const it=x.it, c=repairCost(it); return `<div class="rp-row"><div class="rp-nm"><b class="r${it.r}">${esc(it.name)}</b><small>${x.where} · ${SLOT_N[it.slot]}</small></div><div class="rp-bar"><i style="width:${it.dur/it.durMax*100}%;background:${it.dur===0?'#d04a3a':it.dur/it.durMax<=.25?'#e0902a':'#c8a03a'}"></i><span>${it.dur} / ${it.durMax}${it.dur===0?' (파손)':''}</span></div><button data-rp="${i}" ${S.gold<c?'disabled':''}>수리 ${gI(c)}</button></div>`;}).join(''):'<div class="dim" style="padding:16px;text-align:center">수리가 필요한 장비가 없습니다.</div>'}</div>
    <div class="row" style="justify-content:flex-end;margin-top:10px;gap:8px"><button class="pri" id="rpAll" ${!dmg.length||S.gold<total?'disabled':''}>전체 수리 (${gI(total)})</button><button id="rpBack">NPC 목록</button><button id="nx">닫기</button></div></div>`;
   root.querySelector('.rp-face').appendChild(npcFaceArt(n[0],110,110,true));
@@ -4945,9 +5003,9 @@ function openZoneSelect(){
 const CROWN_SVG='<svg viewBox="0 0 24 18" width="16" height="12" style="vertical-align:-1px"><path d="M2 15l-1-10 6 5 5-8 5 8 6-5-1 10z" fill="#ffc93a" stroke="#8a5a10" stroke-width="1.2" stroke-linejoin="round"/><circle cx="12" cy="3" r="1.6" fill="#fff2b0"/></svg>';
 function zhp(h){ const src=ZR?ZR.hp:(S&&S.zoneSave&&S.zoneSave.hp); return (src&&h&&src[h.id])||{hpR:1,mpR:1}; }
 function partyHud(){
- return `<div class="phud">${S.heroes.slice(0,4).map((h,i)=>`<div class="phr ${i===S.selHero?'cur':''}" data-ph="${i}" title="클릭하면 능력치와 장비를 확인합니다"><canvas data-pf="${i}" width="88" height="88"></canvas><div class="phm"><div class="phn">${i===0?CROWN_SVG+' ':''}<b>${esc(h.name)}</b></div><div class="phb hp"><i style="width:${Math.round(zhp(h).hpR*100)}%"></i></div><div class="phb mp"><i style="width:${Math.round(zhp(h).mpR*100)}%"></i></div></div></div>`).join('')}</div>`;
+ return `<div class="phud">${S.heroes.slice(0,4).map((h,i)=>`<div class="phr ${i===S.selHero?'cur':''}" data-ph="${i}" title="${i?'동료 · CPU가 알아서 싸웁니다':'클릭하면 능력치와 장비를 확인합니다'}"><canvas data-pf="${i}" width="88" height="88"></canvas><div class="phm"><div class="phn">${i===0?CROWN_SVG+' ':''}<b>${esc(h.name)}</b></div><div class="phb hp"><i style="width:${Math.round(zhp(h).hpR*100)}%"></i></div><div class="phb mp"><i style="width:${Math.round(zhp(h).mpR*100)}%"></i></div></div></div>`).join('')}</div>`;
 }
-function togglePartyStatus(i){const ex=document.querySelector('.overlay.status'); if(ex&&STATUS_IDX===i){ex.remove(); return;} closeAllWins(); openStatus(i);}
+function togglePartyStatus(i){ if(i>0){toast('동료는 CPU가 장비·스킬·각인을 알아서 관리합니다.'); return;}const ex=document.querySelector('.overlay.status'); if(ex&&STATUS_IDX===i){ex.remove(); return;} closeAllWins(); openStatus(i);}
 function drawFacePt(g,W,spec){ const d=spec&&spec.img, I=d&&SPRITE_IMG[d.key]; g.fillStyle='#1a1428'; g.fillRect(0,0,W,W);
  if(I&&I.ready&&d.face){const im=I.im, ss=d.face[2]*im.naturalHeight*1.25, sx=Math.max(0,Math.min(im.naturalWidth-ss,d.face[0]*im.naturalWidth-ss/2)), sy=Math.max(0,Math.min(im.naturalHeight-ss,d.face[1]*im.naturalHeight-ss*.42)); g.imageSmoothingQuality='high'; g.drawImage(im,sx,sy,ss,ss,0,0,W,W); return true;}
  return false; }
@@ -4967,7 +5025,7 @@ const HUB_IC={
  multi:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3.5 3.5 3.5 14.500 0 18M12 3c-3.500 3.500-3.500 14.500 0 18" fill="none" stroke="currentColor" stroke-width="1.8"/>',
  set:'<circle cx="12" cy="12" r="3.500"/><path d="M12 2v3.500M12 18.500V22M2 12h3.500M18.500 12H22M5 5l2.500 2.500M16.500 16.500L19 19M5 19l2.500-2.500M16.500 7.500L19 5" stroke="currentColor" stroke-width="2.600" stroke-linecap="round"/>',
  title:'<path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/>'};
-const HUB_BTN=[['home','마을'],['party','파티'],['gear','인벤토리'],['skill','스킬'],['stat','스탯'],['quest','퀘스트'],['dict','사전'],['multi','멀티플레이'],['set','설정'],['title','캐릭터 선택']];
+const HUB_BTN=[['home','마을'],['party','동료'],['gear','인벤토리'],['skill','스킬'],['stat','스탯'],['quest','퀘스트'],['dict','사전'],['multi','멀티플레이'],['set','설정'],['title','캐릭터 선택']];
 function bottomHud(){
  const h=S.heroes[S.selHero]||S.heroes[0]; if(!h)return ''; const st=heroStats(h), need=expNeed(h.lv), pc=Math.min(100,h.exp/need*100), [row1,row2]=quickBar(true), inRest=SCREEN==='rest', curTab=inRest?((S.restTab&&S.restTab!=='rest')?S.restTab:'home'):S.tab, rr=zhp(h);
  const hk={stat:keyName(KEYS.stat||'KeyM'),quest:'L'};
@@ -5042,6 +5100,7 @@ function tabHome(c){
  TOWN_RAF=requestAnimationFrame(loop);
 }
 function heroSelector(){
+ return ''; // 동료는 CPU가 관리하므로 캐릭터 선택 없음
  return `<div class="row" style="margin-bottom:8px">${S.heroes.map((h,i)=>`<button data-sh="${i}" class="${S.selHero===i?'sel':''}">${esc(h.name)} Lv${h.lv}</button>`).join('')}</div>`;
 }
 function bindHeroSel(c){c.querySelectorAll('[data-sh]').forEach(b=>b.onclick=()=>{S.selHero=+b.dataset.sh;render();});}
@@ -5050,34 +5109,29 @@ const AYANE_RESTORE_UI=false; // 복구 완료 후 숨김 (코드는 보관)
 function ayaneLost(){return AYANE_RESTORE_UI&&S&&!S.ayaneRestored&&S.heroes.length&&!S.heroes.some(h=>h.name==='아야네')&&S.heroes.length<4;}
 function restoreAyane(){const h=newHero('mage','P1'); h.name='아야네'; h.lv=7; h.exp=237; h.sp=(h.lv-1)*(typeof SP_PER_LV!=='undefined'?SP_PER_LV:1);
  S.heroes.forEach(x=>{if(x.ctrl==='P1')x.ctrl='AI';}); S.heroes.unshift(h); S.selHero=0; S.ayaneRestored=true; save();}
-function tabParty(c){
- c.innerHTML=`${ayaneLost()?`<div class="card" style="margin-bottom:10px;border-color:#c8a03a"><h3 style="color:var(--gold)">사라진 아야네 복구</h3><div class="dim" style="font-size:12.5px;margin-bottom:8px">오류로 제외된 마법사 아야네(Lv7, EXP 237/880)를 첫 번째 용사로 되돌립니다. 습득한 스킬과 스탯 돌 보너스는 기록이 남아 있지 않아 초기화되며, 스킬 포인트는 레벨에 맞게 다시 지급됩니다. 제외될 때 가방으로 돌아간 장비는 직접 다시 착용해 주십시오.</div><button class="pri" id="ayRestore">아야네 복구</button></div>`:''}<div class="grid2" id="hlist"></div>
- <div class="card" style="margin-top:10px">
-  <h3>용사 추가 <span class="dim" style="font-size:12px">(${S.heroes.length}/4)</span></h3>
-  <div class="dim" style="font-size:12px;margin-bottom:6px">동료는 최대 4명까지 추가할 수 있으며, 동료를 제외하면 착용 중인 장비는 가방으로 돌아가지만, 그 캐릭터의 레벨과 성장은 사라지며 되돌릴 수 없습니다.</div>
-  <div class="row">${activeCls().map(k=>[k,CLASSES[k]]).map(([k,v])=>`<button data-add="${k}" ${S.heroes.length>=4?'disabled':''}>${v.name}</button>`).join('')}</div>
- </div>`;
+function tabParty(c){ // 동료: CPU가 조작하는 같이 싸우는 캐릭터 (파티 = 온라인 멀티플레이 전용 명칭)
+ compSyncAll(); const me=S.heroes[0], comps=S.heroes.slice(1), left=compSlotsLeft();
+ c.innerHTML=`<div class="card" style="margin-bottom:10px"><h3>동료 <span class="dim" style="font-size:12px">(나 포함 ${S.heroes.length}/${TEAM_MAX}명)</span></h3>
+  <div class="dim" style="font-size:12.5px;line-height:1.6">· 동료는 CPU가 조작하며 던전에서 함께 싸웁니다. 장비·스킬·각인·인벤토리는 CPU가 알아서 관리하고 직접 바꿀 수 없습니다.<br>
+  · 동료의 레벨은 내 레벨(Lv.${me.lv})을 따라가고, 레벨에 맞는 스킬과 장비를 자동으로 갖춥니다. EXP·아이템은 동료에게 나뉘지 않습니다.<br>
+  · 함께하는 인원(동료 + 온라인 파티원)이 많을수록 몬스터의 체력·공격력과 수가 늘어나 던전이 어려워집니다.</div></div>
+ <div class="grid2" id="hlist"></div>
+ <div class="card" style="margin-top:10px"><h3>동료 데려가기 <span class="dim" style="font-size:12px">(남은 자리 ${left})</span></h3>
+  <div class="row">${activeCls().map(k=>`<button data-add="${k}" ${left<=0?'disabled':''}>${CLASSES[k].name}</button>`).join('')}</div></div>`;
  const list=$('#hlist');
- S.heroes.forEach((h,i)=>{
-  const st=heroStats(h), C=CLASSES[h.cls];
-  const d=document.createElement('div'); d.className='card hero-card';
-  d.appendChild(heroPortrait(h.cls,70,100,2.1));
+ if(!comps.length)list.innerHTML='<div class="card dim" style="font-size:13px">함께하는 동료가 없습니다. 아래에서 직업을 골라 동료를 데려가세요.</div>';
+ comps.forEach(h=>{ const i=S.heroes.indexOf(h), st=heroStats(h), C=CLASSES[h.cls];
+  const d=document.createElement('div'); d.className='card hero-card'; d.appendChild(heroPortrait(h.cls,70,100,2.1));
   const info=document.createElement('div'); info.style.flex='1';
-  info.innerHTML=`<div class="row" style="justify-content:space-between"><b>${esc(h.name)}</b><span class="tag">${C.name} Lv${h.lv}</span></div>
-   <div class="dim" style="font-size:12px">EXP ${h.exp}/${expNeed(h.lv)} · 항마력 <b style="color:var(--txt)">${st.anti}</b></div>
-   <div style="font-size:12px;margin:4px 0">HP ${st.hp} · MP ${st.mp} · 물리공격력 ${st.atk} · 마법공격력 ${st.mag}<br>물리방어력 ${st.def} · 마법방어력 ${st.mdef}<br>공격속도 ${st.spd} · 이동속도 ${st.mov} · 물리 크리티컬 ${st.pcrit}% · 마법 크리티컬 ${st.mcrit}%<br><button data-stat="${i}" style="padding:3px 8px;margin-top:4px">스테이터스 전체 보기</button></div>
-   <div class="row" style="gap:4px">조작 <select data-ctrl="${i}" style="background:#15121f;color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:4px">${['P1','P2','P3','P4','AI'].map(x=>`<option ${h.ctrl===x?'selected':''}>${x}</option>`).join('')}</select>
-   ${CAN_REMOVE_HERO&&i>0?`<button data-del="${i}" ${S.heroes.length<=1?'disabled title="마지막 용사는 제외할 수 없습니다"':''} style="padding:4px 8px">제외</button>`:''}</div>`;
-  d.appendChild(info); list.appendChild(d);
- });
- const ar=c.querySelector('#ayRestore'); if(ar)ar.onclick=()=>{restoreAyane(); toast('아야네를 복구했습니다.'); render();};
- c.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const used=S.heroes.map(h=>h.ctrl);S.heroes.push(newHero(b.dataset.add,'AI'));save();render();});
- c.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const idx=+b.dataset.del, h=S.heroes[idx]; if(idx===0||S.heroes.length<=1)return;
-  if(b.dataset.arm!=='1'){b.dataset.arm='1'; b.textContent='정말 제외합니다'; b.style.borderColor='#d04a3a'; b.style.color='#ff8a7a'; setTimeout(()=>{if(b.isConnected){b.dataset.arm='0'; b.textContent='제외'; b.style.borderColor=''; b.style.color='';}},3000); return;}
-  const worn=Object.values(h.gear||{}).filter(Boolean); if(S.inv.length+worn.length>BAG_MAX){toast('가방에 자리가 부족합니다. 장비 칸을 비운 뒤 다시 시도해 주십시오.'); return;}
-  worn.forEach(it=>S.inv.push(it)); S.qs6=S.qs6; S.heroes.splice(idx,1); if(S.heroes.length&&!S.heroes.some(x=>x.ctrl==='P1'))S.heroes[0].ctrl='P1'; if(S.selHero>=S.heroes.length)S.selHero=0; save(); sfx('click'); toast(`${h.name}을(를) 파티에서 제외했습니다.`); render();});
- c.querySelectorAll('[data-stat]').forEach(b=>b.onclick=()=>openStatus(+b.dataset.stat));
- c.querySelectorAll('[data-ctrl]').forEach(s=>s.onchange=()=>{S.heroes[+s.dataset.ctrl].ctrl=s.value;save();});
+  info.innerHTML=`<div class="row" style="justify-content:space-between"><b>${esc(h.name)}</b><span class="tag" style="color:#8fe39a">동료 · ${C.name} Lv${h.lv}</span></div>
+   <div style="font-size:12px;margin:4px 0">HP ${st.hp} · MP ${st.mp} · 물리공격력 ${st.atk} · 마법공격력 ${st.mag}<br>물리방어력 ${st.def} · 마법방어력 ${st.mdef} · 공격속도 ${st.spd}</div>
+   <div class="dim" style="font-size:11.5px">CPU 자동 관리 · 스킬 ${h.equip.length}개 장착</div>
+   <div class="row" style="gap:4px;margin-top:4px"><button data-del="${i}" style="padding:4px 8px">돌려보내기</button></div>`;
+  d.appendChild(info); list.appendChild(d); });
+ c.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{ if(compSlotsLeft()<=0)return; const h=newHero(b.dataset.add,'AI'); h.comp=true; S.heroes.push(h); compAuto(h); save(); sfx('click'); toast(`${CLASSES[h.cls].name} 동료가 합류했습니다.`); render(); });
+ c.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ const idx=+b.dataset.del, h=S.heroes[idx]; if(!idx||!h)return;
+  if(b.dataset.arm!=='1'){b.dataset.arm='1'; b.textContent='정말 돌려보냅니다'; b.style.borderColor='#d04a3a'; b.style.color='#ff8a7a'; setTimeout(()=>{if(b.isConnected){b.dataset.arm='0'; b.textContent='돌려보내기'; b.style.borderColor=''; b.style.color='';}},3000); return;}
+  S.heroes.splice(idx,1); S.selHero=0; try{soloSync();}catch(e){} save(); sfx('click'); toast(`${h.name} 동료를 돌려보냈습니다.`); render(); });
 }
 let INV_SEL_KEY=null, DRAG_JUST=0;
 document.addEventListener('click',e=>{if(Date.now()-DRAG_JUST<250){e.stopPropagation(); e.preventDefault();}},true);
@@ -5180,7 +5234,7 @@ function tabInv(c){
   det=sel?`<div class="item"><div><b>${esc(store[sel].name)}</b> <span class="tag">× ${store[sel].n}</span>${store[sel].desc?`<div class="dim" style="font-size:12px;margin-top:3px">${esc(store[sel].desc)}</div>`:''}</div>${sub==='cons'?(CONS[sel]&&CONS[sel].stat?`<button class="pri" data-stone="${sel}" ${SCREEN==='town'?'':'disabled title="마을에서만 사용할 수 있습니다"'}>${esc(h.name)}에게 사용</button>`:qsFix().includes(sel)?`<button data-qr="${sel}">등록 해제</button>`:`<button class="pri" data-qr="${sel}">빠른 등록</button>`):''}</div>`:`<span class="dim">${ids.length?'칸을 누르면 아이템 정보가 나옵니다.':(sub==='cons'?'보유한 소모품이 없습니다. 물약은 몬스터가 떨어뜨리며, 스탯 돌은 에픽 퀘스트 보상으로 얻습니다.':'보유한 재료가 없습니다. 몬스터가 떨어뜨리는 재료와 퀘스트용 정수가 이곳에 쌓입니다.')}</span>`;
  }
  const cnt=sub==='gear'?S.inv.length:sub==='quest'?Object.keys(S.mats||{}).filter(k=>isQMat(k)&&S.mats[k].n>0).length:slotsOf(sub==='cons'?(S.cons||{}):(S.mats||{}),sub==='cons'?CONS_MAX:MAT_MAX);
- c.innerHTML=`<div class="invwin"><div class="iw-h"><b>인벤토리</b><span class="dim" style="font-size:12px">${esc(h.name)} Lv${h.lv}</span>${S.heroes.length>1?`<span class="iw-hs">${S.heroes.map((x,i)=>`<button data-sh="${i}" class="${S.selHero===i?'sel':''}">${i+1}</button>`).join('')}</span>`:''}<button class="iw-x" id="iwx">✕</button></div>
+ c.innerHTML=`<div class="invwin"><div class="iw-h"><b>인벤토리</b><span class="dim" style="font-size:12px">${esc(h.name)} Lv${h.lv}</span>${false?`<span class="iw-hs">${S.heroes.map((x,i)=>`<button data-sh="${i}" class="${S.selHero===i?'sel':''}">${i+1}</button>`).join('')}</span>`:''}<button class="iw-x" id="iwx">✕</button></div>
   <div class="iw-top"><div class="iw-col">${['top','bottom','shoes'].map(eqCell).join('')}</div><div class="iw-me" id="iwme"></div><div class="iw-col2">${eqCell('weapon')}${titleCell(h)}${['ring','bracelet','necklace'].map(eqCell).join('')}</div></div>
   <div class="iw-tabs">${names.map(([k,n])=>`<button data-it="${k}" class="${sub===k?'sel':''}">${n}</button>`).join('')}<button id="invSort" style="padding:6px 12px;margin-left:auto" title="종류·등급 순으로 정리합니다">정렬</button><span class="dim" style="font-size:12px">${cnt}/${BAG_MAX}</span></div>
   <div class="iw-grid">${grid}</div>${!INV_DET_GEAR?'':`<div class="iw-det invdet">${det}</div>`}<div class="iw-gf"><span class="gi" title="골드">${goldIcon(22)}</span><b class="gold">${fmtG(S.gold)}</b></div></div>`;
@@ -5261,7 +5315,7 @@ function tabSkillOld(c){ // 이전 골드 습득 방식 (보관)
    <div class="sk-mid"><div class="sk-nm">${sk.name}${eq?'<em>장착</em>':''}</div><div class="sk-req">${req}</div><div class="sk-ds">${sk.desc} · ${skillDetail(sk)}</div></div>${btn}</div>`;}).join('')||'<div class="dim" style="padding:20px;text-align:center">해당하는 스킬이 없습니다.</div>';
  c.innerHTML=`<div class="lwin inbox"><div class="lw-h">스킬<button class="lw-x" id="skx">✕</button></div>
   <div class="lw-tabs">${[['all','전체'],['eq','장착 중'],['learn','미습득']].map(([k,n])=>`<button data-skt="${k}" class="${sub===k?'sel':''}">${n}</button>`).join('')}</div>
-  <div class="lw-body">${S.heroes.length>1?`<div class="lw-heroes">${S.heroes.map((x,j)=>`<button data-skh="${j}" class="${j===S.selHero?'sel':''}">${esc(x.name)} Lv${x.lv}</button>`).join('')}</div>`:''}${rows}</div>
+  <div class="lw-body">${false?`<div class="lw-heroes">${S.heroes.map((x,j)=>`<button data-skh="${j}" class="${j===S.selHero?'sel':''}">${esc(x.name)} Lv${x.lv}</button>`).join('')}</div>`:''}${rows}</div>
   <div class="lw-foot" style="display:flex;justify-content:space-between;align-items:center"><span>${esc(h.name)} · 전투 장착 <b class="gold">${h.equip.length}/${SK_MAX}</b></span><span class="gold">${gI(S.gold)}</span></div></div>`;
  c.querySelector('#skx').onclick=()=>{if(SCREEN==='town'){S.tab='home'; save();} if(SCREEN==='rest')S.restTab='rest'; render();};
  c.querySelectorAll('[data-skt]').forEach(b=>b.onclick=()=>{S.skTab=b.dataset.skt; render();});
@@ -5471,7 +5525,7 @@ function tabSkill(c){
  // 단축키 등록 (스킬 6칸)
  const sl=skFix(h), slots=sl.map((id,i)=>`<div class="dk-sl" data-sslot="${i}" data-dks="${i}"><span>${keyName(KEYS['s'+i]||'')||i+1}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
  const pend=skPending(h); const _ot=c.querySelector('.dk-tree'), _st=_ot?_ot.scrollTop:(tabSkill._st||0);
- c.innerHTML=`<div class="lwin inbox dsk"><div class="dk-top"><div class="dk-tabs"><span class="dk-tab on">✔ SP 스킬배우기</span>${S.heroes.length>1?S.heroes.map((x,j)=>`<button data-skh="${j}" class="dk-hb ${j===S.selHero?'sel':''}">Lv.${x.lv} ${esc(x.name)}</button>`).join(''):''}</div><div class="dk-sp-box"><span>SP</span><b>${h.sp}</b></div><span class="dk-nm">Lv.${h.lv} ${esc(h.name)} · ${esc(CLASSES[h.cls].name)}</span><button class="lw-x" id="skx">✕</button></div>
+ c.innerHTML=`<div class="lwin inbox dsk"><div class="dk-top"><div class="dk-tabs"><span class="dk-tab on">✔ SP 스킬배우기</span>${false?S.heroes.map((x,j)=>`<button data-skh="${j}" class="dk-hb ${j===S.selHero?'sel':''}">Lv.${x.lv} ${esc(x.name)}</button>`).join(''):''}</div><div class="dk-sp-box"><span>SP</span><b>${h.sp}</b></div><span class="dk-nm">Lv.${h.lv} ${esc(h.name)} · ${esc(CLASSES[h.cls].name)}</span><button class="lw-x" id="skx">✕</button></div>
   <div class="dk-main"><div class="dk-left">
    <div class="dk-cmn"><div class="dk-cml">공용<br>스킬</div><div class="dk-cms">${common}</div><button class="dk-recb ${SK_REC_ON?'on':''}" id="dkRec" title="처음 하는 분을 위한 추천 스킬 표시"><b>👍</b><small>추천</small></button></div>
    <div class="dk-tree"><div class="dk-axh">Lv</div><div class="dk-g" style="width:${gw}px;height:${gh}px">${axis}<svg class="dk-ln" width="${gw}" height="${gh}">${lines}</svg>${cells}${pop}</div></div>
@@ -5503,7 +5557,7 @@ function tabSkill(c){
 }
 function tabDungeon(c){
  const anti=partyAnti();
- c.innerHTML=`<div class="card dim" style="font-size:12px;margin-bottom:10px">파티 인원(1~4명)에 맞춰 적의 수·HP·공격력과 전투 후 회복량이 자동으로 조정됩니다. 1인은 적이 적고 약해지는 대신, 4인은 더 많고 강한 적이 나옵니다.</div><div class="grid2">${DUNGEONS.map((d,i)=>{const ok=anti>=d.req;return `<div class="card"><h3>${d.name}</h3>
+ c.innerHTML=`<div class="card dim" style="font-size:12px;margin-bottom:10px">함께하는 인원(나 + 동료 + 파티원, 1~4명)에 맞춰 적의 수·HP·공격력과 전투 후 회복량이 자동으로 조정됩니다. 1인은 적이 적고 약해지는 대신, 4인은 더 많고 강한 적이 나옵니다.</div><div class="grid2">${DUNGEONS.map((d,i)=>{const ok=anti>=d.req;return `<div class="card"><h3>${d.name}</h3>
   <div class="dim" style="font-size:13px">${d.desc}</div>
   <div style="margin:8px 0" class="row"><span class="tag">난이도 ${'★'.repeat(d.tier)}</span><span class="tag" style="${ok?'':'color:var(--red)'}">필요 항마력 ${d.req}</span><span class="tag">맵 ${d.w}x${d.h}</span>${S.cleared[i]?'<span class="tag" style="color:var(--green)">클리어</span>':''}</div>
   <div class="dim" style="font-size:12px">보스: ${MONS[d.boss].name} · ${S.heroes.length}인 보정 적용</div>
@@ -5516,16 +5570,20 @@ function tabSound(c){
  bindVol(c,()=>tabSound(c));
  c.querySelectorAll('[data-snd]').forEach(b=>b.onclick=()=>{const on=cfg.on; cfg.on=true; SFX.last={}; sfx(b.dataset.snd); cfg.on=on;});
 }
-function tabMulti(c){
+function tabMulti(c){ // 온라인 멀티플레이(파티) — 서버 연동 전 뼈대 화면
+ const st={offline:'오프라인',connecting:'연결 중…',online:'온라인'}[NET.state]||NET.state, live=NET.live();
  c.innerHTML=`<div class="card" style="line-height:1.7">
-  <h3>멀티플레이 (최대 4인)</h3>
-  <p>이 데모의 멀티플레이는 <b>한 기기 로컬 협동</b>입니다. 파티 탭에서 용사마다 조작을 <b>P1~P4</b>로 정하면 그 용사의 차례에 화면 위에 "P2 차례"처럼 표시되고, 해당 플레이어가 조작하면 됩니다. AI로 두면 자동으로 싸웁니다.</p>
-  <p class="dim">PC·모바일 간 <b>온라인 동기화</b>는 아직 없습니다. 게임 서버(WebSocket 등)를 붙이는 다음 단계입니다. 전투 로직이 "턴 단위 행동"으로 짜여 있어서, 각 행동(이동·공격·스킬)을 서버로 보내고 받기만 하면 되는 구조입니다.</p>
-  <h3>현재 파티 조작 배정</h3>
-  ${S.heroes.map(h=>`<div class="item"><span>${esc(h.name)} (${CLASSES[h.cls].name})</span><span class="tag">${h.ctrl}</span></div>`).join('')}
+  <h3>온라인 멀티플레이 · 파티 <span class="tag" style="color:${live?'#8fe39a':'#c8a06a'}">${st}</span></h3>
+  <p>다른 플레이어와 온라인으로 <b>파티</b>를 맺어 함께 던전에 들어가는 기능입니다. 파티는 최대 ${TEAM_MAX}명이며, 동료(CPU)와 합쳐 ${TEAM_MAX}명까지 함께할 수 있습니다.</p>
+  <p class="dim">아직 게임 서버가 연결되지 않아 사용할 수 없습니다. (서버 연동 준비 중)</p>
+  <div class="row" style="gap:6px;margin:8px 0"><button id="mpCreate" disabled>파티 만들기</button><button id="mpJoin" disabled>파티 코드로 참가</button><button id="mpQuick" disabled>빠른 참가</button></div>
+  <h3>현재 함께하는 인원</h3>
+  ${S.heroes.map((h,i)=>`<div class="item"><span>${esc(h.name)} (${CLASSES[h.cls].name} Lv${h.lv})</span><span class="tag">${i?'동료':'나'}</span></div>`).join('')}
+  ${NET.members.filter(m=>!m.me).map(m=>`<div class="item"><span>${esc(m.name||'파티원')} (${m.cls&&CLASSES[m.cls]?CLASSES[m.cls].name:'?'} Lv${m.lv||'?'})</span><span class="tag">파티원</span></div>`).join('')}
  </div>`;
+ const bc=c.querySelector('#mpCreate'), bj=c.querySelector('#mpJoin'), bq=c.querySelector('#mpQuick');
+ if(live){ [bc,bj,bq].forEach(b=>b.disabled=false); bc.onclick=()=>NET.createRoom(); bq.onclick=()=>NET.send(NET.MSG.ROOM_JOIN,{quick:true}); bj.onclick=()=>{const code=prompt('파티 코드'); if(code)NET.joinRoom(code.trim());}; }
 }
-
 /* ================= 런(던전 진행) ================= */
 /* ================= 던전 배경 (배경 디자인 문구에 맞춘 테마별 그림) ================= */
 function srand(seed){let s=(seed>>>0)||1; return ()=>{s^=s<<13; s>>>=0; s^=s>>17; s^=s<<5; s>>>=0; return s/4294967296;};}
@@ -5737,7 +5795,7 @@ const CLS_GUIDE={
  brawler:{han:'格鬪家',pts:['맨손으로 싸우는 단단한 근접 공격수입니다.','연환권으로 연속 타격을 가하고, 메치기로 적을 기절시킬 수 있습니다.','기공 집중으로 일정 시간 공격력을 끌어올립니다.','회피율과 상태이상 저항이 높은 편입니다.']},
  gunner:{han:'銃士',pts:['멀리서 적을 쓰러뜨리는 원거리 공격수입니다.','저격, 연사, 폭발 사격으로 상황에 맞는 공격을 할 수 있습니다.','치명타율과 적중률이 높습니다.','이동 거리가 짧고 체력이 낮아 위치 선정이 중요합니다.']},
  mage:{han:'魔法師',pts:['강력한 마법으로 넓은 범위의 적을 공격하는 캐릭터입니다.','화상과 빙결 등 상태이상으로 전투를 유리하게 이끕니다.','마법공격력과 MP가 높습니다.','체력과 물리방어력이 낮아 보호가 필요합니다.']},
- priest:{han:'司祭',pts:['아군을 치유하고 보호하는 지원형 캐릭터입니다.','치유와 보호막, 축복으로 파티의 생존을 책임집니다.','마법방어력과 상태이상 저항이 높습니다.','공격력은 낮은 편이므로 동료와 함께할 때 가치가 높아집니다.']},
+ priest:{han:'司祭',pts:['아군을 치유하고 보호하는 지원형 캐릭터입니다.','치유와 보호막, 축복으로 아군의 생존을 책임집니다.','마법방어력과 상태이상 저항이 높습니다.','공격력은 낮은 편이므로 동료와 함께할 때 가치가 높아집니다.']},
 };
 function renderCharSel(app){
  const cls=CLS_ORDER.filter(k=>CLASSES[k]); let sel=cls.find(c=>ENABLED_CLS.includes(c))||cls[0];
@@ -6016,6 +6074,7 @@ function enterDungeon(dg){ showDungeonLoading(dg,()=>enterDungeonNow(dg)); }
 function fbRewind(){ ['field','boss'].forEach(k=>{ try{ if(FB.el[k])FB.el[k].currentTime=0; }catch(e){} }); }
 function enterDungeonNow(dg){
  try{fbRewind();}catch(e){}
+ try{compSyncAll();}catch(e){}
  soloSync();
  const D=ZR.iso?isoDiff(DIFFS[ZR.diff]):DIFFS[ZR.diff];
  const hp=ZR.hp||{}; R={augStat:{},st:{hits:0,miss:0,crit:0,multi:0,kills:0,taken:0,sk:{},rounds:0,fights:0},iso:!!ZR.iso,isoWolf:!!ZR.iso&&Math.random()<ISO_WOLF_RATE,dg,diff:D,mods:ZR.mods,augs:ZR.augs,skAug:ZR.skAug,gold:0,exp:0,party:S.heroes.map(h=>({h,hpR:hp[h.id]?hp[h.id].hpR:1,mpR:hp[h.id]?hp[h.id].mpR:1})),map:genLayout(dg),pos:null,items:[]};
@@ -6041,12 +6100,12 @@ function renderMap(app){
  app.innerHTML=`<div class="topbar"><div class="dgpill">${d.name} <span class="dim" style="font-size:12px">〈${d.sub}〉</span><span class="dgn" style="color:${R.diff.col}">${R.diff.name}</span></div><div class="row"><span class="tag gold">획득 ${gI(R.gold)}</span><button id="bStatM">스탯 (M)</button><button id="bQuit">던전 포기</button></div></div>
  <div class="card mapcard"><div class="dmap" style="--mw:${m.w};grid-template-columns:repeat(${m.w},var(--cs));grid-template-rows:repeat(${m.h},var(--cs))">${cells}</div>
   <div class="dim" style="text-align:center;font-size:12px;margin-top:6px">${canMove?'통로로 이어진 방을 눌러 이동하십시오':'현재 방을 먼저 클리어해야 합니다'}</div></div>
- <div class="card" style="margin-top:8px"><h3>파티</h3><div class="pmini">${R.party.map(p=>`<div><b>${esc(p.h.name)}</b> <span class="dim">${p.hpR<=0?'(전투불능)':''}</span><div class="bar"><i style="width:${p.hpR*100}%;background:var(--red)"></i></div><div class="bar"><i style="width:${p.mpR*100}%;background:#2548c4"></i></div></div>`).join('')}</div>
+ <div class="card" style="margin-top:8px"><h3>아군</h3><div class="pmini">${R.party.map(p=>`<div><b>${esc(p.h.name)}</b> <span class="dim">${p.hpR<=0?'(전투불능)':''}</span><div class="bar"><i style="width:${p.hpR*100}%;background:var(--red)"></i></div><div class="bar"><i style="width:${p.mpR*100}%;background:#2548c4"></i></div></div>`).join('')}</div>
  <h3 style="margin-top:10px">각인 <span class="dim" style="font-size:12px">(이 경계를 떠나면 초기화)</span></h3><div class="row">${R.augs.length?R.augs.map(a=>`<span class="tag" title="${esc(a.desc)}" style="border-color:#6a52c9">✦ ${esc(a.name)}</span>`).join(''):'<span class="dim">아직 없습니다. 각인 제단(✦)이나 전투 보상으로 얻습니다.</span>'}</div></div>`;
  app.querySelectorAll('.dcell.adj').forEach(el=>el.onclick=()=>moveRoom(+el.dataset.mx,+el.dataset.my));
  app.querySelectorAll('[data-dir]').forEach(b=>{const[dx,dy]=b.dataset.dir.split(',').map(Number); const n=[R.pos[0]+dx,R.pos[1]+dy]; b.disabled=!canMove||!m.rooms[K(...n)]||!m.has(R.pos,n); b.onclick=()=>moveRoom(...n);});
  $('#bStatM').onclick=()=>openStatus();
- $('#bQuit').onclick=()=>{const ov=modal(`<h3>던전을 포기하시겠습니까?</h3><p class="dim">성소로 돌아갑니다. 지금까지 얻은 골드와 장비는 남고, 각인도 유지됩니다. 이 던전은 클리어되지 않습니다.</p><p style="color:#ff9a8a;font-size:13px">패널티: 이번 던전의 EXP를 얻지 못하고, 파티의 HP·MP가 30% 줄어듭니다. (5% 아래로는 내려가지 않습니다)</p><div class="row"><button class="pri" id="qy">포기하고 성소로</button><button id="qn">계속하기</button></div>`,ov=>{ov.querySelector('#qn').onclick=()=>ov.remove();ov.querySelector('#qy').onclick=()=>{ov.remove();endRun(false,true);};});};
+ $('#bQuit').onclick=()=>{const ov=modal(`<h3>던전을 포기하시겠습니까?</h3><p class="dim">성소로 돌아갑니다. 지금까지 얻은 골드와 장비는 남고, 각인도 유지됩니다. 이 던전은 클리어되지 않습니다.</p><p style="color:#ff9a8a;font-size:13px">패널티: 이번 던전의 EXP를 얻지 못하고, 아군의 HP·MP가 30% 줄어듭니다. (5% 아래로는 내려가지 않습니다)</p><div class="row"><button class="pri" id="qy">포기하고 성소로</button><button id="qn">계속하기</button></div>`,ov=>{ov.querySelector('#qn').onclick=()=>ov.remove();ov.querySelector('#qy').onclick=()=>{ov.remove();endRun(false,true);};});};
 }
 function stashLoot(){ try{ if(R&&R.pos&&B&&B.loot&&B.loot.length){ R.roomLoot=R.roomLoot||{}; const k=K(...R.pos); R.roomLoot[k]=(R.roomLoot[k]||[]).concat(B.loot.filter(L=>!(R.roomLoot[k]||[]).includes(L))); B.loot=[]; } }catch(e){} }
 function moveRoom(x,y){
@@ -6057,7 +6116,7 @@ function moveRoom(x,y){
  rm.clr=true; roomScene(); const D=R.diff;
  if(rm.type==='aug'){ offerAugment('각인 제단',()=>roomScene());}
  if(rm.type==='treasure'){rm.clr=true; const g=Math.round(rnd(40,80)*D.rw*(1+.1*R.dg.idx)); R.gold+=g; let txt=`골드 ${g} 획득!`; if(Math.random()<.65){const it=dropFrom(pick(R.dg.mons),DROP_DM[D.id]||1)||genItem(R.dg.lv?R.dg.lv[0]:1,null,R.party.map(p=>p.h.cls)); R.items.push(it); txt+=`<div class="item" style="margin-top:8px"><div>${itemCard(it)}</div></div>`;} infoModal('보물 상자',txt,()=>roomScene());}
- if(rm.type==='fountain'){rm.clr=true; const fp=(5+Math.floor(Math.random()*26))/100; R.party.forEach(p=>{if(p.hpR>0){p.hpR=Math.min(1,p.hpR+fp);p.mpR=Math.min(1,p.mpR+fp);}else p.hpR=Math.max(.05,fp);}); infoModal('회복의 샘',`파티 HP·MP ${Math.round(fp*100)}% 회복! 쓰러진 동료가 일어났습니다.`,()=>roomScene());}
+ if(rm.type==='fountain'){rm.clr=true; const fp=(5+Math.floor(Math.random()*26))/100; R.party.forEach(p=>{if(p.hpR>0){p.hpR=Math.min(1,p.hpR+fp);p.mpR=Math.min(1,p.mpR+fp);}else p.hpR=Math.max(.05,fp);}); infoModal('회복의 샘',`아군 HP·MP ${Math.round(fp*100)}% 회복! 쓰러진 동료가 일어났습니다.`,()=>roomScene());}
 }
 /* 비전투 방·정리된 방: 전장에 파티만 세워 두고 화살표로 이동 */
 function roomScene(){
@@ -6132,17 +6191,18 @@ function endRun(clear,abandon){ if(R&&R.fin)return; try{ if(B&&!B.lost&&!B.keepL
  const quitP=(!clear&&abandon===true);
  if(quitP){ try{ if(B&&B.units)B.units.forEach(u=>{if(u.side==='A'&&u.kind==='hero'&&u.p){u.p.hpR=u.dead?0:u.hp/u.maxhp; u.p.mpR=u.mp/u.maxmp;}}); }catch(e){}
   R.party.forEach(p=>{ if(p.hpR>0)p.hpR=Math.max(Math.min(p.hpR,.05),p.hpR-.3); p.mpR=Math.max(Math.min(p.mpR,.05),p.mpR-.3); }); }
- const ups=[], cuts=[], expRows=[]; R.party.forEach(p=>{const rt=quitP?0:expRate(p.h,dg), g=quitP?0:Math.round(R.exp*rt), lv0=p.h.lv, rg=(dg.lv&&dg.lv.length)?dg.lv:null; expRows.push(`<div class="exprow"><span class="en">${esc(p.h.name)} <small>Lv.${lv0}</small></span><b class="eg">+${g} EXP</b>${quitP?'<span class="ew">던전을 포기하여 EXP를 얻지 못했습니다</span>':rt<1?`<span class="ew">레벨이 던전 적정 레벨${rg?`(Lv.${rg[0]}~${rg[1]})`:''}보다 높아 ${Math.round(rt*100)}%만 받았습니다</span>`:''}</div>`); grantExp(p.h,g).forEach(l=>ups.push(`${p.h.name} Lv.${l} (스킬 포인트 +${SP_PER_LV})`));});
+ const ups=[], cuts=[], expRows=[]; R.party.filter(p=>!isComp(p.h)).forEach(p=>{const rt=quitP?0:expRate(p.h,dg), g=quitP?0:Math.round(R.exp*rt), lv0=p.h.lv, rg=(dg.lv&&dg.lv.length)?dg.lv:null; expRows.push(`<div class="exprow"><span class="en">${esc(p.h.name)} <small>Lv.${lv0}</small></span><b class="eg">+${g} EXP</b>${quitP?'<span class="ew">던전을 포기하여 EXP를 얻지 못했습니다</span>':rt<1?`<span class="ew">레벨이 던전 적정 레벨${rg?`(Lv.${rg[0]}~${rg[1]})`:''}보다 높아 ${Math.round(rt*100)}%만 받았습니다</span>`:''}</div>`); grantExp(p.h,g).forEach(l=>ups.push(`${p.h.name} Lv.${l} (스킬 포인트 +${SP_PER_LV})`));});
+ try{compSyncAll();}catch(e){}
  if(ZR){ZR.hp=ZR.hp||{}; R.party.forEach(p=>{const a=clear?.1:0; ZR.hp[p.h.id]={hpR:Math.min(1,Math.max(0,p.hpR)+a),mpR:Math.min(1,p.mpR+a)};});}
  const html=`<p>골드 <b class="gold">+${R.gold}</b></p><div class="expbox"><div class="exph">획득 EXP <span class="dim">· 던전 기본 ${R.exp}</span></div>${expRows.join('')}</div>${broke.length?`<p style="color:var(--red);font-size:13px">내구도가 다해 파손된 장비: ${broke.join(', ')}. 성소의 떠돌이 대장장이에게 수리를 맡기십시오.</p>`:''}${ups.length?`<p style="color:var(--green)">레벨 업! ${ups.join(', ')}</p>`:''}
   ${sold.length?`<p style="color:var(--red)">가방이 가득 차 장비 ${sold.length}개가 자동으로 판매되었습니다. (+${gI(soldG)})</p>`:''}${resSlots(R.items,room,R.got)}`;
  const post=!!(clear&&B&&B.keepLoot&&R); if(post){ R.fin=true; if(ZR)try{zoneSaveNow();}catch(e){} startLoop(); } else { R=null; stopLoop(); }
  if(abandon==='title'){save(); go('title'); return;} if(abandon==='slots'){save(); go('slots'); return;}
  let title, msg, btn, next;
- if(!clear&&!abandon){ zoneEnd(); title='<span style="color:var(--red)">파티 전멸...</span>'; msg='<p class="dim">경계 탐험 기록(성소 저장과 각인)이 사라졌습니다. 얻은 장비와 골드는 남습니다.</p>'; btn='마을로'; next=()=>{ fadeBlack(1,1500); setTimeout(()=>{ go('town'); setTimeout(()=>fadeBlack(0,1500),120); },1550); }; }
- else if(!clear){ title='던전 포기'; msg='<p class="dim">성소로 돌아갑니다. 각인은 유지됩니다.</p><p style="color:#ff9a8a;font-size:13px">포기 패널티: EXP를 얻지 못했고, 파티의 HP·MP가 30% 줄었습니다.</p>'; btn='성소로'; next=()=>go('rest'); }
+ if(!clear&&!abandon){ zoneEnd(); title='<span style="color:var(--red)">아군 전멸...</span>'; msg='<p class="dim">경계 탐험 기록(성소 저장과 각인)이 사라졌습니다. 얻은 장비와 골드는 남습니다.</p>'; btn='마을로'; next=()=>{ fadeBlack(1,1500); setTimeout(()=>{ go('town'); setTimeout(()=>fadeBlack(0,1500),120); },1550); }; }
+ else if(!clear){ title='던전 포기'; msg='<p class="dim">성소로 돌아갑니다. 각인은 유지됩니다.</p><p style="color:#ff9a8a;font-size:13px">포기 패널티: EXP를 얻지 못했고, 아군의 HP·MP가 30% 줄었습니다.</p>'; btn='성소로'; next=()=>go('rest'); }
  else if(final){ const augN=ZR?ZR.augs.length:0; zoneEnd(); const p=zprog(z.id); title=`<span style="color:var(--gold)">경계 정복 — ${z.name}</span>`; msg=`<p class="dim">경계 보스를 쓰러뜨렸습니다. 각인 ${augN}개는 초기화됩니다.${p.diffOpen>DIFFS.indexOf(D)?` <b style="color:${DIFFS[p.diffOpen].col}">${DIFFS[p.diffOpen].name}</b> 난이도가 열렸습니다.`:''}</p>`; btn='마을로'; next=()=>{S.tab='home'; go('town');}; }
- else { title=`<span style="color:var(--gold)">던전 클리어 — ${dg.name}</span>`; msg='<p class="dim">성소로 돌아가 숨을 고릅니다. 던전을 클리어하여 파티의 HP와 MP가 10%씩 회복되었습니다.</p>'; btn='성소로'; next=()=>go('rest'); }
+ else { title=`<span style="color:var(--gold)">던전 클리어 — ${dg.name}</span>`; msg='<p class="dim">성소로 돌아가 숨을 고릅니다. 던전을 클리어하여 아군의 HP와 MP가 10%씩 회복되었습니다.</p>'; btn='성소로'; next=()=>go('rest'); }
  save();
  if(post){ const acts=final?[['마을로',()=>{S.tab='home'; go('town');}]]:[['재도전',()=>enterDungeon(dg),R.iso],['다른던전선택',()=>go('dsel')],['성소로 돌아가기',()=>go('rest')]];
   const R0=R, leave=fn=>{ if(R0._leaving)return; R0._leaving=true; try{ if(window.gtipHide)gtipHide(); }catch(e){} fadeBlack(1,1260); setTimeout(()=>{ try{ if(B)B.loot=[]; }catch(e){} save(); const p=document.getElementById('postclr'); if(p)p.remove(); document.body.classList.remove('postclr'); R=null; stopLoop(); fn(); setTimeout(()=>fadeBlack(0,1560),120); },1350); };
@@ -6718,8 +6778,9 @@ async function nextTurn(){
  if(B.zones&&B.zones.some(z=>z.x===u.x&&z.y===u.y)){const d=Math.max(1,Math.round(u.maxhp*((u.boss||u.dboss)?.03:.07))); u.hp-=d; u.hitT=vnow(); floatText(u,'화염 '+d,'#ff7a2a'); if(u.hp<=0){kill(u,null); updatePanel(); await sleep(500); if(checkEnd())return; return endTurn();}}
  updatePanel();
  if(u.st.stun){u.st.stun=0; floatText(u,'기절 — 행동 불가','#ffe066'); addLog(`${u.name} 기절로 턴을 넘김`); await sleep(700); return endTurn();}
- if(u.side==='A'&&u.ctrl!=='AI'){ setMode('move'); showBanner(`${u.ctrl} 차례 — ${u.name}`); sfx('turn'); }
- else{ showBanner(u.side==='A'?`AI — ${u.name}`:`적 — ${u.name}`); await runAI(u); }
+ if(u.side==='A'&&u.ctrl==='NET'){ await netTurn(u); }
+ else if(u.side==='A'&&u.ctrl!=='AI'){ setMode('move'); showBanner(`내 차례 — ${u.name}`); sfx('turn'); }
+ else{ showBanner(u.side==='A'?`동료 — ${u.name}`:`적 — ${u.name}`); await runAI(u); }
 }
 async function endTurn(){ if(B.over)return; B.cur=null; B.mode=null; B.preview=null; B.oi++; updatePanel(); await sleep(150); nextTurn(); }
 function showBanner(t){const b=$('#banner'); if(b){b.textContent=t; b.style.display='block';}}
@@ -6841,7 +6902,7 @@ function renderBattleScreen(app){
  cv.addEventListener('pointerup',e=>{closeConsPop(); const Lc=lootAt(e,cv); if(Lc){lootPick(Lc); return;} const t=toTile(e); if(t)onTile(t[0],t[1],true);});
  $('#bStatB').onclick=()=>openStatus(); $('#bQuestB').onclick=openQuestLog; $('#bAugB').onclick=()=>openAugList(R.augs); updateBexp();
  $('#bSpdB').onclick=()=>{const o=[1,1.5,2]; BSPD_SEL=o[(o.indexOf(BSPD_SEL)+1)%o.length]; try{localStorage.setItem('rod_bspd',String(BSPD_SEL));}catch(e){} $('#bSpdB').textContent=BSPD_SEL+'x'; sfx('click');};
- $('#bQuitB').onclick=()=>{const ov=modal(`<h3>던전을 포기하시겠습니까?</h3><p class="dim">성소로 돌아갑니다. 지금까지 얻은 골드와 장비는 남고, 각인도 유지됩니다. 이 던전은 클리어되지 않습니다.</p><p style="color:#ff9a8a;font-size:13px">패널티: 이번 던전의 EXP를 얻지 못하고, 파티의 HP·MP가 30% 줄어듭니다. (5% 아래로는 내려가지 않습니다)</p><div class="row"><button class="pri" id="qy">포기하고 성소로</button><button id="qn">계속하기</button></div>`,ov=>{ov.querySelector('#qn').onclick=()=>ov.remove();ov.querySelector('#qy').onclick=()=>{ov.remove(); if(B)B.over=true; stopLoop(); endRun(false,true);};});}; $('#bSetB').onclick=()=>openSettings();
+ $('#bQuitB').onclick=()=>{const ov=modal(`<h3>던전을 포기하시겠습니까?</h3><p class="dim">성소로 돌아갑니다. 지금까지 얻은 골드와 장비는 남고, 각인도 유지됩니다. 이 던전은 클리어되지 않습니다.</p><p style="color:#ff9a8a;font-size:13px">패널티: 이번 던전의 EXP를 얻지 못하고, 아군의 HP·MP가 30% 줄어듭니다. (5% 아래로는 내려가지 않습니다)</p><div class="row"><button class="pri" id="qy">포기하고 성소로</button><button id="qn">계속하기</button></div>`,ov=>{ov.querySelector('#qn').onclick=()=>ov.remove();ov.querySelector('#qy').onclick=()=>{ov.remove(); if(B)B.over=true; stopLoop(); endRun(false,true);};});}; $('#bSetB').onclick=()=>openSettings();
  $('#bSnd').onclick=()=>{const c=sfxCfg(); c.on=!c.on; if(SFX.master)SFX.master.gain.value=c.on?c.vol:0; save(); $('#bSnd').textContent=c.on?'🔊':'🔇'; if(c.on)sfx('click');};
  navEnter(); buildHud(); startLoop(); updatePanel();
  fitCanvas(); requestAnimationFrame(fitCanvas);
@@ -6865,7 +6926,7 @@ function buildHud(){
   const pt=document.createElement('canvas'); pt.width=138; pt.height=138; pt.className='pt';
   const g=pt.getContext('2d'); if(!drawFacePt(g,138,u.spec)){g.scale(3,3); drawHumanoid(g,23,96,2,u.spec,{t:0,pose:'idle'});}
   const body=document.createElement('div'); body.className='pb';
-  body.innerHTML=`<div class="pn"><b>${esc(u.name)}</b><span class="ctl ${u.ctrl==='AI'?'ai':''}">${u.ctrl}</span></div>
+  body.innerHTML=`<div class="pn"><b>${esc(u.name)}</b><span class="ctl ${u.ctrl==='AI'?'ai':''}">${ctlName(u)}</span></div>
    <div class="sbar hp"><i class="trail"></i><i class="heal"></i><i class="fill"></i><i class="shd"></i><span><em class="v" style="font-style:normal;margin-left:auto"></em></span></div>
    <div class="sbar mp"><i class="trail" style="background:#7a96e0"></i><i class="fill" style="background:linear-gradient(180deg,#3a62e8,#1a3a9e)"></i><span><em style="font-style:normal">MP</em><em class="v" style="font-style:normal"></em></span></div>
    <div class="pst"></div>`;
@@ -6958,7 +7019,7 @@ function updatePanelCore(){
  if(!B||SCREEN!=='battle')return;
  const tb=$('#turnbar'); if(!tb)return;
  updateBexp(); $('#rnd').textContent='라운드 '+B.round; $('#rnd').style.display=B.kind==='room'?'none':'';
- tb.innerHTML=B.order.map((u,i)=>`<span class="tchip ${u.side} ${u===B.cur?'now':''} ${u.dead?'dead':''}">${u.side==='A'&&u.ctrl!=='AI'?u.ctrl+' ':''}${esc(u.name)}</span>`).join('');
+ tb.innerHTML=B.order.map((u,i)=>`<span class="tchip ${u.side} ${u===B.cur?'now':''} ${u.dead?'dead':''}">${u.side==='A'&&u.kind==='hero'?ctlName(u)+' ':''}${esc(u.name)}</span>`).join('');
  const nowChip=tb.querySelector('.now'); if(nowChip)nowChip.scrollIntoView({block:'nearest',inline:'center'});
  const ci=$('#curinfo'), acts=$('#acts'), u=B.cur;
  let SLOTS=STW()>=860?10:8; const fill=(list)=>{while(list.length<SLOTS)list.push({html:'&nbsp;<small>&nbsp;</small>',on:null,dis:true,cls:'ghost'}); acts.innerHTML=''; list.slice(0,SLOTS).forEach(b=>{const el=document.createElement('button'); el.innerHTML=b.html; if(b.cls)el.className=b.cls; if(b.dis&&b.tip){el.classList.add('dis'); el.setAttribute('aria-disabled','true');} else el.disabled=b.dis; if(b.tip)el.setAttribute('data-tip',b.tip); if(b.on&&!b.dis)el.onclick=b.cons?b.on:()=>{closeConsPop(); b.on();}; acts.appendChild(el);});};
@@ -6968,7 +7029,7 @@ function updatePanelCore(){
   ci.innerHTML=(u?`<b>${esc(u.name)}</b> <span class="dim">${u.side==='E'?'적의 차례…':'AI가 행동 중…'}</span>`:'<span class="dim">…</span>')+'<div class="dim" style="font-size:12px">&nbsp;</div>';
   fill([]); return;
  }
- ci.innerHTML=`<b>${esc(u.name)}</b> <span class="tag">${u.ctrl}</span>
+ ci.innerHTML=`<b>${esc(u.name)}</b> <span class="tag">${ctlName(u)}</span>
   <div class="dim" style="font-size:12px">${B.mode==='move'?'파란 칸을 눌러 이동':B.mode==='target'?(B.preview?'범위 확인 → 같은 버튼을 한 번 더 눌러 시전':'빨간 칸을 눌러 대상 선택'):'행동을 고르십시오'} · 이동 ${B.moved?'완료':'가능'} · 행동 ${B.acted?'완료':'가능'}</div>`;
  const btn=(html,on,dis,cls,tip)=>({html,on,dis,cls,tip});
  const list=[];
@@ -7322,7 +7383,7 @@ function drawBattle(){
    if(u.shield>0){g.fillStyle='#ffd23a'; g.fillRect(bx,by,Math.min(bw,bw*u.shield/u.maxhp),3);} }
    if(u.st.stun){g.fillStyle='#ffe066';g.font='bold 11px sans-serif';g.fillText('★',u.px+(u.side==='A'?bw/2+6:-4)+Math.sin(now/150)*6,by-(u.side==='A'?6:4));}
    if(u.st.burn){g.fillStyle='#ff7a2a';g.fillRect(bx+bw+3,by,4,4);} if(u.st.poison){g.fillStyle='#a6e84a';g.fillRect(bx+bw+8,by,4,4);} if(u.st.bleed){g.fillStyle='#ff3a4a';g.fillRect(bx+bw+13,by,4,4);}
-   if(u.side==='A'&&u.ctrl!=='AI'){g.fillStyle='#ffd23f';g.font='bold 10px sans-serif';g.save();g.textAlign='center';g.lineWidth=3;g.strokeStyle='#000';g.strokeText(u.ctrl,u.px,by-18);g.fillText(u.ctrl,u.px,by-18);g.restore();}
+   if(u.side==='A'&&u.kind==='hero'&&u.ctrl!=='P1'){const tx=ctlName(u);g.fillStyle=u.ctrl==='AI'?'#8fe39a':'#7fd8ff';g.font='bold 10px sans-serif';g.save();g.textAlign='center';g.lineWidth=3;g.strokeStyle='#000';g.strokeText(tx,u.px,by-18);g.fillText(tx,u.px,by-18);g.restore();}
    if(!u.dead){g.save(); g.font='bold 9px sans-serif'; g.textAlign='center'; const isB=u.side==='E'&&(u.boss||u.dboss), nm=u.h?`Lv.${u.h.lv} ${u.name}`:u.side==='E'?`Lv.${monLv(u)} ${isB?'보스 - ':''}${u.name}`:u.name, nw=g.measureText(nm).width+8, ny=by-7; u._ny=ny; g.fillStyle='rgba(0,0,0,.6)'; g.fillRect(u.px-nw/2,ny-9,nw,12); g.fillStyle=u.side==='A'?'#fff6dc':isB?'#ff6a6a':u.named?'#7fe68f':'#ffffff'; g.fillText(nm,u.px,ny);
     const ii=optOn('iniBadge')?iniInfo(u):null; if(ii){ const cx=u.px-nw/2-8, cy=ny-3; g.globalAlpha=ii.done?.45:1; g.beginPath(); g.arc(cx,cy,6.5,0,Math.PI*2); g.fillStyle=ii.now?'#ffd23f':u.side==='A'?'#2a5aa8':'#a83a3a'; g.fill(); g.lineWidth=1.2; g.strokeStyle='#000'; g.stroke(); g.fillStyle=ii.now?'#2a1600':'#fff'; g.font='bold 9px sans-serif'; g.fillText(String(ii.rank),cx,cy+3); g.globalAlpha=1; }
     g.restore();}
@@ -7778,8 +7839,8 @@ setInterval(qTrackSync,120);
 function questRewardWin(id){ try{ sfx('enhOk'); enhAlert(`<div style="text-align:center"><div style="color:#ffd860;font-weight:700;margin-bottom:4px">${QUESTS[id].name}</div><div style="font-size:16px;font-weight:700;margin-bottom:10px">보상을 획득했습니다!</div>${rewardIcons(id)}</div>`,[['확인']]); }catch(e){} }
 function rewardIcons(id){const q=QUESTS[id], w=q.reward||{}, o=[];
  if(w.gold)o.push(rwCell(goldIcon(),w.gold,'골드','골드 '+fmtG(w.gold)+'을(를) 받습니다.'));
- if(w.exp)o.push(rwCell('<span class="cic" style="width:86%;height:86%"><svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="7" y="4" width="19" height="24" rx="2.5" fill="#f0e6ff" stroke="#e2d0ff" stroke-width="1"/><path d="M9 28h16" stroke="#b9a2dc" stroke-width="1"/><path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H24a2.5 2.5 0 0 1 2.5 2.5V24H8.5A2.5 2.5 0 0 0 6 26.5z" fill="#8a4ad0" stroke="#d9c0ff" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 26.5A2.5 2.5 0 0 0 8.5 29H26v-4.8H8.5A2.5 2.5 0 0 0 6 26.5z" fill="#f0e6ff" stroke="#d9c0ff" stroke-width="1.1"/><rect x="9" y="2" width="3" height="22" fill="#6a2fb0" opacity=".7"/><path d="M19 8l1.4 3 3.3.4-2.4 2.3.6 3.3-2.9-1.6-2.9 1.6.6-3.3-2.4-2.3 3.3-.4z" fill="#ffe27a" stroke="#fff3b0" stroke-width=".5"/></svg></span>',w.exp,'EXP','파티원 전원이 EXP '+w.exp.toLocaleString()+'을(를) 받습니다.'));
- if(w.sp)o.push(rwCell('<span class="cic" style="width:86%;height:86%"><svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="3" y="5" width="26" height="22" rx="6" fill="#2f78d8" stroke="#bcdcff" stroke-width="1.5"/><rect x="5" y="7" width="22" height="9" rx="4" fill="#fff" opacity=".16"/><text x="16" y="21.5" text-anchor="middle" font-size="13" font-weight="800" font-family="sans-serif" fill="#fff">SP</text></svg></span>',w.sp,'스킬 포인트','파티원 전원이 스킬 포인트 '+w.sp+'을(를) 받습니다.'));
+ if(w.exp)o.push(rwCell('<span class="cic" style="width:86%;height:86%"><svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="7" y="4" width="19" height="24" rx="2.5" fill="#f0e6ff" stroke="#e2d0ff" stroke-width="1"/><path d="M9 28h16" stroke="#b9a2dc" stroke-width="1"/><path d="M6 4.5A2.5 2.5 0 0 1 8.5 2H24a2.5 2.5 0 0 1 2.5 2.5V24H8.5A2.5 2.5 0 0 0 6 26.5z" fill="#8a4ad0" stroke="#d9c0ff" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 26.5A2.5 2.5 0 0 0 8.5 29H26v-4.8H8.5A2.5 2.5 0 0 0 6 26.5z" fill="#f0e6ff" stroke="#d9c0ff" stroke-width="1.1"/><rect x="9" y="2" width="3" height="22" fill="#6a2fb0" opacity=".7"/><path d="M19 8l1.4 3 3.3.4-2.4 2.3.6 3.3-2.9-1.6-2.9 1.6.6-3.3-2.4-2.3 3.3-.4z" fill="#ffe27a" stroke="#fff3b0" stroke-width=".5"/></svg></span>',w.exp,'EXP','EXP '+w.exp.toLocaleString()+'을(를) 받습니다.'));
+ if(w.sp)o.push(rwCell('<span class="cic" style="width:86%;height:86%"><svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="3" y="5" width="26" height="22" rx="6" fill="#2f78d8" stroke="#bcdcff" stroke-width="1.5"/><rect x="5" y="7" width="22" height="9" rx="4" fill="#fff" opacity=".16"/><text x="16" y="21.5" text-anchor="middle" font-size="13" font-weight="800" font-family="sans-serif" fill="#fff">SP</text></svg></span>',w.sp,'스킬 포인트','스킬 포인트 '+w.sp+'을(를) 받습니다.'));
  if(w.cons)for(const k in w.cons){const d=CONS[k]||{}; o.push(rwCell(consIcon(k,0),w.cons[k],d.name||k,d.desc||''));}
  if(w.skill){const sk=SK[w.skill]; o.push(rwCell(skIcon(sk,38),null,'스킬 '+sk.name,sk.desc||''));}
  if(w.mat)for(const k in w.mat)o.push(rwCell(consIcon(k,0),w.mat[k],MATS[k].name,MATS[k].desc));
@@ -7843,10 +7904,10 @@ const AUGS_LUNA_OLD=`이전 루나 각인 6종(유리 대포·피의 계약·도
  }
 AUGS.push(
  {id:'apex',g:3,name:'정점의 힘',desc:'모든 공격력 증가 +40%',f:m=>m.dmg+=.4},
- {id:'titan',g:3,name:'거신의 육체',desc:'파티 최대 HP +50%, 받는 피해 -12%',f:m=>{m.hp+=.5;m.dr+=.12;}},
+ {id:'titan',g:3,name:'거신의 육체',desc:'아군 최대 HP +50%, 받는 피해 -12%',f:m=>{m.hp+=.5;m.dr+=.12;}},
  {id:'storm',g:3,name:'폭풍의 연쇄',desc:'추가 데미지 +35%',f:m=>m.add+=35},
  {id:'lu_doom',g:9,name:'파멸의 서약',desc:'물리·마법 크리티컬 +25%, 모든 속성강화 +50\n대가: 받는 피해 +30%',f:m=>{m.crit+=25;m.enh+=50;m.dr-=.3;}},
- {id:'lu_time',g:9,name:'시간의 도박사',desc:'스킬 재사용 대기 -2턴, 스킬 MP 소모 -30%\n대가: 파티 최대 HP -25%',f:m=>{m.cdr+=2;m.mpc+=.3;m.hp-=.25;}},
+ {id:'lu_time',g:9,name:'시간의 도박사',desc:'스킬 재사용 대기 -2턴, 스킬 MP 소모 -30%\n대가: 아군 최대 HP -25%',f:m=>{m.cdr+=2;m.mpc+=.3;m.hp-=.25;}},
  {id:'lu_shadow',g:9,name:'달그림자의 가호',desc:'받는 피해 -35%, 전투 시작 시 최대 HP 30% 보호막\n대가: 모든 공격력 -25%',f:m=>{m.dr+=.35;m.shield+=.3;m.dmg-=.25;}},
  {id:'lu_hunt',g:9,name:'월식의 사냥꾼',desc:'적 처치 시 HP 20%·MP 30 회복, 물리·마법 크리티컬 +20%\n대가: 상태이상저항 -30%',f:m=>{m.kill+=2;m.crit+=20;m.sres-=30;}},
  {id:'lu_nova',g:9,name:'별빛 폭주',desc:'범위 공격 피해 +100%\n대가: 기본 공격 피해 -60%',f:m=>{m.aoe+=1;m.basic-=.6;}},
@@ -8200,7 +8261,7 @@ function dresClose(){ const d=document.getElementById('dres'); if(!d)return; d.c
 function showResults(done){ if(!R||document.getElementById('dres'))return done&&done();
  R._res=true; const res=calcResult(), dg=R.dg, D=R.diff; R._resData=res;
  const base=R.exp+Math.round(90*(1+.12*dg.idx)*D.rw*(dg.expM||1)), n=R.party.length;
- const bon=[['랭크',Math.round(base*RANK_EXP[res.rk]),'랭크 보너스 EXP. B랭크 이상일 때 추가 EXP가 가산됩니다.'],['파티',Math.round(base*.05*(n-1)),'파티 보너스 EXP. 파티원 1명마다 5% 가산됩니다.'],['각인',0,'각인 보너스 EXP'],['난이도',D.id==='normal'?0:Math.round(base*.05*DIFFS.indexOf(D)),'난이도 보너스 EXP. 익스퍼트 이상에서 가산됩니다.'],['이벤트',0,'이벤트 보너스 EXP'],['연속',0,'연속 클리어 보너스 EXP']];
+ const bon=[['랭크',Math.round(base*RANK_EXP[res.rk]),'랭크 보너스 EXP. B랭크 이상일 때 추가 EXP가 가산됩니다.'],['인원',Math.round(base*.05*(n-1)),'함께한 인원 보너스 EXP. 동료·파티원 1명마다 5% 가산됩니다.'],['각인',0,'각인 보너스 EXP'],['난이도',D.id==='normal'?0:Math.round(base*.05*DIFFS.indexOf(D)),'난이도 보너스 EXP. 익스퍼트 이상에서 가산됩니다.'],['이벤트',0,'이벤트 보너스 EXP'],['연속',0,'연속 클리어 보너스 EXP']];
  const fin=base+bon.reduce((a,b)=>a+b[1],0); R.exp+=bon.reduce((a,b)=>a+b[1],0);
  const tip=t=>`data-tip="${esc('<div class="tipcard">'+t+'</div>')}"`;
  const d=document.createElement('div'); d.id='dres';
