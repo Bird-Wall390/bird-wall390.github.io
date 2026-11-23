@@ -1,1 +1,1 @@
-# Risk Of Dungeon\n\n현재 버전: v0.0.57\n\n플레이: https://bird-wall390.github.io/\n
+# Risk Of Dungeon\n\n현재 버전: v0.0.58\n\n플레이: https://bird-wall390.github.io/\n

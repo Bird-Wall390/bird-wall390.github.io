@@ -1782,7 +1782,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.57';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.58';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -3792,7 +3792,7 @@ function toSlots(){
 }
 /* ---------- 세이브 이동: 파일로 내보내기 · 불러오기 · 게임 파일에 끼워 넣기 ---------- */
 function packSave(){ try{ save(); }catch(e){} const ls={}; try{ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i); if(/^rod_/.test(k)&&k!=='rod_last_save')ls[k]=localStorage.getItem(k);} }catch(e){} return {game:'RiskOfDungeon',v:1,t:Date.now(),ls}; }
-function dlFile(name,text,mime){ const b=new Blob([text],{type:mime||'application/octet-stream'}), a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); }
+function dlFile(name,text,mime){ if(window.RodApp&&RodApp.saveFile){ const p=RodApp.saveFile(name,String(text)); try{toast(p?`휴대폰에 저장했습니다: ${p}`:'저장하지 못했습니다.',2600);}catch(e){} return; } const b=new Blob([text],{type:mime||'application/octet-stream'}), a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500); }
 function stampName(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`; }
 function saveExportJson(){ dlFile(`risk_of_dungeon_save_${stampName()}.json`,JSON.stringify(packSave()),'application/json'); toast('세이브 파일(.json)을 내려받았습니다.'); }
 function saveEmbedHtml(){ try{ const pk=packSave(), json=JSON.stringify(pk).replace(/</g,'\\u003c'); let html=__SRC.replace(/<script id="rod-embedded-save" type="application\/json">\{[\s\S]*?<\/script>\s*/,''); html=html.replace('</head>',()=>'<script id="rod-embedded-save" type="application/json">'+json+'<\/script>\n</head>'); dlFile('rift_tactics.html',html,'text/html'); toast('세이브가 들어 있는 게임 파일(.html)을 내려받았습니다. 이 파일을 옮겨 열면 이어서 할 수 있습니다.',4200); }catch(e){ toast('게임 파일 만들기에 실패했습니다.'); } }
@@ -7703,7 +7703,7 @@ load(); setArt('anime',false); render();
   if(SCREEN==='rest'&&S&&S.restTab&&S.restTab!=='rest'&&S.restTab!=='home'){ S.restTab='rest'; render(); try{sfx('winClose');}catch(e){} return true; }
   return false; };
  const onBack=viaFs=>{
-  if(arm&&performance.now()-arm<2000){ arm=0; history.back(); return; }   // 2초 안에 한 번 더: 실제로 나감
+  if(arm&&performance.now()-arm<2000){ arm=0; if(window.RodApp&&RodApp.exit){ RodApp.exit(); return; } history.back(); return; }   // 2초 안에 한 번 더: 실제로 나감
   let closed=false; try{ closed=backClose(); }catch(e){}
   if(!viaFs)history.pushState({rod:1},'');
   if(!closed){ arm=performance.now(); toast('뒤로가기를 한 번 더 누르면 게임이 종료됩니다.',1800); } else arm=0; };
@@ -7712,7 +7712,7 @@ load(); setArt('anime',false); render();
     그 뒤로가기도 창 닫기로 처리한 뒤 다음 터치에서 다시 전체화면으로 돌아감.
     전체화면에서는 상단바를 내려도 화면 위에 겹쳐서만 보이고 화면 크기는 바뀌지 않음 */
  if(ST_COARSE&&document.documentElement.requestFullscreen){ let was=false, ours=false;
-  document.addEventListener('pointerdown',e=>{ if(document.fullscreenElement)return; if(window.matchMedia&&matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches)return; if((e.clientY||0)<60)return; if(window.__fsOut&&performance.now()-window.__fsOut<4000)return; try{ const p=document.documentElement.requestFullscreen({navigationUI:'hide'}); if(p&&p.catch)p.catch(()=>{}); }catch(e){} },{capture:true,passive:true});
+  document.addEventListener('pointerdown',e=>{ if(document.fullscreenElement||window.RodApp)return; if(window.matchMedia&&matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches)return; if((e.clientY||0)<60)return; if(window.__fsOut&&performance.now()-window.__fsOut<4000)return; try{ const p=document.documentElement.requestFullscreen({navigationUI:'hide'}); if(p&&p.catch)p.catch(()=>{}); }catch(e){} },{capture:true,passive:true});
   document.addEventListener('fullscreenchange',()=>{ const now=!!document.fullscreenElement; if(was&&!now){ window.__fsOut=performance.now(); if(!ours)onBack(true); } was=now; ours=false; });
  }
 })();
