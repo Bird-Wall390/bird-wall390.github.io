@@ -2039,7 +2039,7 @@ body button.dsbtn,.dsbtn{font-family:'Do Hyeon','Malgun Gothic',sans-serif!impor
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.72';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.73';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2526,43 +2526,43 @@ const ZONES=[
   story:'햇살과 산들바람이 가득한 숲의 초입입니다. 평소 온순하던 작은 정령들이 경계심을 드러내며 여행자의 발길을 막아서고 있습니다.',
   dungeons:[
   {latin:'Sälva-Vëin',name:'샐바-베인',sub:'바람 부는 오솔길',mons:['mossSlime','hornSquirrel','wingBug'],pos:[.10,.80],lab:'r',
-   story:'숲으로 들어서는 첫 번째 흙길입니다. 길가에 떨어진 요정 순찰대의 부러진 지팡이를 발견하고 본격적인 탐색을 시작합니다.',
+   story:'숲으로 들어서는 첫 번째 흙길이다. 길가에 요정 순찰대의 부러진 지팡이가 떨어져 있었다고 전해진다.',
    design:'연둣빛 풀잎이 바람에 일렁이고, 햇살 사이로 금빛 먼지 입자가 흩날리는 밝고 아늑한 흙길입니다.',
    theme:{sky:['#6f93b0','#cfdcae'],far:'forest',farC:['#2f4a32','#3d5e3a','#4d7044'],ground:['#4f6d35','#486530'],path:1,deco:['grass','stones'],parts:'dust'}},
   {latin:'Flöris-ël',name:'플뢰리스-엘',sub:'이슬 맺힌 풀밭',mons:['dewSpirit','leapFrog','grassMantis'],pos:[.24,.68],lab:'r',
-   story:'아침 이슬이 거대하게 맺힌 탁 트인 공터입니다. 장난기 많던 이슬 정령들이 예민해져 모험가에게 물방울을 튕기며 공격합니다.',
+   story:'아침 이슬이 거대하게 맺히는 탁 트인 공터다. 장난기 많던 이슬 정령들이 예민해져 침입자에게 물방울을 튕겨 댄다고 전해진다.',
    design:'사람 키만 한 거대 클로버와 풀잎 끝에 영롱한 투명 물방울이 맺혀 햇빛을 반사하는 푸른 초원입니다.',
    theme:{sky:['#78a8c8','#dcefc8'],far:'meadow',farC:['#3f7a3a','#4f8f44','#5fa452'],ground:['#507b39','#497335'],deco:['grass','dew'],parts:'sparkle'}},
   {latin:'Aelën-Vëin',name:'아엘렌-베인',sub:'민들레 언덕',mons:['featherBird','dandelionSpirit','gustWeasel'],pos:[.15,.47],lab:'r',
-   story:'바람이 모이는 완만한 구릉지대입니다. 돌풍을 타고 날아다니는 마수들이 하늘에서 기습을 가해 옵니다.',
+   story:'바람이 모이는 완만한 구릉지대다. 돌풍을 타고 날아다니는 마수들이 하늘에서 덮쳐 온다고 전해진다.',
    design:'하얀 민들레 홀씨가 눈송이처럼 화면을 가로질러 날리고, 언덕 너머로 거대한 세계수의 실루엣이 보이는 탁 트인 구릉입니다.',
    theme:{sky:['#7fa6c6','#ece4c4'],far:'hills',farC:['#58784a','#6b8a56','#7d9c62'],ground:['#6a8848','#627f41'],deco:['grass','dandelion'],parts:'seeds'}},
   {latin:'Lümën-Vëin',name:'뤼멘-베인',sub:'반딧불이 샛길',mons:['firefly','shadowMoth','barkBeetle'],pos:[.30,.30],lab:'r',
-   story:'나뭇가지가 우거져 그늘이 진 숲길입니다. 길을 잃기 쉬운 어둠 속에서 도깨비불 무리가 길을 밝히며 경계합니다.',
+   story:'나뭇가지가 우거져 그늘이 진 숲길이다. 길을 잃기 쉬운 어둠 속에서 도깨비불 무리가 길을 밝히며 지킨다고 전해진다.',
    design:'짙은 녹색 나무 그늘 아래 수백 마리의 황금빛·연둣빛 반딧불이가 은하수처럼 떠다니는 몽환적인 오솔길입니다.',
    theme:{sky:['#0c1814','#1b3022'],far:'canopy',farC:['#0c1c10','#142a18','#1c3820'],ground:['#253820','#20321c'],deco:['grass'],parts:'fireflies',dark:1}},
   {latin:'Sylvën-ël',name:'실벤-엘',sub:'은빛 버섯 군락',mons:['sporeSoldier','myceliumSlime','silverToad'],pos:[.45,.46],lab:'b',
-   story:'습하고 서늘한 나무 밑동 근처의 빈터입니다. 포자를 뿜어내는 발광 버섯 정령들이 영역을 지키고 있습니다.',
+   story:'습하고 서늘한 나무 밑동 근처의 빈터다. 포자를 뿜어내는 발광 버섯 정령들이 영역을 지키고 있다고 전해진다.',
    design:'성인 키를 넘는 푸른빛·은빛 발광 버섯들이 둥글게 군락을 이루고, 바닥에 하얀 균사체 무늬가 빛나는 신비로운 빈터입니다.',
    theme:{sky:['#121c28','#26364a'],far:'mushrooms',farC:['#1a2634','#22324a','#2c4060'],ground:['#2c3a42','#28353c'],deco:['mycel'],parts:'spores',dark:1}},
   {latin:'Flöris Mëros',name:'플뢰리스 메로스',sub:'맑은 시냇물가',mons:['waveSpirit','pincerCray','striderRider'],pos:[.56,.73],lab:'r',
-   story:'숲 외곽을 가로지르는 얕은 개울가입니다. 물살이 평소보다 거칠어지며 물의 정령들이 침입자를 밀어내려 합니다.',
+   story:'숲 외곽을 가로지르는 얕은 개울가다. 물살이 평소보다 거칠어지고 물의 정령들이 침입자를 밀어낸다고 전해진다.',
    design:'바닥의 둥근 자갈이 투명하게 비치는 얕은 시냇물과, 물 위로 놓인 이끼 낀 징검다리, 반짝이는 물보라가 있는 개울가입니다.',
    theme:{sky:['#6e9ec4','#d2e8e2'],far:'stream',farC:['#355a3a','#44704a','#548458'],ground:['#5a7658','#526e50'],deco:['pebbles'],parts:'sparkle'}},
   {latin:'Sälva Löris',name:'샐바 로리스',sub:'야생화 정원',mons:['thornVine','budFairy','beeSoldier'],pos:[.71,.62],lab:'r',
-   story:'요정들이 가꾸던 작은 야생화 화단입니다. 손길이 끊겨 거대하게 자라난 덩굴과 식충 식물들이 길을 막고 있습니다.',
+   story:'요정들이 가꾸던 작은 야생화 화단이다. 손길이 끊겨 거대하게 자라난 덩굴과 식충 식물들이 길을 막고 있다고 전해진다.',
    design:'붉고 노란 대형 야생화들과 무성한 덩굴이 아치형 터널을 이루며, 꽃가루 입자가 붉게 흩날리는 화려한 정원입니다.',
    theme:{sky:['#b8866a','#efd6a2'],far:'garden',farC:['#3a6630','#477636','#548640'],ground:['#4f7834','#476f30'],deco:['grass','flowers'],parts:'pollen'}},
   {latin:'Vaelën-Vëin',name:'바엘렌-베인',sub:'이끼 낀 돌다리',mons:['mossGolem','pebbleImp','valleyCrow'],pos:[.62,.38],lab:'l',
-   story:'깊은 계곡 위를 가로지르는 낡은 돌다리입니다. 다리 난간에 고대 시렌스 문자(צ·ـר˜ـנـת)가 희미하게 새겨져 있습니다.',
+   story:'깊은 계곡 위를 가로지르는 낡은 돌다리다. 다리 난간에 고대 시렌스 문자(צ·ـר˜ـנـת)가 희미하게 새겨져 있다고 전해진다.',
    design:'깎아지른 협곡 사이를 잇는 고풍스러운 석조 아치 다리입니다. 돌틈마다 푸른 이끼와 작은 덩굴이 자라난 유적의 첫 흔적입니다.',
    theme:{sky:['#7a96a6','#c6cec0'],far:'cliff',farC:['#46504c','#57625d','#68746e'],ground:['#6a6e62','#62665a'],stone:1,deco:['moss'],parts:'leaves'}},
   {latin:'Gränia-ël',name:'그레니아-엘',sub:'갈림길 쉼터',mons:['patrolWraith','wildWolf','vineHunter'],pos:[.77,.22],lab:'l',
-   story:'숲 안쪽으로 향하는 세 갈래 길이 만나는 작은 광장입니다. 꺼져 가는 요정 등불을 밝혀 다음 경계로 향하는 단서를 찾습니다.',
+   story:'숲 안쪽으로 향하는 세 갈래 길이 만나는 작은 광장이다. 꺼져 가는 요정 등불을 밝히면 다음 경계로 향하는 단서가 드러난다고 전해진다.',
    design:'원형으로 다듬어진 돌바닥 광장 중앙에 덩굴이 감긴 고풍스러운 요정 석등이 서 있고, 세 방향으로 숲길이 뻗은 곳입니다.',
    theme:{sky:['#9a7258','#dcb88a'],far:'plaza',farC:['#2c4530','#385638','#466844'],ground:['#6a6658','#625e50'],stone:1,deco:['lantern'],parts:'leaves'}},
   {latin:'Sälva Gränia',name:'샐바 그레니아',sub:'수호자의 떡갈나무',mons:['wildWolf','thornVine','vineHunter','mossGolem'],boss:'brambleHorn',pos:[.90,.44],lab:'l',
-   story:'숲 외곽을 지키는 거대 떡갈나무 아래입니다. 나무줄기에서 배어 나온 탁한 수액에 취해 폭주하는 숲의 짐승을 진정시켜야 합니다.',
+   story:'숲 외곽을 지키는 거대 떡갈나무 아래다. 나무줄기에서 배어 나온 탁한 수액에 취해 숲의 짐승이 폭주한다고 전해진다.',
    design:'화면을 가득 채울 만큼 거대한 고목의 밑동 앞 공터입니다. 나무껍질 틈에서 보랏빛 점액이 미세하게 흘러내립니다.',
    theme:{sky:['#24162a','#4e3446'],far:'oak',farC:['#1c2618','#263420','#30402a'],ground:['#3a3a28','#343422'],deco:['ooze'],parts:'motes',dark:1}},
  ]},
@@ -6178,7 +6178,7 @@ function renderDSel(app){
   }catch(e){}});
  const tip=$('#wtip'), wmap=$('#wmap');
  const showTip=(i,el)=>{const d=z.dungeons[i], op=dgOpen(z,i), ex=dgExclusive(d);
-  const mk=lim=>`${d.lv?`<div class="wt-h">추천레벨 : Lv. ${d.lv[0]}~${d.lv[1]}</div>`:''}<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${lvTxt(d.lv)}${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?` <span style="color:#ffb070">· 현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,lim).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>lim?`<div class="dim">외 ${ex.length-lim}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
+  const mk=lim=>`${d.lv?`<div class="wt-h">추천레벨 : Lv. ${d.lv[0]}~${d.lv[1]}</div>`:''}<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?`<span style="color:#ffb070">현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,lim).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>lim?`<div class="dim">외 ${ex.length-lim}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
   tip.style.display='block'; tip.style.visibility='hidden'; tip.style.maxHeight='';
   const mr=wmap.getBoundingClientRect(), sc=(mr.width/wmap.offsetWidth)||1, mw=wmap.offsetWidth, mh=wmap.offsetHeight;
   const tw=Math.min(300,mw-20); tip.style.width=tw+'px';
