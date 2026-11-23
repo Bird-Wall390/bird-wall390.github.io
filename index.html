@@ -2099,7 +2099,7 @@ html body #app .dswarn.out{animation:dsSlideOut .5s cubic-bezier(.6,0,.8,.4) bot
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.87';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.88';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6209,7 +6209,7 @@ function dgQuestMark(z,i){ // 진행 중인 퀘스트가 이 던전을 가리키
  if(!hit.length)return null;
  const ty=['unique','epic','achv','normal','rep'].find(t=>hit.some(id=>(QUESTS[id].type||'normal')===t));
  return {col:QTYPE[ty][1],names:hit.map(id=>QUESTS[id].name)}; }
-const DF_BAND=['#9aa3b0','#2f86e0','#8a3fe0','#d4206e'], DF_TXT=['NORMAL','EXPERT','MASTER<br>LORD',"KING'S<br>ROAD"];
+const DF_BAND=['#1f9d55','#2f86e0','#8a3fe0','#d4206e'], DF_TXT=['NORMAL','EXPERT','MASTER<br>LORD',"KING'S<br>ROAD"];
 function renderDSel(app){
  if(!ZR){go('town');return;}
  const z=zoneById(ZR.zone), p=zprog(z.id);
