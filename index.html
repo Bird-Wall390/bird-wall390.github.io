@@ -1537,6 +1537,12 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 #app.battle #einfoTog{display:block;position:absolute;left:8px;bottom:128px;z-index:8;pointer-events:auto;padding:3px 12px;font-size:12px;line-height:1.4;border-radius:5px}
 #app.battle #einfo{display:block;position:absolute;left:8px;bottom:158px;width:270px;max-height:calc(var(--vhf) - 330px);overflow:auto;pointer-events:auto;background:rgba(10,8,6,.86);border:1px solid #8c6e48;border-radius:8px;padding:8px 10px;z-index:6}
 #app.battle.einfoOff #einfo{display:none}
+/* 내 정보 창: 위쪽 캐릭터·장비 칸을 낮게 줄여서 아래 능력치를 더 많이 보이게 */
+.lwin .lw-scene{padding:5px 8px!important;gap:4px!important;align-items:center}
+.lwin .lw-scene .iw-col,.lwin .lw-scene .iw-col2{grid-template-columns:repeat(2,36px)!important;gap:3px!important}
+.lwin .lw-scene .lw-eq{width:36px;height:36px}
+.lwin .lw-me{justify-content:center;line-height:1.15}.lwin .lw-me .c1,.lwin .lw-me .c3{font-size:11px}.lwin .lw-me .c2{font-size:13px}
+.lwin .lw-st{gap:2px;margin-top:5px}.lwin .lw-sr{min-height:31px;padding:0 10px;font-size:12.5px}
 @media(max-height:700px){#app.battle #einfo{width:205px;padding:6px 8px;font-size:12px}#app.battle #infocard{width:205px}body:has(#app.battle) .tqwrap{width:205px!important}body:has(#app.battle) .tqwrap .tqs{font-size:11.5px;padding:6px 8px}}
 .ei-none{font-size:12px;color:#b8a888;text-align:center;padding:6px 0}
 .ei-h{display:flex;align-items:center;gap:6px;margin-bottom:6px}
@@ -1782,7 +1788,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.59';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.60';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -3937,7 +3943,7 @@ function openStatus(i){
   <div class="lw-body">${body}</div>
   <div class="lw-foot"><div style="display:flex;justify-content:space-between"><span>EXP</span><span>Lv.${h.lv} (${h.exp} / ${expNeed(h.lv)})</span></div><div class="bar" style="height:6px;margin-top:4px;background:#000;border:1px solid #4a3a28;border-radius:3px;overflow:hidden"><div style="height:100%;width:${Math.min(100,h.exp/expNeed(h.lv)*100)}%;background:linear-gradient(90deg,#3f9a52,#92e49c)"></div></div></div></div>`;
  document.body.appendChild(ov);
- const sp=ov.querySelector('#sPort'); if(sp)sp.appendChild(heroPortrait(h.cls,150,170,4));
+ const sp=ov.querySelector('#sPort'); if(sp)sp.appendChild(heroPortrait(h.cls,96,108,4));
  ov.querySelector('#sX').onclick=()=>ov.remove();
  ov.querySelectorAll('[data-si]').forEach(b=>b.onclick=()=>openStatus(+b.dataset.si));
  ov.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{openStatus.tab=b.dataset.st; openStatus(STATUS_IDX);});
