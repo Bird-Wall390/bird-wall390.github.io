@@ -1779,7 +1779,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.49';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.50';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7681,6 +7681,27 @@ load(); setArt('anime',false); render();
  const up=()=>{ if(!P)return; const p=P; P=null; requestAnimationFrame(()=>{ let el=p.el; if(!el.isConnected){ el.classList.remove('pressed'); el=pick(document.elementFromPoint(p.x,p.y)); if(el)el.classList.add('pressed'); }
    const left=Math.max(60,MIN-(performance.now()-p.t)); setTimeout(()=>{ if(el)el.classList.remove('pressed'); p.el.classList.remove('pressed'); },left); }); };
  document.addEventListener('pointerup',up,{capture:true,passive:true}); document.addEventListener('pointercancel',up,{capture:true,passive:true});
+})();
+
+/* ---- 스마트폰 뒤로가기 = 창 닫기. 닫을 창이 없으면 "한 번 더 누르면 종료" 안내 후 2초 안에 다시 누르면 종료 ---- */
+(()=>{ try{ history.replaceState({rod:0},''); history.pushState({rod:1},''); }catch(e){return;}
+ let arm=0;
+ const sig=()=>[document.querySelectorAll(WIN_SEL).length,S&&S.tab,S&&S.restTab,typeof BW!=='undefined'&&!!BW].join('|');
+ const backClose=()=>{
+  if(typeof DBG!=='undefined'&&DBG.open){ DBG.open=false; dbgPanel(); return true; }
+  const wins=[...document.querySelectorAll(WIN_SEL)];
+  if(wins.length){ const b=sig(); document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',code:'Escape',bubbles:true,cancelable:true}));
+   if(sig()===b){ try{closeWin(wins[wins.length-1]);}catch(e){ wins[wins.length-1].remove(); } } try{sfx('winClose');}catch(e){} return true; }
+  if(SCREEN==='battle'&&typeof BW!=='undefined'&&BW){ closeBW(); try{sfx('winClose');}catch(e){} return true; }
+  if(SCREEN==='town'&&S&&S.tab&&S.tab!=='home'){ S.tab='home'; save(); render(); try{sfx('winClose');}catch(e){} return true; }
+  if(SCREEN==='rest'&&S&&S.restTab&&S.restTab!=='rest'&&S.restTab!=='home'){ S.restTab='rest'; render(); try{sfx('winClose');}catch(e){} return true; }
+  return false; };
+ addEventListener('popstate',()=>{
+  if(arm&&performance.now()-arm<2000){ arm=0; history.back(); return; }   // 2초 안에 한 번 더: 실제로 나감
+  let closed=false; try{ closed=backClose(); }catch(e){}
+  history.pushState({rod:1},'');
+  if(!closed){ arm=performance.now(); toast('뒤로가기를 한 번 더 누르면 게임이 종료됩니다.',1800); } else arm=0;
+ });
 })();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script></body>
