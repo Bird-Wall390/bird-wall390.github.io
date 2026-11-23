@@ -243,7 +243,7 @@ body.bt{overflow:hidden;height:var(--vhf)}
 .nq-row{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin-bottom:5px;background:#0a120c;border:1px solid #2a4a2a;color:#8fe08a;padding:9px 10px}
 .nq-row.sel{border-color:#4aa8ff;box-shadow:0 0 0 1px #4aa8ff inset;color:#cfe8ff}.nq-row.done{opacity:.55;filter:grayscale(1)}
 .nq-b{font-size:11px;padding:1px 7px;border-radius:5px;background:#2a5a2a;color:#d8ffd0;white-space:nowrap}.nq-b.going{background:#6a5a1a}.nq-b.ready{background:#1a6a8a}.nq-b.done{background:#444}
-.nq-dlg{user-select:none;-webkit-user-select:none;position:relative;display:flex;gap:14px;height:196px;flex:none;background:rgba(12,10,8,.94);border:2px solid #8a6a38;border-radius:10px;padding:12px 16px 12px 190px;cursor:pointer}
+.nq-dlg{user-select:none;-webkit-user-select:none;position:relative;display:flex;gap:14px;height:196px;flex:none;background:rgba(12,10,8,.94);border:2px solid #8a6a38;border-radius:10px;padding:12px 16px 12px 236px;cursor:pointer}
 .nq-face{position:absolute;left:12px;top:10px;bottom:10px}
 .nq-body{flex:1;position:relative;min-width:0}.nq-name{color:#ffd860;font-weight:700;border-bottom:1px solid #5a4a30;padding-bottom:6px;margin-bottom:8px}
 .nq-text{color:#f4ecd8;font-size:16px;line-height:1.6;height:92px;overflow:auto;white-space:pre-wrap}
@@ -992,9 +992,9 @@ body button.isobtn:hover{filter:brightness(1.2)}
 *::-webkit-scrollbar-button:single-button:horizontal{display:none}
 *::-webkit-scrollbar-track:horizontal{background:linear-gradient(180deg,#3a3630,#17120e 30%,#17120e 70%,#3a3630);border:1px solid #05030a;border-radius:3px}
 *::-webkit-scrollbar-thumb:horizontal{min-width:44px;background:linear-gradient(180deg,#b98a4a,#7a2a18 25%,#4a1810 75%,#b98a4a);border:1px solid #e0b060;border-radius:3px}
-.nq-dlg{padding-left:190px}
-.nq-face{left:14px;top:12px;bottom:12px;width:150px;height:auto;border:2px solid #8a6a38;border-radius:75px 75px 8px 8px;overflow:hidden;background:#10161f;box-shadow:0 2px 8px rgba(0,0,0,.6),inset 0 0 0 1px #3a2a14}
-.nq-face img{display:block;width:100%!important;height:100%!important;object-fit:cover;object-position:50% 8%;border-radius:0!important}
+.nq-dlg{padding-left:236px}
+.nq-face{left:8px;top:auto;bottom:0;width:auto;height:262px;border:0;border-radius:0;overflow:visible;background:none;box-shadow:none;pointer-events:none}
+.nq-face img{display:block;width:auto!important;height:100%!important;object-fit:contain;object-position:50% 100%;border-radius:0!important;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
 @media(max-width:700px){.nq-face{left:10px;top:-60px;bottom:auto;width:90px;height:112px;border-radius:45px 45px 6px 6px}}
 #app .bhud .bh-exp{height:64px;margin-bottom:-6px}
 #app .bhud .bx{height:64px}
@@ -1892,7 +1892,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.41';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.42';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
