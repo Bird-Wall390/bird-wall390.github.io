@@ -1522,18 +1522,20 @@ html body .lwin.inbox.dsk,html body .skhost .lwin.inbox.dsk.dsk.dsk{left:0!impor
 .dk-rec{position:absolute;left:-6px;top:-7px;font-style:normal;font-size:9px;background:#2a8a3a;color:#fff;padding:0 3px;border-radius:2px;border:1px solid #7dff9a}
 .dk-eq{position:absolute;right:-5px;bottom:-5px;font-style:normal;font-size:10px;background:#1a4a80;color:#fff;width:15px;height:15px;border-radius:50%;text-align:center;line-height:15px;border:1px solid #7fc8ff}
 .dk-awk{position:absolute;right:-6px;top:-7px;font-style:normal;font-size:9px;background:#a01a4a;color:#fff;padding:0 3px;border-radius:2px}.dk-awk.q{background:#7a2ac8}
+.dk-ctl{position:static!important;width:auto!important;margin:0 0 6px}.dk-msv{display:flex;gap:10px;align-items:center;padding:10px;background:#15110c}.dk-msi{width:56px;height:56px;flex:none;border:2px solid #3a8a4a;border-radius:4px;overflow:hidden}.dk-msi .skimg{width:100%;height:100%}
+.dk-sh button{margin-left:auto;padding:2px 10px!important;font-size:11.5px!important;min-height:0!important}.dk-sh b{color:#8fd0ff;font-size:12.5px}
 .dk-pop{position:absolute;z-index:5;width:190px;background:linear-gradient(180deg,#3a2c16,#1a130a);border:2px solid #e8963a;border-radius:4px;box-shadow:0 4px 14px #000;padding:4px 6px}
 .dk-pn{font-weight:800;font-size:13px;color:#ffe2a0;text-align:center;border-bottom:1px solid #6a4a20;padding-bottom:3px;margin-bottom:4px}
 .dk-pr{display:flex;align-items:center;gap:4px}.dk-sp{min-width:26px;text-align:center;color:#ffd24a;font-weight:800;font-size:13px}
 .dk-pr button{width:24px;height:22px;padding:0!important;font-weight:900!important;font-size:14px!important;min-height:0!important;background:#8a1a12!important;border:1px solid #ff6a4a!important;color:#fff!important}.dk-pr button:disabled{background:#3a2a24!important;border-color:#5a4a3a!important;color:#887!important}
 .dk-pl{margin-left:auto;font-size:12px;color:#aee8ff}.dk-pl b{color:#fff}
 .dk-btns{flex:none;display:flex;justify-content:center;align-items:center;gap:10px;padding:6px;border-top:1px solid #3a3020;background:#14110c}.dk-btns button{min-width:96px}
-.dk-right{width:292px;flex:none;display:flex;flex-direction:column;min-height:0;background:#0e0c09}
+.dk-right{width:350px;flex:none;display:flex;flex-direction:column;min-height:0;background:#0e0c09}
 .dk-det{flex:1;overflow:auto;padding:8px;border:1px solid #c8782a;margin:6px;border-radius:3px;background:#100d0a}
 .dk-dh{font-size:15px;color:#ffe2a0;text-align:center;margin-bottom:6px}.dk-dh span{color:#ffd24a;font-size:13px}
 .dk-pv{position:relative;border:1px solid #3a3020;border-radius:3px;overflow:hidden}.dk-pv canvas{display:block;width:100%;height:auto}
 .dk-pvi{position:absolute;left:4px;top:4px;width:34px;height:34px;border:1px solid #c8a050;border-radius:3px;overflow:hidden}.dk-pvi .skimg{width:100%;height:100%}
-.dk-el{position:absolute;right:6px;top:4px;font-size:11px;font-weight:800;text-shadow:0 1px 2px #000}
+.dk-el{position:absolute;right:6px;bottom:4px;font-size:11px;font-weight:800;text-shadow:0 1px 2px #000}
 .dk-cmd{display:flex;align-items:center;gap:6px;margin:6px 0;font-size:12px}.dk-cmd span{color:#ffb84a}.dk-cmd b{color:#e8e0c8;font-weight:600;flex:1}.dk-cmd button{padding:2px 10px!important;font-size:11px!important;min-height:0!important;background:#1a4a80!important;border-color:#7fc8ff!important}
 .dk-dl{font-size:12px;line-height:1.65}.dk-dr{display:flex;justify-content:space-between;gap:8px}.dk-dr span{color:#c8b892}.dk-dr b{color:#fff;font-weight:600;text-align:right}
 .dk-why{margin-top:4px;font-size:11.5px;color:#ff8a7a}
@@ -1881,7 +1883,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.2';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.3';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5256,7 +5258,7 @@ function townSkTip(h,sk,learned){
  }
  return `<b>${esc(sk.name)}</b> <span class="dim">· ${SK_KN[skKind(sk)][0]}${sk.elem?' · '+ELEM[sk.elem]+'속성':''}</span>${sk.desc?`<div class="tpds">${esc(sk.desc)}</div>`:''}<div class="tpbox">${head}${up}</div>`;}
 /* ===== 스킬창 (던파 2012 개편 스킬창 방식: 전체화면 트리 + 상세 정보 + 단축키 등록 + 최종 적용) ===== */
-let SK_SEL={}, SK_REC_ON=true;
+let SK_SEL={}, SK_REC_ON=true, SK_SEL_MS=false;
 function skTreeLayout(cls){
  const all=Object.values(SK).filter(s=>s.cls===cls&&!s.passive).sort((a,b)=>skLearnLv(a)-skLearnLv(b)||(a.quest?1:0)-(b.quest?1:0));
  const lvls=[...new Set(all.map(skLearnLv))].sort((a,b)=>a-b), COLS=5, pos={}, par={}, used={};
@@ -5282,17 +5284,76 @@ function skDoUp(h,sk){ if(skCanUp(h,sk))return false; const learned=h.skills.inc
  if(!learned){ if(sk.quest&&typeof DBG!=='undefined'&&DBG.on){h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_MAX)h.equip.push(sk.id); return true;}
   skStage(h,{t:'learn',id:sk.id,cost:skSP(sk)}); h.sp-=skSP(sk); h.skills.push(sk.id); h.skLv[sk.id]=1; if(!sk.passive&&h.equip.length<SK_MAX)h.equip.push(sk.id); return true; }
  const L=skLvOf(h,sk.id); skStage(h,{t:'up',id:sk.id,from:L,cost:skSP(sk)}); h.sp-=skSP(sk); h.skLv[sk.id]=L+1; return true; }
-function skPrevAnim(cv,sk){ const vm=VFX_MAP[sk.id]||{}, g=cv.getContext('2d'), W=cv.width, H=cv.height, t0=performance.now();
- const loop=now=>{ if(!document.body.contains(cv))return; g.setTransform(1,0,0,1,0,0); const bg=g.createRadialGradient(W/2,H*.6,10,W/2,H*.6,W*.7); bg.addColorStop(0,'#2a2438'); bg.addColorStop(1,'#07060c'); g.fillStyle=bg; g.fillRect(0,0,W,H);
-  g.fillStyle='rgba(255,255,255,.05)'; for(let i=0;i<6;i++)g.fillRect(0,H*.72+i*8,W,1);
-  const k=((now-t0)%1500)/1500, p=Math.min(.999,k*1.15)*4, fi=Math.floor(p), ft=p-fi, al=k>.85?Math.max(0,(1-k)/.15):1;
-  g.save(); g.globalCompositeOperation='lighter';
-  const bvIdx=vm.b!=null?vm.b:vm.bvb!=null?vm.bvb:null;
-  if(bvIdx!=null&&BV.ims[bvIdx>>4]){ const IM=BV.ims[bvIdx>>4], C=BV.C, e=bvIdx&15, row=(e/2)|0, col0=(e%2)*4, beam=vm.b==null, w=beam?W*.95:Math.min(W,H)*.95, hh=beam?H*.55:w;
-   const dr=(f,a)=>{ if(f>3||a<=0)return; g.globalAlpha=al*a; g.drawImage(IM,(col0+f)*C,row*C,C,C,beam?W*.025:(W-w)/2,(H-hh)/2,w,hh); };
-   dr(fi,fi<3?1-ft*.85:1); if(fi<3)dr(fi+1,ft*.85); }
-  else if(vm.mv!=null&&MV.ready){ const F=MV.F[vm.mv], n=F.length, q=Math.min(.999,k*1.15)*n, f=Math.floor(q); const fr=F[f]; if(fr){const asp=fr[2]/fr[3], w=Math.min(W*.95,H*.9*asp), hh=w/asp; g.globalAlpha=al; g.drawImage(MV.im,fr[0],fr[1],fr[2],fr[3],(W-w)/2,(H-hh)/2,w,hh);} }
-  g.restore(); requestAnimationFrame(loop); };
+function skPrevAnim(cv,sk,h){
+ const g=cv.getContext('2d'), W=cv.width, H=cv.height, PW=76, PH=42, COLS=7, ROWS=5, OX0=Math.round((W-COLS*PW)/2), OY0=H-ROWS*PH-8, t0=performance.now();
+ const tc=(x,y)=>({cx:OX0+x*PW+PW/2, cy:OY0+y*PH+PH/2});
+ const vm=VFX_MAP[sk.id]||{}, sup=isSupport(sk)||sk.t==='self'||sk.t==='ally'||sk.t==='allies', hx=1, hy=2;
+ const dX=sk.t==='area'?(sk.shape==='diamond'?4:3):2, dY=2;
+ const md=(x,y,a,b)=>Math.abs(x-a)+Math.abs(y-b), cb=(x,y,a,b)=>Math.max(Math.abs(x-a),Math.abs(y-b));
+ let hit=[], rng=[], tgt=[dX,dY];
+ for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+  if(sk.t==='single'&&md(x,y,hx,hy)<=(sk.range||1)&&!(x===hx&&y===hy))rng.push([x,y]);
+  if(sk.t==='area'&&md(x,y,hx,hy)<=(sk.range||1)&&!(x===hx&&y===hy))rng.push([x,y]);
+  if(sk.t==='area'){const m=md(x,y,dX,dY), c=cb(x,y,dX,dY); if((sk.shape==='cross'&&m<=1)||(sk.shape==='square'&&c<=1)||(sk.shape==='diamond'&&m<=2))hit.push([x,y]);}
+  if(sk.t==='around'){const c=cb(x,y,hx,hy); if(c>=1&&c<=(sk.r||1))hit.push([x,y]);}
+ }
+ if(sk.t==='single')hit=[[dX,dY]];
+ if(sk.t==='line'||sk.t==='dash'){ for(let i=1;i<=(sk.len||1)&&hx+i<COLS;i++)hit.push([hx+i,hy]); }
+ if(sup){hit=[[hx,hy]]; tgt=[hx,hy];}
+ const hitSet=new Set(hit.map(([x,y])=>x+','+y)), dummyHit=!sup&&hitSet.has(dX+','+dY);
+ const hero={kind:'hero',spec:(CLASSES[h.cls]||{}).spec,h}, col=sk.elem&&ELEM_FX[sk.elem]?ELEM_FX[sk.elem]:'#ffd23f';
+ const T=2300, A0=380, IMP=vm.bt!=null?640:A0+60, DUR=900;
+ const bvAt=(idx,x,y,sz,k,flip)=>{const IM=BV.ims[idx>>4]; if(!IM)return; const C=BV.C,e=idx&15,row=(e/2)|0,col0=(e%2)*4,p=Math.min(.9999,Math.max(0,k))*4,fi=Math.floor(p),ft=p-fi,al=k<.06?k/.06:k>.85?Math.max(0,(1-k)/.15):1;
+  g.save(); g.globalCompositeOperation='lighter'; g.translate(x,y); if(flip)g.scale(-1,1); const w=sz*(.96+.08*Math.min(1,k*1.4));
+  g.globalAlpha=al*(fi<3?1-ft*.85:1); g.drawImage(IM,(col0+fi)*C,row*C,C,C,-w/2,-w/2,w,w); if(fi<3){g.globalAlpha=al*ft*.85; g.drawImage(IM,(col0+fi+1)*C,row*C,C,C,-w/2,-w/2,w,w);} g.restore();};
+ const beamAt=(draw,x1,y1,x2,y2,hh,k)=>{const L=Math.hypot(x2-x1,y2-y1)+PW*.7, ang=Math.atan2(y2-y1,x2-x1), al=k<.06?k/.06:k>.85?Math.max(0,(1-k)/.15):1; g.save(); g.globalCompositeOperation='lighter'; g.translate(x1,y1); g.rotate(ang); draw(L,hh,al); g.restore();};
+ const bvBeamAt=(idx,x1,y1,x2,y2,hh,k)=>{const IM=BV.ims[idx>>4]; if(!IM)return; const C=BV.C,e=idx&15,row=(e/2)|0,col0=(e%2)*4,p=Math.min(.9999,Math.max(0,k))*4,fi=Math.floor(p),ft=p-fi;
+  beamAt((L,hh,al)=>{g.globalAlpha=al*(fi<3?1-ft*.85:1); g.drawImage(IM,(col0+fi)*C,row*C,C,C,-PW*.25,-hh/2,L,hh); if(fi<3){g.globalAlpha=al*ft*.85; g.drawImage(IM,(col0+fi+1)*C,row*C,C,C,-PW*.25,-hh/2,L,hh);}},x1,y1,x2,y2,hh,k);};
+ const mvAt=(idx,x,y,sz,k,flip,beam)=>{ if(!MV.ready)return; const F=MV.F[idx]; if(!F)return; const n=F.length,p=Math.min(.9999,Math.max(0,k))*n,fi=Math.floor(p),fr=F[fi]; if(!fr)return; const asp=fr[2]/fr[3], al=k<.06?k/.06:k>.85?Math.max(0,(1-k)/.15):1;
+  g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=al;
+  if(beam){ const [x2,y2]=beam, L=Math.hypot(x2-x,y2-y)+PW*.7, ang=Math.atan2(y2-y,x2-x); g.translate(x,y); g.rotate(ang); if(asp>1.6)g.drawImage(MV.im,fr[0],fr[1],fr[2],fr[3],-PW*.15,-sz*.4,L,sz*.8); else g.drawImage(MV.im,fr[0],fr[1],fr[2],fr[3],-sz*.35,-sz*.35,sz*.7,sz*.7); }
+  else { const w=sz*Math.min(asp,2)*(asp>1.2?.8:1), hh=w/asp; g.translate(x,y); if(flip)g.scale(-1,1); g.drawImage(MV.im,fr[0],fr[1],fr[2],fr[3],-w/2,-hh/2,w,hh); }
+  g.restore(); };
+ const oldAt=(i,x,y,sz,k)=>{ if(!VFX.ready||i==null)return; const C=VFX.C,ci=i%6,ri=(i/6)|0,al=k<.1?k/.1:Math.max(0,1-Math.pow((k-.1)/.9,1.4)); g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=al; const w=sz*(.55+.6*Math.min(1,k*2.2)); g.drawImage(VFX.im,ci*C,ri*C,C,C,x-w/2,y-w/2,w,w); g.restore(); };
+ const drawDummy=(x,y,hitK,now)=>{ const sh=hitK>0?Math.sin(hitK*40)*6*(1-hitK):0; g.save(); g.translate(x+sh,y); g.scale(1.25,1.25);
+  g.fillStyle='rgba(0,0,0,.35)'; g.beginPath(); g.ellipse(0,0,24,7,0,0,7); g.fill();
+  g.fillStyle='#5a3a1e'; g.fillRect(-4,-70,8,70); g.fillStyle='#6a4626'; g.fillRect(-28,-58,56,7);
+  const fl=hitK>0&&hitK<.35; g.fillStyle=fl?'#ffffff':'#c8a060'; g.beginPath(); g.ellipse(0,-50,19,24,0,0,7); g.fill(); g.strokeStyle='#7a5a30'; g.lineWidth=2; g.stroke();
+  g.fillStyle=fl?'#fff':'#e8e0d0'; g.beginPath(); g.arc(0,-50,11,0,7); g.fill(); g.fillStyle=fl?'#fff':'#c0302a'; g.beginPath(); g.arc(0,-50,7,0,7); g.fill(); g.fillStyle=fl?'#fff':'#e8e0d0'; g.beginPath(); g.arc(0,-50,3,0,7); g.fill();
+  g.fillStyle=fl?'#fff':'#d4b070'; g.beginPath(); g.arc(0,-84,11,0,7); g.fill(); g.strokeStyle='#7a5a30'; g.stroke();
+  g.restore(); };
+ const loop=now=>{ if(!document.body.contains(cv))return; const t=(now-t0)%T;
+  g.setTransform(1,0,0,1,0,0); g.globalAlpha=1; g.globalCompositeOperation='source-over';
+  const bg=g.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#16121e'); bg.addColorStop(1,'#07060a'); g.fillStyle=bg; g.fillRect(0,0,W,H);
+  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){ const X=OX0+x*PW, Y=OY0+y*PH; g.fillStyle=(x+y)%2?'#2a2a26':'#24241f'; g.fillRect(X,Y,PW,PH); g.strokeStyle='rgba(0,0,0,.6)'; g.lineWidth=1; g.strokeRect(X+.5,Y+.5,PW-1,PH-1);
+   const k=x+','+y; if(rng.some(([a,b])=>a===x&&b===y)){g.fillStyle='rgba(90,160,255,.16)'; g.fillRect(X+1,Y+1,PW-2,PH-2);}
+   if(hitSet.has(k)){ const pulse=.32+.12*Math.sin(now/180); g.fillStyle=sup?`rgba(90,255,150,${pulse})`:`rgba(255,110,50,${pulse})`; g.fillRect(X+1,Y+1,PW-2,PH-2); g.strokeStyle=sup?'#7dff9a':'#ff9a4a'; g.lineWidth=2; g.strokeRect(X+2,Y+2,PW-4,PH-4);} }
+  const hp=tc(hx,hy), dp=tc(dX,dY), tp=tc(...tgt);
+  // 유닛 (위쪽 줄부터 그림)
+  const ak=t>=A0&&t<A0+700?(t-A0)/700:null, pose=t<A0&&t>A0-260?'wind':ak!=null?'atk':'idle';
+  const hitK=dummyHit&&t>=IMP&&t<IMP+500?(t-IMP)/500:0;
+  const draws=[[hp.cy,()=>{ try{drawUnitSpriteBase(g,hero,hp.cx,hp.cy+8,SPR*1.25,{t:now,pose,ak,ult:false,col,flip:false});}catch(e){} }]];
+  if(!sup)draws.push([dp.cy,()=>drawDummy(dp.cx,dp.cy+8,hitK,now)]);
+  draws.sort((a,b)=>a[0]-b[0]).forEach(d=>d[1]());
+  // 이펙트
+  if(t>=A0){ const k=(t-A0)/DUR, sc=vm.s||1;
+   if(vm.bt!=null&&t<IMP){ const q=(t-A0)/(IMP-A0), x=hp.cx+(tp.cx-hp.cx)*q, y=hp.cy-24+(tp.cy-hp.cy)*q, IM=BV.ims[vm.bt>>4]; if(IM){const C=BV.C,e=vm.bt&15; g.save(); g.globalCompositeOperation='lighter'; g.drawImage(IM,((e%2)*4+1)*C,((e/2)|0)*C,C,C,x-75*sc*.9,y-75*sc*.9,150*sc*.9,150*sc*.9); g.restore();} }
+   const ki=(t-IMP)/DUR;
+   if(t>=IMP&&ki<=1){
+    const last=hit.length?hit[hit.length-1]:tgt, lp=tc(...last);
+    if(vm.bvb!=null)bvBeamAt(vm.bvb,hp.cx,hp.cy-26,lp.cx,lp.cy-26,96*(vm.wide||1),ki);
+    if(vm.mvb!=null)mvAt(vm.mvb,hp.cx,hp.cy-26,118*sc,ki,false,[lp.cx,lp.cy-26]);
+    const place=vm.m==='center'?[tgt]:vm.m==='self'||vm.m==='allies'?[[hx,hy]]:vm.m==='tile'?(hit.length?hit:[tgt]):[];
+    place.forEach(([x,y],j)=>{ const p=tc(x,y), kk=Math.max(0,ki-(vm.m==='tile'?j*.03:0));
+     if(vm.b!=null)bvAt(vm.b,p.cx,p.cy-22,128*sc,kk,false); else if(vm.mv!=null)mvAt(vm.mv,p.cx,p.cy-22,118*sc,kk,false); else oldAt(vm.i,p.cx,p.cy-22,116*sc,kk); });
+    if(vm.hit!=null)hit.forEach(([x,y])=>{const p=tc(x,y); bvAt(vm.hit,p.cx,p.cy-22,128*1.1,ki,false);});
+    if(vm.hitmv!=null)hit.forEach(([x,y])=>{const p=tc(x,y); mvAt(vm.hitmv,p.cx,p.cy-22,118*1.1,ki,false);});
+    if(!vm.b&&vm.mv==null&&vm.bvb==null&&vm.mvb==null&&vm.i==null){ hit.forEach(([x,y])=>{const p=tc(x,y); g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=Math.max(0,1-ki); g.fillStyle=col; g.beginPath(); g.arc(p.cx,p.cy-22,10+ki*30,0,7); g.fill(); g.restore();}); }
+   }
+   if(dummyHit&&t>=IMP&&t<IMP+700){ const q=(t-IMP)/700; g.save(); g.globalAlpha=1-q; g.fillStyle='#fff'; g.strokeStyle='#000'; g.lineWidth=4; g.font='bold 22px sans-serif'; g.textAlign='center'; const txt=String(Math.round((sk.pow||1)*100*(sk.hits||1)))+'%'; g.strokeText(txt,dp.cx,dp.cy-128-q*24); g.fillText(txt,dp.cx,dp.cy-128-q*24); g.restore(); }
+  }
+  g.save(); g.font='bold 17px sans-serif'; g.textAlign='right'; g.fillStyle=sup?'#9dffb8':'#ffb07a'; g.fillText((sup?'적용 범위':(sk.t==='single'?'대상':'공격 범위'))+' '+hit.length+'칸',W-10,22); if(rng.length){g.fillStyle='rgba(140,190,255,.9)'; g.fillText('사거리 '+(sk.range||0)+'칸',W-10,42);} g.restore();
+  requestAnimationFrame(loop); };
  requestAnimationFrame(loop); }
 function tabSkill(c){
  const h=S.heroes[S.selHero]; h.skLv=h.skLv||{}; if(h.sp==null)h.sp=0; skFix(h);
@@ -5304,27 +5365,32 @@ function tabSkill(c){
  const lines=T.all.filter(s=>T.par[s.id]).map(s=>{const a=cellXY(T.par[s.id]), b=cellXY(s.id), lit=h.skills.includes(s.id)&&h.skills.includes(T.par[s.id]), y1=a.y+40, ym=b.y-30;
   return `<path d="M${a.x} ${y1} V${ym} H${b.x} V${b.y-24}" class="${lit?'lit':''}"/>`;}).join('');
  const cells=T.all.map(s=>{const p=T.pos[s.id], ln=h.skills.includes(s.id), need=skLearnLv(s), lock=!ln&&(h.lv<need||(s.quest&&!(typeof DBG!=='undefined'&&DBG.on))), pend=SK_SNAP[h.id]&&SK_SNAP[h.id].log.some(e=>e.id===s.id), eqi=skFix(h).indexOf(s.id);
-  return `<div class="dk-c${ln?' on':''}${lock?' lock':''}${s.id===sel?' sel':''}${pend?' pend':''}" data-dk="${s.id}" style="left:${PADX+p.c*CW+(CW-50)/2}px;top:${PADY+p.r*RH}px">
+  return `<div class="dk-c${ln?' on':''}${lock?' lock':''}${s.id===sel&&!SK_SEL_MS?' sel':''}${pend?' pend':''}" data-dk="${s.id}" style="left:${PADX+p.c*CW+(CW-50)/2}px;top:${PADY+p.r*RH}px">
    <div class="dk-ic k-${skKind(s)}${s.quest||s.awaken?' uq':''}">${skGlyph(s)}${SK_REC_ON&&REC.has(need)?'<i class="dk-rec">추천</i>':''}${eqi>=0?`<i class="dk-eq">${eqi+1}</i>`:''}${s.awaken?'<i class="dk-awk">각성</i>':s.quest?'<i class="dk-awk q">고유</i>':''}</div>
    <div class="dk-lv">${lvBox(s)}</div></div>`;}).join('');
  const axis=T.lvls.map((lv,i)=>`<div class="dk-ax" style="top:${PADY+i*RH+14}px">${lv}</div>`).join('');
  // 선택 스킬 팝업 (아이콘 옆 + − M)
- let pop='';
- if(sk&&T.pos[sk.id]){ const p=T.pos[sk.id], ln=h.skills.includes(sk.id), L=ln?skLvOf(h,sk.id):0, can=!skCanUp(h,sk), canDn=!!(SK_SNAP[h.id]&&SK_SNAP[h.id].log.some(e=>e.id===sk.id)), cx0=PADX+p.c*CW+CW/2, left=cx0+32+192<=gw?cx0+32:Math.max(2,cx0-32-192), top=PADY+p.r*RH-2;
-  pop=`<div class="dk-pop" style="left:${left}px;top:${top}px"><div class="dk-pn">${esc(sk.name)}</div><div class="dk-pr"><span class="dk-sp" title="한 번 올릴 때 드는 SP">${skSP(sk)}</span><button data-dkp="+" ${can?'':'disabled'} title="레벨 올리기">+</button><button data-dkp="-" ${canDn?'':'disabled'} title="적용 전에 올린 레벨만 내릴 수 있습니다">−</button><button data-dkp="M" ${can?'':'disabled'} title="올릴 수 있는 만큼 올리기">M</button><span class="dk-pl">Lv <b>${L}</b>/${SK_MAXLV}</span></div></div>`; }
+ let pop='', ctl='';
+ if(sk&&!SK_SEL_MS){ const ln=h.skills.includes(sk.id), L=ln?skLvOf(h,sk.id):0, can=!skCanUp(h,sk), canDn=!!(SK_SNAP[h.id]&&SK_SNAP[h.id].log.some(e=>e.id===sk.id));
+  ctl=`<div class="dk-pop dk-ctl"><div class="dk-pr"><span class="dk-sp" title="한 번 올릴 때 드는 SP">${skSP(sk)}</span><button data-dkp="+" ${can?'':'disabled'} title="레벨 올리기">+</button><button data-dkp="-" ${canDn?'':'disabled'} title="적용 전에 올린 레벨만 내릴 수 있습니다">−</button><button data-dkp="M" ${can?'':'disabled'} title="올릴 수 있는 만큼 올리기">M</button><span class="dk-pl">Lv <b>${L}</b>/${SK_MAXLV}</span></div></div>`; }
  // 공용 스킬 줄: 방어구 마스터리 + 패시브
  const M=MASTERY[h.cls], pas=Object.values(SK).filter(s=>s.cls===h.cls&&s.passive);
- const common=(M?[`<div class="dk-cm on" data-dkm="1" title="${esc(ATYPES[M.at].n+' 마스터리 · 기본 습득 · '+masteryDesc(h.cls).replace(/<[^>]+>/g,''))}"><div class="dk-ic k-passive">${SK_IMG['ms_'+h.cls]?`<img class="skimg" src="${SK_IMG['ms_'+h.cls]}" alt="">`:'⛨'}</div><b class="dk-ms">Master</b></div>`]:[]).concat(pas.map(s=>`<div class="dk-cm${h.skills.includes(s.id)?' on':''}${s.id===sel?' sel':''}" data-dk="${s.id}"><div class="dk-ic k-passive">${skGlyph(s)}</div>${lvBox(s)}</div>`)).join('');
+ const common=(M?[`<div class="dk-cm on${SK_SEL_MS?' sel':''}" data-dkm="1" title="${esc(ATYPES[M.at].n+' 마스터리 · 기본 습득 · '+masteryDesc(h.cls).replace(/<[^>]+>/g,''))}"><div class="dk-ic k-passive">${SK_IMG['ms_'+h.cls]?`<img class="skimg" src="${SK_IMG['ms_'+h.cls]}" alt="">`:'⛨'}</div><b class="dk-ms">Master</b></div>`]:[]).concat(pas.map(s=>`<div class="dk-cm${h.skills.includes(s.id)?' on':''}${s.id===sel?' sel':''}" data-dk="${s.id}"><div class="dk-ic k-passive">${skGlyph(s)}</div>${lvBox(s)}</div>`)).join('');
  // 오른쪽 상세 정보
  let det='';
- if(sk){ const ln=h.skills.includes(sk.id), L=ln?skLvOf(h,sk.id):0, eqi=skFix(h).indexOf(sk.id), why=skCanUp(h,sk), mode=S.skDetMode||'brief';
+ if(SK_SEL_MS&&M){ const ms=masteryOf(h), A=ATYPES[M.at].n, f=(k,v,m)=>`${SET_LAB[k]} +${v*m}${MS_FLAT.has(k)&&k==='spd'?'':'%'}`;
+  det=`<div class="dk-dh"><b>${A} 마스터리</b> <span class="dk-ms">Master</span></div><div class="dk-pv dk-msv"><div class="dk-msi">${SK_IMG['ms_'+h.cls]?`<img class="skimg" src="${SK_IMG['ms_'+h.cls]}" alt="">`:'⛨'}</div><div><b>패시브 · 기본 습득</b><div class="dim" style="font-size:11.5px">SP 없이 처음부터 배워져 있고, 장착하지 않아도 항상 적용됩니다.</div></div></div>
+  <div class="dk-sh"><span>●</span><b>효과</b></div><div class="dk-txt">${A} 방어구(상의·하의·신발) <b>1부위당</b><div class="gold" style="margin:3px 0">${Object.entries(M.b).map(([k,v])=>f(k,v,1)).join(' · ')}</div><div class="dim">최대 3부위까지 중첩</div></div>
+  <div class="dk-sh"><span>●</span><b>현재 적용</b></div><div class="dk-txt"><b>${ms.n}/3부위</b> 착용 중<div class="${ms.n?'gold':'dim'}" style="margin-top:3px">${ms.n?Object.entries(M.b).map(([k,v])=>f(k,v,ms.n)).join(' · '):'적용 중인 효과가 없습니다'}</div></div>
+  <div class="dk-sh" style="color:#ff8a7a"><span>●</span><b>다른 재질 패널티</b></div><div class="dk-txt">${ms.bad?`<span style="color:#ff8a7a">${ms.bad}부위 착용 중 → 공격속도 -${ms.bad} · 회피율 -${ms.bad}${ms.bad>=2?' · 이동속도 -1':''}</span>`:'<span class="dim">현재 패널티 없음</span>'}<div class="dim" style="font-size:11px;margin-top:3px">1부위당 공격속도 -1 · 회피율 -1 / 2부위 이상 이동속도 -1<br>내구도가 0이 된 방어구는 계산에서 제외됩니다.</div></div>`; }
+ else if(sk){ const ln=h.skills.includes(sk.id), L=ln?skLvOf(h,sk.id):0, eqi=skFix(h).indexOf(sk.id), why=skCanUp(h,sk), mode=S.skDetMode||'full';
   const row=(k,v)=>`<div class="dk-dr"><span>${k}</span><b>${v}</b></div>`;
-  det=`<div class="dk-dh"><b>${esc(sk.name)}</b> <span>Lv ${L}</span></div>
-   <div class="dk-pv"><canvas id="dkPv" width="268" height="150"></canvas><div class="dk-pvi k-${skKind(sk)}">${skGlyph(sk)}</div>${sk.elem?`<span class="dk-el" style="color:${ELEM_COL[sk.elem]}">${ELEM[sk.elem]}속성</span>`:''}</div>
+  det=`<div class="dk-dh"><b>${esc(sk.name)}</b> <span>Lv ${L}</span></div>${ctl}
+   <div class="dk-pv"><canvas id="dkPv" width="560" height="300"></canvas><div class="dk-pvi k-${skKind(sk)}">${skGlyph(sk)}</div>${sk.elem?`<span class="dk-el" style="color:${ELEM_COL[sk.elem]}">${ELEM[sk.elem]}속성</span>`:''}</div>
    <div class="dk-cmd"><span>단축키</span><b>${sk.passive?'패시브 (장착 불필요)':eqi>=0?`${eqi+1}번 칸 · ${keyName(KEYS['s'+eqi]||'')}`:'등록 안 됨'}</b>${!sk.passive&&ln?`<button data-dkeq="1">${eqi>=0?'해제':'등록'}</button>`:''}</div>
    <div class="dk-dl">${row('습득 레벨',`Lv ${skLearnLv(sk)} 이상`)}${sk.passive?'':row('재사용 대기',`${sk.cd||0}턴`)}${sk.passive?'':row('MP 소모량',sk.mp||0)}${fragBase(sk)?row('무의 파편 소모량',`${fragBase(sk)}개`):''}${row('필요 SP',`${skSP(sk)} / 1레벨`)}${ln&&L<SK_MAXLV?row('다음 레벨',`캐릭터 Lv ${skNeedLv(sk,L+1)}`):''}</div>
    ${why&&!(ln&&L>=SK_MAXLV)?`<div class="dk-why">${esc(why)}</div>`:''}
-   <div class="dk-sh"><span>●</span><select id="dkMode"><option value="brief" ${mode==='brief'?'selected':''}>간략 설명</option><option value="full" ${mode==='full'?'selected':''}>상세 설명</option></select></div>
+   <div class="dk-sh"><span>●</span><b>${mode==='full'?'상세 설명':'간략 설명'}</b><button id="dkMode" title="간략 설명 / 상세 설명 전환">${mode==='full'?'간략히 보기':'자세히 보기'}</button></div>
    <div class="dk-txt">${mode==='full'?townSkTip(h,sk,ln):`<div>${esc(sk.desc||'')}</div><div style="margin-top:6px">${skillDetail(sk,ln?h:null)}</div>`}</div>`; }
  // 단축키 등록 (스킬 6칸)
  const sl=skFix(h), slots=sl.map((id,i)=>`<div class="dk-sl" data-sslot="${i}" data-dks="${i}"><span>${keyName(KEYS['s'+i]||'')||i+1}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
@@ -5335,7 +5401,7 @@ function tabSkill(c){
    <div class="dk-tree"><div class="dk-axh">Lv</div><div class="dk-g" style="width:${gw}px;height:${gh}px">${axis}<svg class="dk-ln" width="${gw}" height="${gh}">${lines}</svg>${cells}${pop}</div></div>
    <div class="dk-btns"><button class="pri" id="skOk" ${skAnyPending()?'':'disabled'}>스킬 적용</button><button id="skRv" ${pend?'':'disabled'}>취소</button><button id="skCl">닫기</button>${pend?'<em class="skpend">적용 전</em>':''}</div>
   </div><div class="dk-right"><div class="dk-det">${det}</div><div class="dk-keys"><div class="dk-kh">단축키 등록</div><div class="dk-kg">${slots}</div><div class="dim" style="font-size:11px;margin-top:4px">스킬 아이콘을 끌어다 놓거나, 스킬을 고른 뒤 칸을 누르면 등록됩니다.</div></div></div></div></div>`;
- try{const cv=c.querySelector('#dkPv'); if(cv&&sk)skPrevAnim(cv,sk);}catch(e){}
+ try{const cv=c.querySelector('#dkPv'); if(cv&&sk)skPrevAnim(cv,sk,h);}catch(e){}
  { const tr=c.querySelector('.dk-tree'); if(tr){ tr.scrollTop=_st; const se=tr.querySelector('.dk-c.sel'); if(se){ const top=se.offsetTop, vis=tr.clientHeight; if(top<tr.scrollTop+10||top+70>tr.scrollTop+vis)tr.scrollTop=Math.max(0,top-vis/2+30);} tr.onscroll=()=>{tabSkill._st=tr.scrollTop;}; } }
  const skClose=()=>{SLOT_PICK=null; sfx('winClose'); if(SCREEN==='battle'){closeBW(); return;} if(SCREEN==='town'){S.tab='home'; save();} if(SCREEN==='rest')S.restTab='rest'; render();};
  const closeAsk=()=>{ if(skAnyPending())skConfirm('close',skClose); else skClose(); };
@@ -5343,9 +5409,10 @@ function tabSkill(c){
  c.querySelector('#skOk').onclick=()=>skConfirm('commit',()=>render());
  c.querySelector('#skRv').onclick=()=>{ if(!skPending(h))return; skRevert(h); save(); sfx('click'); render(); };
  c.querySelector('#dkRec').onclick=()=>{SK_REC_ON=!SK_REC_ON; render();};
- const md=c.querySelector('#dkMode'); if(md)md.onchange=()=>{S.skDetMode=md.value; render();};
+ const md=c.querySelector('#dkMode'); if(md)md.onclick=()=>{S.skDetMode=(S.skDetMode||'full')==='full'?'brief':'full'; render();};
  c.querySelectorAll('[data-skh]').forEach(b=>b.onclick=()=>{S.selHero=+b.dataset.skh; SLOT_PICK=null; render();});
- c.querySelectorAll('[data-dk]').forEach(el=>{ el.onclick=()=>{ if(DRAG_JUST&&Date.now()-DRAG_JUST<250)return; SK_SEL[h.id]=el.dataset.dk; sfx('click'); render(); };
+ c.querySelectorAll('[data-dkm]').forEach(el=>el.onclick=()=>{SK_SEL_MS=true; sfx('click'); render();});
+ c.querySelectorAll('[data-dk]').forEach(el=>{ el.onclick=()=>{ if(DRAG_JUST&&Date.now()-DRAG_JUST<250)return; SK_SEL_MS=false; SK_SEL[h.id]=el.dataset.dk; sfx('click'); render(); };
   el.ondblclick=()=>{const s=SK[el.dataset.dk]; if(skDoUp(h,s)){sfx('enhOk'); render();}};
   const s=SK[el.dataset.dk]; if(s&&!s.passive&&h.skills.includes(s.id)) dragBind(el,t=>{const q=t&&t.closest&&t.closest('[data-sslot]'); if(!q)return; if(skEquipAt(h,s.id,+q.dataset.sslot)){sfx('click'); render();}},()=>el.querySelector('.dk-ic')); });
  c.querySelectorAll('[data-dkp]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const k=b.dataset.dkp;
@@ -5355,8 +5422,8 @@ function tabSkill(c){
   render(); });
  c.querySelectorAll('[data-dkeq]').forEach(b=>b.onclick=()=>{ const sl2=skFix(h), at=sl2.indexOf(sk.id); if(at>=0){h.equip=h.equip.filter(x=>x!==sk.id);} else { const e=sl2.indexOf(null); if(e<0){toast('단축키 칸이 가득 찼습니다. 칸을 눌러 바꿀 수 있습니다.'); return;} skEquipAt(h,sk.id,e);} save(); sfx('click'); render(); });
  c.querySelectorAll('[data-dks]').forEach(b=>b.onclick=()=>{ if(DRAG_JUST&&Date.now()-DRAG_JUST<250)return; const i=+b.dataset.dks, cur=skFix(h)[i];
-  if(sk&&!sk.passive&&h.skills.includes(sk.id)&&cur!==sk.id){skEquipAt(h,sk.id,i); sfx('click'); render(); return;}
-  if(cur){SK_SEL[h.id]=cur; render();} });
+  if(!SK_SEL_MS&&sk&&!sk.passive&&h.skills.includes(sk.id)&&cur!==sk.id){skEquipAt(h,sk.id,i); sfx('click'); render(); return;}
+  if(cur){SK_SEL_MS=false; SK_SEL[h.id]=cur; render();} });
 }
 function tabDungeon(c){
  const anti=partyAnti();
