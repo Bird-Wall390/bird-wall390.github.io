@@ -2112,13 +2112,19 @@ html body #app .wqm svg{display:block}
 .augok{min-width:140px;padding:9px 30px;font-size:16px;font-weight:900;letter-spacing:2px;color:#2a1a04;background:linear-gradient(180deg,#ffe9a0,#d9a93c 60%,#a8791c);border:2px solid #fff0b8;border-radius:10px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.6)}
 .augok:hover:not(:disabled){filter:brightness(1.1)}.augok:active:not(:disabled){transform:translateY(2px)}
 .augok:disabled{filter:grayscale(.85) brightness(.6);cursor:not-allowed;box-shadow:none}
+/* v0.5.103: 용어 상세툴팁은 항상 창 위, 각인 [선택] 버튼은 등급색 */
+#gtm{z-index:2100!important}
+.overlay.augpick .augok{position:relative;isolation:isolate;color:#fff!important;text-shadow:0 1px 2px #000}
+.overlay.augpick .augok::after{content:"";position:absolute;inset:-7px;background:var(--agc,#b46aff);mix-blend-mode:color;opacity:.95;border-radius:8px;pointer-events:none}
+.overlay.augpick .augok:not(:disabled){filter:drop-shadow(0 0 7px var(--agc,#b46aff))}
+.overlay.augpick .augok:disabled::after{opacity:0}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.102';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.103';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
