@@ -1892,7 +1892,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.36';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.37';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -4741,7 +4741,7 @@ const TOWNS={
   desc:'거대한 고목의 밑동과 가지 사이에 나무집들이 구름다리로 이어진 마을입니다. 마을 중앙으로 맑은 시냇물이 흐르고, 바람개비와 초롱불이 따뜻하게 빛납니다.',
   story:'숲의 이변을 조사하러 온 모험가들이 처음 발을 딛는 전초기지입니다. 온순한 숲의 요정들과 인간 약초상, 대장장이가 모여 있으며, 기본 장비 정비·물약 보급·초반 퀘스트 수주를 담당합니다.',
   etym:'Sälva(속삭이는, 산들바람) + -ëlia(안식처, 정착지)',range:'요정 영토 전체 (1경계 흐르는 숲 외곽 ~ 3경계 잠든 깊은 숲)',
-  npcs:[['대현자 리프','동행 대현자 · 에픽 의뢰','"저는 그대가 가는 길마다 곁에서 경계의 이변을 지켜보고 있습니다. 새로운 일이 생기면 가장 먼저 알려 드리지요."',['q_hunt']],['약초상 마르텐','물약 보급','"숲에서 딴 약초로 만든 물약입니다. 부족하면 언제든 들르십시오."'],['대장장이 오르간','장비 수리 · 판매 · 강화','"장비가 상했다면 맡기십시오. 불꽃이 식기 전에 고쳐 드리겠습니다."'],['경계-이면 감시자 에르시안','경계-이면 입장','"균열 너머에는 비틀린 또 하나의 던전, 경계-이면이 있습니다. 문을 열 열쇠를 구해 드리지요."',['r_echo']]]},
+  npcs:[['대현자 리프','동행 대현자 · 에픽 의뢰','"저는 그대가 가는 길마다 곁에서 경계의 이변을 지켜보고 있습니다. 새로운 일이 생기면 가장 먼저 알려 드리지요."',['q_hunt']],['약초상 마르텐','물약 보급','"숲에서 딴 약초로 달인 물약입니다. 필요하시면 천천히 둘러보시지요."'],['대장장이 오르간','장비 수리 · 판매 · 강화','"장비가 상했으면 맡기게. 불꽃이 식기 전에 고쳐 주겠네."'],['경계-이면 감시자 에르시안','경계-이면 입장','"균열 너머에는 비틀린 또 하나의 던전, 경계-이면이 있습니다. 문을 열 열쇠를 구해 드리지요."',['r_echo']]]},
  ciren:{id:'ciren',act:1,name:'시레니아',latin:'Çirënia',sub:'이끼 정원 야영지',actName:'요정 영토',
   desc:'무너진 고대 요정 신전의 하얀 대리석 기둥과 아치 아래에 천막과 모닥불을 피워 만든 학술 탐사 캠프입니다. 낡은 석상 주변에 양피지 지도와 고대 문자 해독 도구들이 놓여 있습니다.',
   story:'숲 깊은 곳에 숨겨져 있던 유적이 열리자, 고대 샐베스어(ש˜ـלـו˜ـת)를 연구하는 학자들과 유물 사냥꾼들이 모여 세운 거점입니다. 석판 해독·유물 감정·장비 강화 및 마법 부여 기능을 제공합니다.',
@@ -4958,7 +4958,7 @@ function openNpcUI(T){
   let showDone=false, sel=null, lines=[], li=0, typing=false, full='', pos=0, finished=false, extra='';
   const qSt=id=>qStatusAt(id,n); let quests=npcQIds(n).filter(qVisible); const rq=()=>{quests=npcQIds(n).filter(qVisible);};
   root.innerHTML=`<div class="nq"><div class="nq-top"><div class="nq-left"><div class="nq-ph"><span class="dim">의뢰를 선택하십시오.</span></div></div>
-    <div class="nq-right"><div class="nq-rh">${n[0]}의 의뢰<button class="nq-dn" id="nqDone"></button></div><div class="nq-list" id="nql"></div></div></div>
+    <div class="nq-right"><div class="nq-rh">${npcShortOf(n)}의 의뢰<button class="nq-dn" id="nqDone"></button></div><div class="nq-list" id="nql"></div></div></div>
     <div class="nq-dlg" id="nqd"><div class="nq-face" id="nqf"></div><div class="nq-body"><div class="nq-name" id="nqn"></div><div class="nq-text" id="nqt"></div><div class="nq-more" id="nqm">▼</div><button class="nq-dx" id="nqdx">닫기</button><div class="nq-btns" id="nqb"></div></div></div><button class="nq-x" id="nx">× 닫기</button><button class="nq-back" id="nb">NPC 목록</button></div>`;
   $('#nqf').appendChild(npcFaceArt(n[0],170,200,true)); $('#nqdx').onclick=()=>{clearInterval(timer); typing=false; $('#nqd').style.display='none';}; $('#nx').onclick=close; $('#nb').onclick=list;
   const left=()=>{const box=root.querySelector('.nq-left'); if(!sel){box.innerHTML=`<div class="nq-ph"><span class="dim">${quests.length?'의뢰를 선택하십시오.':'현재 받을 수 있는 의뢰가 없습니다.'}</span></div>`; return;}
@@ -4976,16 +4976,16 @@ function openNpcUI(T){
    timer=setInterval(()=>{if(!$('#nqt')){clearInterval(timer);return;} pos++; $('#nqt').textContent=full.slice(0,pos); if(pos>=full.length)endLine();},22);};
   const endLine=()=>{clearInterval(timer); typing=false; $('#nqt').textContent=full; if(li<lines.length-1){$('#nqm').style.visibility='visible';} else {finished=true; $('#nqb').style.visibility='visible';}};
   const say=(ls,nm)=>{$('#nqd').style.display=''; lines=(ls&&ls.length)?ls:['…']; li=0; finished=false; $('#nqn').textContent=nm; btns(); type();};
-  const speak=()=>{const q=QUESTS[sel], st=qSt(sel)[0]; say(q.say[st==='new'?'offer':st==='going'?'going':st==='ready'?'ready':'done']||q.say.accept, `${n[0]} / ${q.name}`);};
+  const speak=()=>{const q=QUESTS[sel], st=qSt(sel)[0]; say(q.say[st==='new'?'offer':st==='going'?'going':st==='ready'?'ready':'done']||q.say.accept, `${npcShortOf(n)} / ${q.name}`);};
   const pick=id=>{sel=id; left(); rlist(); speak();};
   const act=a=>{const id=sel, q=QUESTS[id];
    if(a==='acc'){questAccept(id); left(); rlist(); clearInterval(timer); typing=false; $('#nqd').style.display='none'; toast(`「${q.name}」 의뢰를 수락했습니다. 퀘스트 버튼에서 진행 상황을 확인할 수 있습니다.`); if(SCREEN==='town'&&S.tab==='home')render();}
    else if(a==='auto'){qDbgAuto(id); left(); rlist(); const rd=qSt(id)[0]==='ready'; if(rd)speak(); else {btns(); toast('목표를 모두 채웠습니다. '+(q.to?'「'+q.to+'」에게 보고하면 완료됩니다.':'')); } if(SCREEN==='town'&&S.tab==='home')render();}
    else if(a==='no'){clearInterval(timer); typing=false; $('#nqd').style.display='none';}
-   else if(a==='give'){questAbandon(id); left(); rlist(); say(q.say.giveup||['알겠습니다. 마음이 바뀌면 언제든 다시 말씀해 주십시오.'],`${n[0]} / ${q.name}`);}
-   else if(a==='claim'){const prev=new Set(quests), out=questClaim(id); if(out){rq(); questRewardWin(id); if(SCREEN==='town'&&S.tab==='home')render(); const nxt=quests.find(x=>!prev.has(x)&&qSt(x)[0]==='new'&&qClsOk(QUESTS[x],true)); const cl=(q.say.claim||['수고하셨습니다.']); if(nxt){ sel=nxt; left(); rlist(); say(cl.concat(QUESTS[nxt].say.offer||[]),`${n[0]} / ${QUESTS[nxt].name}`); } else { left(); rlist(); say(cl,`${n[0]} / ${q.name}`); } const g=document.querySelector('.thead .tag.gold'); if(g)g.innerHTML=gI(S.gold);}}};
+   else if(a==='give'){questAbandon(id); left(); rlist(); say(q.say.giveup||npcFb(n,'giveup'),`${npcShortOf(n)} / ${q.name}`);}
+   else if(a==='claim'){const prev=new Set(quests), out=questClaim(id); if(out){rq(); questRewardWin(id); if(SCREEN==='town'&&S.tab==='home')render(); const nxt=quests.find(x=>!prev.has(x)&&qSt(x)[0]==='new'&&qClsOk(QUESTS[x],true)); const cl=(q.say.claim||npcFb(n,'claim')); if(nxt){ sel=nxt; left(); rlist(); say(cl.concat(QUESTS[nxt].say.offer||[]),`${npcShortOf(n)} / ${QUESTS[nxt].name}`); } else { left(); rlist(); say(cl,`${npcShortOf(n)} / ${q.name}`); } const g=document.querySelector('.thead .tag.gold'); if(g)g.innerHTML=gI(S.gold);}}};
   $('#nqd').onclick=e=>{if(e.target.closest('button'))return; if(typing)endLine(); else if(li<lines.length-1){li++; type();}};
-  rlist(); left(); say(quests.length?['어서 오십시오. '+n[2].replace(/^"|"$/g,'')]:[n[2].replace(/^"|"$/g,'')],n[0]);
+  rlist(); left(); say([n[2].replace(/^"|"$/g,'')],npcShortOf(n));
  };
  list();
 }
@@ -7975,13 +7975,16 @@ function qClsOk(q,st){ if(!q.cls)return true; const hs=q.type==='unique'?S.heroe
 function qVisible(id){const q=QUESTS[id], st=qState(id); if(!qClsOk(q,st))return false; if(q.prev&&!st&&!(qState(q.prev)&&qState(q.prev).st==='done'))return false; return true;}
 function npcFull(sh){for(const k in TOWNS){const n=TOWNS[k].npcs.find(n=>npcNameOf(n[0])[1]===sh); if(n)return n[0];} const rn=(typeof REST_NPCS!=='undefined')&&REST_NPCS.find(n=>npcNameOf(n[0])[1]===sh); return rn?rn[0]:sh;}
 function npcShortOf(n){return npcNameOf(n[0])[1];}
+// 대사가 없는 퀘스트에서 쓰는 기본 말: NPC마다 자기 말투로
+const NPC_FB={세라:{giveup:['그래요? 알겠어요. 마음 바뀌면 언제든 다시 와요!'],claim:['고마워요! 수고했어요.']},오르간:{giveup:['그런가. 마음이 바뀌면 다시 오게.'],claim:['수고했네.']},바룬:{giveup:['됐다. 마음이 서면 다시 와라.'],claim:['수고했다.']},리넷:{giveup:['아, 그래요? 생각 바뀌면 또 와요!'],claim:['수고했어요!']},마르텐:{giveup:['그러시지요. 마음이 서면 다시 오십시오.'],claim:['수고하셨습니다.']},테오란:{giveup:['괜찮습니다. 마음이 서시면 다시 오십시오.'],claim:['수고하셨습니다.']}};
+function npcFb(n,k){const f=NPC_FB[npcShortOf(n)]; return (f&&f[k])||(k==='giveup'?['알겠습니다. 마음이 바뀌면 언제든 다시 말씀해 주십시오.']:['수고하셨습니다.']);}
 /* NPC가 보여 줄 의뢰: 자기가 주는 의뢰 + 자기에게 보고하러 온(완료 가능) 의뢰 */
 function npcQIds(n){const sh=npcShortOf(n), own=(n[3]||[]).filter(id=>QUESTS[id]); return own.concat(Object.keys(QUESTS).filter(id=>!own.includes(id)&&QUESTS[id].to===sh&&qReady(id)));}
 function qStatusAt(id,n){const s=qStatus(id), q=QUESTS[id]; if(q.to&&n&&npcShortOf(n)!==q.to&&(s[0]==='ready'||s[0]==='going'))return ['going',s[0]==='ready'?npcNameOf(npcFull(q.to))[1]+'에게 보고':'진행 중']; return s;}
 function qPartGoal(id,i){const q=QUESTS[id], o=qParts(q)[i], p=qPartProg(id,i), need=o.need||1, dt=o.diff?' ('+DIFFS[o.diff].name+' 이상)':'';
  if(o.type==='collect'||o.type==='have')return `${MATS[o.item].name} ${p}/${need}`;
  if(o.type==='clear'){const z=zoneById(o.zone), d=z&&z.dungeons[o.dg]; return `「${d?d.name:'던전'}」${o.diff?' '+DIFFS[o.diff].name+' 이상':''} 클리어 ${p}/${need}`;}
- if(o.type==='talk')return `${npcFull(q.to)}에게 가서 이야기하기`;
+ if(o.type==='talk')return `${q.to}에게 가서 이야기하기`;
  if(o.type==='pay')return `${fmtG(need)}골드 (보고할 때 납부${(S.gold||0)>=need?'':' · 골드 부족'})`;
  if(o.type==='dboss'){const d=dgOfNamed(o.mon); return `${d?'「'+d.name+'」 ':''}던전 보스 정예 ${MONS[o.mon].name} 처치${dt} ${p}/${need}`;}
  if(o.mon)return `${MONS[o.mon].name} 처치${dt} ${p}/${need}`;
@@ -8000,7 +8003,7 @@ const QTRK_TOP=184; // 마을·성소·던전 어디서나 같은 자리 (던전
 function qTrackSync(force){ try{
  const sc=(typeof SCREEN!=='undefined')?SCREEN:'', show=S&&S.heroes&&S.heroes.length&&(sc==='rest'||sc==='battle'||sc==='map'||(sc==='town'&&S.tab==='home'));
  let el=document.getElementById('qtrk'); const ids=show?qPins():[];
- const html=ids.map(id=>`<div class="tqs">${qBadge(id)} <b>${QUESTS[id].name}</b><br>${qReady(id)?`<span style="color:#7dffa0">완료 — ${npcFull(QUESTS[id].to||QUESTS[id].npc)}에게 보고하십시오</span>`:qGoal(id)}</div>`).join('');
+ const html=ids.map(id=>`<div class="tqs">${qBadge(id)} <b>${QUESTS[id].name}</b><br>${qReady(id)?`<span style="color:#7dffa0">완료 — ${QUESTS[id].to||QUESTS[id].npc}에게 보고하십시오</span>`:qGoal(id)}</div>`).join('');
  const open=!(S&&S.qtrkHide), sig=sc+'|'+open+'|'+html;
  if(sig!==QTRK_SIG||force){ QTRK_SIG=sig;
   if(!html){ if(el)el.remove(); return; }
