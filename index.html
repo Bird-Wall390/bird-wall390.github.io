@@ -2110,7 +2110,7 @@ html body #app .wqm svg{display:block}
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.99';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.100';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -8765,7 +8765,7 @@ function dresClose(){ const d=document.getElementById('dres'); if(!d)return; d.c
 function showResults(done){ if(!R||document.getElementById('dres'))return done&&done();
  R._res=true; const res=calcResult(), dg=R.dg, D=R.diff; R._resData=res;
  const base=R.exp+Math.round(90*(1+.12*dg.idx)*D.rw*(dg.expM||1)), n=R.party.length;
- const bon=[['랭크',Math.round(base*RANK_EXP[res.rk]),'랭크 보너스 EXP. B랭크 이상일 때 추가 EXP가 가산됩니다.'],['인원',Math.round(base*.05*(n-1)),'함께한 인원 보너스 EXP. 동료·파티원 1명마다 5% 가산됩니다.'],['각인',0,'각인 보너스 EXP'],['난이도',D.id==='normal'?0:Math.round(base*.05*DIFFS.indexOf(D)),'난이도 보너스 EXP. 익스퍼트 이상에서 가산됩니다.'],['이벤트',0,'이벤트 보너스 EXP'],['연속',0,'연속 클리어 보너스 EXP']];
+ const bon=[['랭크',Math.round(base*RANK_EXP[res.rk]),'랭크 보너스 EXP. B랭크 이상일 때 추가 EXP가 가산됩니다.'],['파티',Math.round(base*.05*R.party.filter(x=>x&&((x.h||x).ctrl==='NET')).length),'온라인 멀티플레이 파티원 보너스 EXP. 파티원 1명마다 5% 가산됩니다. 동료(CPU)는 해당되지 않습니다.'],['각인',0,'각인 보너스 EXP'],['난이도',D.id==='normal'?0:Math.round(base*.05*DIFFS.indexOf(D)),'난이도 보너스 EXP. 익스퍼트 이상에서 가산됩니다.'],['이벤트',0,'이벤트 보너스 EXP'],['연속',0,'연속 클리어 보너스 EXP']];
  const fin=base+bon.reduce((a,b)=>a+b[1],0); R.exp+=bon.reduce((a,b)=>a+b[1],0);
  const tip=t=>`data-tip="${esc('<div class="tipcard">'+t+'</div>')}"`;
  const d=document.createElement('div'); d.id='dres';
