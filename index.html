@@ -1887,7 +1887,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.9';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.10';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -3574,16 +3574,21 @@ function animCell(A,f,kind){ const cache=kind==='fl'?A.fl:A.rd; if(cache[f])retu
 function drawAnimSprite(ctx,X,Y,s,spec,o,A){
  const I=SPRITE_IMG[spec.img.key], d=spec.img, k=s*.68*(spec.scale||1), t=o.t||0, ih=I.im.naturalHeight, ppu=(d.footY-d.eyeY)*ih/(d.unit||52), Href=ih/ppu*k;
  const m0=A.meta[0], S=Href/Math.max(1,m0[3]-m0[1]), C=A.C;
- let f, dx=0, red=false;
+ // 시퀀스 위의 연속 위치 → 현재 프레임 f, 다음 프레임 g, 사이 비율 ft (프레임 사이를 겹쳐 그려 2배 부드럽게)
+ let sq, pos, loop=false, dx=0, red=false;
  const ha=o.hitAge!=null?o.hitAge/520:9;
- if(ha<1){ f=A.seq.hurt[ha<.5?0:1]; const amp=Math.pow(1-ha,2); dx=12*k*amp*(o.push||-1); red=ha*520>90&&ha*520<330; }
- else if(o.ak!=null&&o.ak<1){ const sq=A.seq[A.sk[o.sk]||'atk']; f=sq[Math.min(sq.length-1,Math.floor(o.ak*sq.length))]; }
- else if(o.pose==='wind')f=A.seq.wind[0];
- else if(o.pose==='run')f=A.seq.run[Math.floor(t/75)%8];
- else f=A.seq.idle[Math.floor(t/150)%8];
- const src=o.flash?animCell(A,f,'fl'):red?animCell(A,f,'rd'):null;
+ if(ha<1){ sq=A.seq.hurt; pos=Math.min(.999,ha*1.6)*sq.length; const amp=Math.pow(1-ha,2); dx=12*k*amp*(o.push||-1); red=ha*520>90&&ha*520<330; }
+ else if(o.ak!=null&&o.ak<1){ sq=A.seq[A.sk[o.sk]||'atk']; pos=o.ak*sq.length; }
+ else if(o.pose==='wind'){ sq=A.seq.wind; pos=0; }
+ else if(o.pose==='run'){ sq=A.seq.run; pos=(t/75)%sq.length; loop=true; }
+ else { sq=A.seq.idle; pos=(t/150)%sq.length; loop=true; }
+ const i0=Math.min(sq.length-1,Math.floor(pos)), ft=pos-Math.floor(pos), f=sq[i0], g=loop?sq[(i0+1)%sq.length]:sq[Math.min(sq.length-1,i0+1)];
+ let ba=Math.max(0,Math.min(1,(ft-.3)/.7)); ba=ba*ba*(3-2*ba); if(g===f)ba=0;
+ const cell=(fr)=>o.flash?[animCell(A,fr,'fl'),0,0]:red?[animCell(A,fr,'rd'),0,0]:[A.im,(fr%8)*C,((fr/8)|0)*C];
  ctx.save(); ctx.translate(X+dx*(o.flip?-1:1),Y); if(o.flip)ctx.scale(-1,1); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
- if(src)ctx.drawImage(src,0,0,C,C,-A.AX*S,-A.FY*S,C*S,C*S); else ctx.drawImage(A.im,(f%8)*C,((f/8)|0)*C,C,C,-A.AX*S,-A.FY*S,C*S,C*S);
+ const ga=ctx.globalAlpha;
+ {const [im,sx,sy]=cell(f); ctx.drawImage(im,sx,sy,C,C,-A.AX*S,-A.FY*S,C*S,C*S);}
+ if(ba>.01){ const [im,sx,sy]=cell(g); ctx.globalAlpha=ga*ba; ctx.drawImage(im,sx,sy,C,C,-A.AX*S,-A.FY*S,C*S,C*S); ctx.globalAlpha=ga; }
  ctx.restore();
 }
 function drawImgSprite(ctx,X,Y,s,spec,o){
