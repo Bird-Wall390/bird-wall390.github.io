@@ -1081,6 +1081,8 @@ body button.isobtn:hover{filter:brightness(1.2)}
 button,[role=button],.qcell,.icell,.iw-eq,.lw-eq,.nvb,.sw-it,.shop-it,.tag.btn,input[type=button],input[type=submit]{transition:scale .65s cubic-bezier(.2,2.3,.35,1),translate .65s cubic-bezier(.2,2.3,.35,1),filter .4s ease-out,box-shadow .4s ease-out}
 button:active:not(:disabled):not(.dragghost),[role=button]:active,.qcell:active:not(.dragghost),.icell:not(.empty):active:not(.dragghost),.iw-eq:active:not(.dragghost),.lw-eq:active,.nvb:active,.sw-it:active,.shop-it:active,.tag.btn:active,input[type=button]:active,input[type=submit]:active{scale:.9;translate:0 2px;filter:brightness(.72) saturate(1.1)!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.55);transition-duration:.07s,.07s,.07s,.07s;transition-timing-function:ease-out}
 button:disabled:active{scale:1;translate:none;filter:none}
+/* 스마트폰 짧은 탭에서도 눌림 모양이 보이도록 (JS가 .pressed를 최소 0.13초 유지) */
+.pressed:not(:disabled):not(.dragghost):not(.empty){scale:.9;translate:0 2px;filter:brightness(.72) saturate(1.1)!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.55);transition-duration:0s!important}
 @media (prefers-reduced-motion:reduce){button:active:not(:disabled),.qcell:active,.icell:active,.iw-eq:active{scale:1;translate:none}}
 /* 내 정보·스킬 창: 인벤토리 창과 같은 배경·테두리·슬롯 에셋 */
 .lwin{background:rgba(18,14,24,.96);border:2px solid #8a6a38}
@@ -1777,7 +1779,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.48';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.49';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (아이폰 계열)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7670,6 +7672,16 @@ loadSpriteImg('brawler','img/brawler.webp','#ffe090');
 loadSpriteImg('gunner','img/gunner.webp','#ffd890');
 loadSpriteImg('priest','img/priest.webp','#ffe39a');
 load(); setArt('anime',false); render();
+
+/* ---- 짧은 탭 눌림 연출: 손가락을 바로 떼도 버튼이 눌리는 모양이 최소 0.13초 보이게 함.
+   누른 뒤 화면이 새로 그려져 버튼이 바뀌면, 같은 자리의 새 버튼에 이어서 표시 ---- */
+(()=>{ const SEL='button,[role=button],.qcell,.icell:not(.empty),.iw-eq,.lw-eq,.nvb,.sw-it,.shop-it,.tag.btn,input[type=button],input[type=submit]', MIN=130; let P=null;
+ const pick=t=>{ const el=t&&t.closest&&t.closest(SEL); return el&&!el.disabled&&!el.classList.contains('empty')?el:null; };
+ document.addEventListener('pointerdown',e=>{ if(e.pointerType==='mouse')return; const el=pick(e.target); if(!el)return; if(P&&P.el)P.el.classList.remove('pressed'); el.classList.add('pressed'); P={el,t:performance.now(),x:e.clientX,y:e.clientY}; },{capture:true,passive:true});
+ const up=()=>{ if(!P)return; const p=P; P=null; requestAnimationFrame(()=>{ let el=p.el; if(!el.isConnected){ el.classList.remove('pressed'); el=pick(document.elementFromPoint(p.x,p.y)); if(el)el.classList.add('pressed'); }
+   const left=Math.max(60,MIN-(performance.now()-p.t)); setTimeout(()=>{ if(el)el.classList.remove('pressed'); p.el.classList.remove('pressed'); },left); }); };
+ document.addEventListener('pointerup',up,{capture:true,passive:true}); document.addEventListener('pointercancel',up,{capture:true,passive:true});
+})();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script></body>
 </html>
