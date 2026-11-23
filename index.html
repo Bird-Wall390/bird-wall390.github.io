@@ -1918,13 +1918,22 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #bMenuPop button{min-width:120px;padding:6px 12px!important;font-size:13px!important;text-align:left;display:flex;justify-content:space-between;gap:12px}
 #bMenuPop button small{color:#cdb98e;font-size:11px}
 .dk-sl.x2 span{color:#ffb07a}
+
+/* v0.5.55: 보조칸 애니메이션 없음 · 하단 버튼 크게 · 스킬 버튼 아이콘 */
+.sk2row{transition:none!important}
+#bhudB .bh-hub{grid-template-columns:repeat(24,10.6px)!important}
+#bhudB #bhHub>button:nth-child(-n+4){height:70px!important}
+#bhudB #bhHub>button .kh{font-size:12px!important;left:10px!important;top:7px!important}
+#bhudB #bhHub>button.sk2b{display:flex!important;align-items:center;justify-content:center;padding:0!important}
+#bhudB #bhHub>button.sk2b .sk2ic{width:34px;height:34px;fill:#d9c9a3;stroke:#d9c9a3;filter:drop-shadow(0 1px 1px #000)}
+#bhudB #bhHub>button.sk2b.sel .sk2ic{fill:#ffe08a;stroke:#ffe08a}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.54';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.55';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5631,14 +5640,14 @@ function tabSkill(c){
    <div class="dk-sh"><span>●</span><b>${mode==='full'?'상세 설명':'간략 설명'}</b><button id="dkMode" title="간략 설명 / 상세 설명 전환">${mode==='full'?'간략히 보기':'자세히 보기'}</button></div>
    <div class="dk-txt">${mode==='full'?townSkTip(h,sk,ln):`<div>${esc(sk.desc||'')}</div><div style="margin-top:6px">${skillDetail(sk,ln?h:null)}</div>`}</div>`; }
  // 단축키 등록 (스킬 6칸)
- const sl=skFix(h), slots=sl.map((id,i)=>`<div class="dk-sl${i>=6?' x2':''}" data-sslot="${i}" data-dks="${i}" ${i>=6?`data-tip="${esc(SK2_NOTE)}"`:''}><span>${i>=6?'보조 '+(i-5):(keyName(KEYS['s'+i]||'')||i+1)}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
+ const sl=skFix(h), slots=[6,7,8,9,10,11,0,1,2,3,4,5].map(i=>[sl[i],i]).map(([id,i])=>`<div class="dk-sl${i>=6?' x2':''}" data-sslot="${i}" data-dks="${i}" ${i>=6?`data-tip="${esc(SK2_NOTE)}"`:''}><span>${i>=6?'보조 '+(i-5):(keyName(KEYS['s'+i]||'')||i+1)}</span><div class="dk-si">${id&&SK[id]?skGlyph(SK[id]):''}</div></div>`).join('');
  const pend=skPending(h); const _ot=c.querySelector('.dk-tree'), _st=_ot?_ot.scrollTop:(tabSkill._st||0);
  c.innerHTML=`<div class="lwin inbox dsk"><div class="dk-top"><div class="dk-tabs"><span class="dk-tab on">✔ SP 스킬배우기</span>${false?S.heroes.map((x,j)=>`<button data-skh="${j}" class="dk-hb ${j===S.selHero?'sel':''}">Lv.${x.lv} ${esc(x.name)}</button>`).join(''):''}</div><div class="dk-sp-box"><span>SP</span><b>${h.sp}</b></div><span class="dk-nm">Lv.${h.lv} ${esc(h.name)} · ${esc(CLASSES[h.cls].name)}</span><button class="lw-x" id="skx">✕</button></div>
   <div class="dk-main"><div class="dk-left">
    <div class="dk-cmn"><div class="dk-cml">공용<br>스킬</div><div class="dk-cms">${common}</div><button class="dk-recb ${SK_REC_ON?'on':''}" id="dkRec" title="처음 하는 분을 위한 추천 스킬 표시"><b>👍</b><small>추천</small></button></div>
    <div class="dk-tree"><div class="dk-axh">Lv</div><div class="dk-g" style="width:${gw}px;height:${gh}px">${axis}<svg class="dk-ln" width="${gw}" height="${gh}">${lines}</svg>${cells}${pop}</div></div>
    <div class="dk-btns"><button class="pri" id="skOk" ${skAnyPending()?'':'disabled'}>스킬 적용</button><button id="skRv" ${pend?'':'disabled'}>취소</button><button id="skCl">닫기</button>${pend?'<em class="skpend">적용 전</em>':''}</div>
-  </div><div class="dk-right"><div class="dk-det">${det}</div><div class="dk-keys"><div class="dk-kh">단축키 등록</div><div class="dk-kg">${slots}</div><div class="dim" style="font-size:11px;margin-top:4px">스킬 아이콘을 끌어다 놓거나, 스킬을 고른 뒤 칸을 누르면 등록됩니다. 아래 줄(보조)에 넣은 스킬은 전투의 [스킬] 버튼으로 펼쳐서 쓰며, 사용 후 재사용 대기가 1턴 늘어납니다.</div></div></div></div></div>`;
+  </div><div class="dk-right"><div class="dk-det">${det}</div><div class="dk-keys"><div class="dk-kh">단축키 등록</div><div class="dk-kg">${slots}</div><div class="dim" style="font-size:11px;margin-top:4px">스킬 아이콘을 끌어다 놓거나, 스킬을 고른 뒤 칸을 누르면 등록됩니다. 위 줄(보조)에 넣은 스킬은 전투의 [스킬] 버튼으로 펼쳐서 쓰며, 사용 후 재사용 대기가 1턴 늘어납니다.</div></div></div></div></div>`;
  try{const cv=c.querySelector('#dkPv'); if(cv&&sk)skPrevAnim(cv,sk,h);}catch(e){}
  { const tr=c.querySelector('.dk-tree'); if(tr){ tr.scrollTop=_st; const se=tr.querySelector('.dk-c.sel'); if(se){ const top=se.offsetTop, vis=tr.clientHeight; if(top<tr.scrollTop+10||top+70>tr.scrollTop+vis)tr.scrollTop=Math.max(0,top-vis/2+30);} tr.onscroll=()=>{tabSkill._st=tr.scrollTop;}; } }
  const skClose=()=>{SLOT_PICK=null; sfx('winClose'); if(SCREEN==='battle'){closeBW(); return;} if(SCREEN==='town'){S.tab='home'; save();} if(SCREEN==='rest')S.restTab='rest'; render();};
@@ -7194,7 +7203,8 @@ function lootPosApply(){ const a=$('#bhudB'), hp=!!(S&&S.opt&&S.opt.lootPos==='h
  const Ln=a.querySelector('#bhLoot'); if(Ln&&ap){ ap.querySelectorAll(':scope>#bhLoot').forEach(x=>x.remove()); ap.appendChild(Ln); } const L=$('#bhLoot'); const tg=$(hp?'#einfoTog':'#infoTog'); if(L&&tg){ const w=(tg.offsetWidth||90)+14; L.style.left=hp?w+'px':'auto'; L.style.right=hp?'auto':w+'px';
    // MP 구슬 쪽(기본): [모두 줍기] 왼쪽 끝을 위의 전투로그 창 왼쪽 끝선에 맞춤
    const card=$('#infocard'); if(!hp&&card&&ap){ const cs=getComputedStyle(card), rt=parseFloat(cs.right), cw=card.offsetWidth||parseFloat(cs.width)||0;
-     if(cw>0&&isFinite(rt)){ L.style.right='auto'; L.style.left=Math.round(ap.clientWidth-rt-cw)+'px'; } } } }
+     if(cw>0&&isFinite(rt)){ L.style.right='auto'; L.style.left=Math.round(ap.clientWidth-rt-cw)+'px'; } }
+   try{ const lr=L.getBoundingClientRect(), tr=tg.getBoundingClientRect(); if(!hp&&lr.width&&tr.width&&lr.right>tr.left-6){ L.style.left='auto'; L.style.right=w+'px'; } }catch(e){} } }
 window.addEventListener('resize',()=>{try{lootPosApply();}catch(e){}});
 function updateBexp(){const e=$('#bexpw'); if(e&&R)e.innerHTML=bexpHtml(); const x=$('#bhExp'); if(x&&R){const h=(R.party.find(p=>p.h.ctrl!=='AI')||R.party[0]).h, need=expNeed(h.lv), pc=Math.min(100,h.exp/need*100), pend=R.exp?Math.min(100-pc,R.exp*expRate(h,R.dg)/need*100):0;
  x.title=`EXP ${h.exp} / ${need}`; { const z=$('#bhX10'); if(z){ z.innerHTML=exp10Html(pc,pend); z.setAttribute('data-tip',`<b>Lv.${h.lv}</b> EXP ${h.exp} / ${need} (${pc.toFixed(1)}%)${R.exp?`<br>이번 던전 +${Math.round(R.exp*expRate(h,R.dg))}`:''}`); } } x.innerHTML=`<div class="bx"><b>${h.lv}</b><div class="bxt"><i style="width:${pc.toFixed(1)}%"></i><i class="pend" style="left:${pc.toFixed(1)}%;width:${pend.toFixed(1)}%"></i></div><span>${pc.toFixed(1)}%${R.exp?` (+${Math.round(R.exp*expRate(h,R.dg))})`:''}</span></div>`;}}
@@ -7243,7 +7253,7 @@ function bhudRefresh(){
  const clone=(sb,span,fallback)=>{if(!sb){hb(fallback,'idle','',null,span); return;} const off=sb.classList.contains('dis')||sb.disabled; hb(sb.innerHTML,sb.className.replace(/\bdis\b/,'')+(off?' off':''),sb.getAttribute('data-tip')||'',()=>{if(!off)sb.click();},span);};
  clone(sm,6,`<em class="kh">${keyName(KEYS.bmov)}</em>이동`); clone(sa,6,`<em class="kh">${keyName(KEYS.batk)}</em>공격`); clone(se,6,`<em class="kh">${keyName(KEYS.bend)}</em>턴 종료`);
  const sk2on=!!((S.opt&&S.opt.sk2)||BW==='skill');
- hb(`<em class="kh">${sk2on?'▼':'▲'}</em>스킬<small>${sk2on?'접기':'펼치기'}</small>`,'tx sk2b'+(sk2on?' sel':''),'보조 스킬칸(7~12번)을 펼치거나 접습니다.<br>보조 칸의 스킬은 사용 후 재사용 대기가 1턴 늘어납니다.',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
+ hb(`<em class="kh">${sk2on?'▼':'▲'}</em><svg class="sk2ic" viewBox="0 0 32 32"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2" opacity=".55"/><rect x="18" y="18" width="11" height="11" rx="2" opacity=".55"/><path d="M16 21.5l-3.2 3.2M16 21.5l3.2 3.2" stroke-width="2.4" stroke-linecap="round" fill="none" style="display:none"/></svg>`,'tx sk2b'+(sk2on?' sel':''),'보조 스킬칸(7~12번)을 펼치거나 접습니다.<br>보조 칸의 스킬은 사용 후 재사용 대기가 1턴 늘어납니다.',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
  { const r2=$('#bhSk2'); if(r2){ r2.innerHTML=''; r2.classList.toggle('open',sk2on);
    for(let j=0;j<6;j++){const i=6+j, id=(u.slots||[])[i], sk=id&&SK[id];
     if(!sk){r2.appendChild(mk('<em></em>','',SK2_NOTE)); continue;}
