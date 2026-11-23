@@ -2110,7 +2110,7 @@ html body #app .wqm svg{display:block}
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.98';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.99';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7634,6 +7634,30 @@ function drawGates(g,now){
   drawGate(g,q.cx,q.by,q.w,q.h,st,rgb,now); g.restore();
  }
 }
+
+/* ---------- 가려진 유닛 실루엣 ----------
+   앞에 선 유닛(스프라이트가 실제로 겹칠 때)에 가려진 유닛의 윤곽선을, 앞 유닛의 몸 모양 안쪽에만 얹어 보여 줌.
+   (아군 = 하늘색, 적 = 붉은색) 아무도 투명해지지 않으므로 적이 항상 또렷하게 보임 */
+function drawOccSil(g,now){
+ const us=B.units.filter(u=>!u.dead&&u._dp&&u.px!=null); if(us.length<2)return;
+ const dim=u=>u.boss?[100,150]:[60,u.kind==='hero'?100:84], pairs=[];
+ for(const v of us){const fr=[], [wv,hv]=dim(v); for(const f of us){ if(f===v||f.py<=v.py+6)continue; const [wf,hf]=dim(f); if(Math.abs(f.px-v.px)>=(wf+wv)/2-12)continue; if(v.py-Math.max(v.py-hv,f.py-hf)<24)continue; fr.push(f);} if(fr.length)pairs.push([v,fr]);}
+ if(!pairs.length)return;
+ const k=g.getTransform().a||1, RW=240, RH=220, pw=Math.ceil(RW*k), ph=Math.ceil(RH*k);
+ const mk=(n,rx,ry)=>{const c=window[n]||(window[n]=document.createElement('canvas')); if(c.width!==pw||c.height!==ph){c.width=pw;c.height=ph;} const x=c.getContext('2d'); x.setTransform(1,0,0,1,0,0); x.globalCompositeOperation='source-over'; x.globalAlpha=1; x.clearRect(0,0,pw,ph); x.setTransform(k,0,0,k,-rx*k,-ry*k); x.imageSmoothingEnabled=false; return x;};
+ for(const [v,fr] of pairs){
+  const rx=v.px-RW/2, ry=v.py-RH+24, m=mk('_SM',rx,ry), s=mk('_SS',rx,ry), d=mk('_SD',rx,ry);
+  for(const f of fr)drawUnitSprite(m,f,f._dp.x,f._dp.y,SPR,f._dp.sp);
+  drawUnitSprite(s,v,v._dp.x,v._dp.y,SPR,v._dp.sp);
+  s.setTransform(1,0,0,1,0,0); s.globalCompositeOperation='source-in'; s.fillStyle=v.side==='A'?'#5ad0ff':'#ff6a5a'; s.fillRect(0,0,pw,ph);
+  d.setTransform(1,0,0,1,0,0); const r=2*k;
+  for(const [dx,dy] of [[r,0],[-r,0],[0,r],[0,-r],[r,r],[-r,-r],[r,-r],[-r,r]])d.drawImage(s.canvas,dx,dy);
+  d.globalCompositeOperation='destination-out'; d.drawImage(s.canvas,0,0);
+  d.globalCompositeOperation='source-over'; d.globalAlpha=.2; d.drawImage(s.canvas,0,0); d.globalAlpha=1;
+  d.globalCompositeOperation='destination-in'; d.drawImage(m.canvas,0,0);
+  g.save(); g.globalAlpha=.95; g.drawImage(d.canvas,0,0,pw,ph,rx,ry,RW,RH); g.restore();
+ }
+}
 function drawBattle(){
  updateHud(); if(B&&B.info&&(!B._iT||performance.now()-B._iT>100)){B._iT=performance.now(); try{updateInfo();}catch(e){}}
  const cv=$('#cv'); if(!cv||!B)return; const g=cv.getContext('2d'); g.setTransform(RES,0,0,RES,0,0); g.imageSmoothingEnabled=false;
@@ -7706,10 +7730,10 @@ function drawBattle(){
   const hx=u.hitT&&now-u.hitT<200?Math.sin(now/20)*2:0;
   const sp={t:now+u.id*137,sk:u.atkSk,pose,flip:u.face<0,ak:u.atkT&&ak<1?ak:null,ult:(u.atkPow||0)>=60,col:u.atkColor,hitAge:u.hitT?now-u.hitT:null,push:u.kb&&now-u.kb.t0<600?u.kb.dir*(u.face<0?-1:1):-1};
   if(ghost){for(let i=3;i>=1;i--){g.globalAlpha=(u.dead?0:.26-i*.07); drawUnitSprite(g,u,u.px+off-u.face*14*i+kbx,u.py+offY,SPR,{...sp,flash:true});} g.globalAlpha=1;}
-  {const oc=!u.dead&&B.units.some(v=>v!==u&&!v.dead&&v.y<u.y&&u.y-v.y<=2&&Math.abs(v.x-u.x)<=1&&(v.kind==='hero'||u.kind!=='hero')), ot=(oc&&u.kind!=='hero')?.4:1; u._oa=u._oa==null?ot:u._oa+(ot-u._oa)*.25; }   // 내 위쪽 칸의 유닛을 가리면 반투명하게
+  u._oa=1;   // 가려도 투명하게 하지 않음 (가려진 유닛은 실루엣 윤곽선으로 표시, drawOccSil 참고)
   if(u._oa<.98&&!u.dead){const sc=RES, W0=240, H0=270, OFY=200; const ocv=window._OCV||(window._OCV=document.createElement('canvas')); const pw=Math.ceil(W0*sc), ph=Math.ceil(H0*sc); if(ocv.width!==pw||ocv.height!==ph){ocv.width=pw;ocv.height=ph;} const og=ocv.getContext('2d'); og.setTransform(1,0,0,1,0,0); og.clearRect(0,0,pw,ph); og.setTransform(sc,0,0,sc,0,0); og.imageSmoothingEnabled=false;
    drawUnitSprite(og,u,W0/2+off+kbx+hx,OFY+offY,SPR,{...sp,flash}); g.save(); g.globalAlpha*=u._oa; g.drawImage(ocv,0,0,pw,ph,u.px-W0/2,u.py-OFY,W0,H0); g.restore();}
-  else drawUnitSprite(g,u,u.px+off+kbx+hx,u.py+offY,SPR,{...sp,flash});
+  else {const dpx=u.px+off+kbx+hx, dpy=u.py+offY, dsp={...sp,flash}; u._dp=u.dead?null:{x:dpx,y:dpy,sp:dsp}; drawUnitSprite(g,u,dpx,dpy,SPR,dsp);}
   g.restore();
   g.restore();
   const dBar=u.dead&&u.side==='E'&&!isBossU(u)&&u._hc&&(u._hc.prev>1e-6||(u._hc.ck&&u._hc.ck.length))&&performance.now()-(u._dRt||(u._dRt=performance.now()))<HPC_LIFE+80;   // 한 방에 쓰러져도 체력바가 깎이는 모습은 보여줌
@@ -7737,6 +7761,7 @@ function drawBattle(){
  }
 
  flushO(1e9);
+ try{drawOccSil(g,now);}catch(e){}
  // 이펙트
  B.fx=B.fx.filter(f=>now-f.t0<f.dur);
  for(const f of B.fx){const k=(now-f.t0)/f.dur, ex=f.ex||{}, sc=ex.ult?1.8:(ex.pow>1.5?1.45:1.2);
