@@ -1295,7 +1295,10 @@ body .lw-x:hover,body .iw-x:hover{filter:brightness(1.2)}
 .npcl-box.npcl-list{width:min(1000px,100%);height:min(640px,calc(96*var(--vh)));max-height:none;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden}
 .npcl-list .npcl-h{flex:none}
 .npcl-list .npcl-grid{flex:1;min-height:0;overflow:auto;align-content:start}
-@media(min-width:701px){.npcl-list .npcl-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;justify-content:stretch!important}}
+@media(min-width:701px){.npcl-list .npcl-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;justify-content:stretch!important}
+/* NPC가 5명을 넘으면 얼굴을 가슴 위까지만 보여 줘 두 줄이 한 화면에 들어가게 합니다 */
+.npcl-list .npcl-grid.many{gap:10px}.npcl-list .npcl-grid.many .npcl-face .npcl-ph{aspect-ratio:164/144;object-position:50% 34%}
+@media(max-height:520px){.npcl-list .npcl-grid.many{gap:8px}.npcl-list .npcl-grid.many .npcl-face .npcl-ph{aspect-ratio:164/116;object-position:50% 30%}}}
 
 #postclr{position:fixed;right:3%;top:26%;z-index:55;width:min(300px,calc(42*var(--vw)));display:flex;flex-direction:column;align-items:stretch;padding:14px 0 10px;background:linear-gradient(90deg,rgba(30,18,40,0),rgba(40,24,52,.88) 18%,rgba(40,24,52,.88) 100%);border-top:2px solid #c8a050;border-bottom:2px solid #c8a050}
 #postclr .pc-t{text-align:center;font:700 26px var(--kfont,inherit);color:#f4e2b8;text-shadow:0 2px 4px #000;letter-spacing:1px;margin-bottom:6px}
@@ -1307,6 +1310,7 @@ body.postclr #bQuit,body.postclr #bQuitB{display:none!important}
 @media(max-width:700px){#postclr{top:18%;width:calc(56*var(--vw))}#postclr .pc-t{font-size:20px}#postclr .pc-b{font-size:16px;padding:8px}}
 
 .tqwrap{position:fixed!important;right:14px;top:96px;width:min(290px,calc(60*var(--vw)));display:flex;flex-direction:column;gap:6px;z-index:70;text-align:left;pointer-events:none}
+.qpart{display:inline}.qpart.ok{color:#7dffa0}.nq-sheet .qpart.ok{color:#2f7a2a}.nq-sheet .qsrc,.ql-s .qsrc{color:inherit}
 .tqwrap .tqs{margin:0!important;max-width:none!important;flex-basis:auto!important;pointer-events:auto}
 .enal-b .rwrow{justify-content:center;display:flex;gap:8px}
 @media(max-width:700px){.tqwrap{top:70px;width:calc(46*var(--vw))}}
@@ -1888,7 +1892,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.27';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.28';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2123,7 +2127,7 @@ const SK={
  mg_mana:{elem:'dark',cls:'mage',name:'마나 드레인',t:'single',range:4,pow:1.1,drainMp:30,curse:.3,stat:'mag',mp:0,cd:3,lv:2,gold:120,desc:'어둠의 구체로 적의 마력을 빼앗습니다. 맞히면 MP 30 회복, 30% 저주(3턴간 마법방어력 −25%)'},
  mg_meteor:{elem:'fire',cls:'mage',name:'메테오',t:'area',range:4,shape:'square',pow:.66,hits:3,burn:.35,stat:'mag',mp:44,cd:3,lv:3,gold:250,desc:'불타는 운석을 떨어뜨려 3x3 범위를 3번 강타합니다. 35% 화상'},
  mg_blizz:{elem:'water',cls:'mage',name:'눈보라',t:'area',range:3,shape:'diamond',pow:.36,hits:4,stun:.2,stat:'mag',mp:48,cd:4,lv:4,gold:350,desc:'얼음 회오리로 마름모 13칸을 4번 휩씁니다. 20% 빙결(기절)'},
- mg_fstrike:{elem:'fire',cls:'mage',name:'파이어 스트라이크',t:'single',range:4,pow:.8,hits:3,learnLv:5,burn:.6,stat:'mag',mp:32,cd:2,lv:1,gold:0,quest:'q_fire',desc:'붉은 업화의 기둥을 단일 대상에게 내리꽂습니다. 60% 화상 (고유 스킬: 퀘스트 보상)'},
+ mg_fstrike:{elem:'fire',cls:'mage',name:'파이어 스트라이크',t:'single',range:4,pow:.8,hits:3,learnLv:5,burn:.6,stat:'mag',mp:32,cd:2,lv:1,gold:0,quest:'uq_m5',desc:'붉은 업화의 기둥을 단일 대상에게 내리꽂습니다. 60% 화상 (고유 스킬: 퀘스트 보상)'},
  mg_nova:{elem:'light',cls:'mage',name:'홀리 노바',t:'around',r:2,pow:.55,hits:4,stun:.2,stat:'mag',mp:72,cd:5,lv:6,gold:700,desc:'성스러운 빛의 마법진을 터뜨려 주변 2칸을 4번 폭격합니다. 20% 섬광(기절)'},
  // 사제
  pr_heal:{cls:'priest',name:'치유의 빛',t:'ally',range:3,heal:2.0,mp:20,cd:1,lv:1,gold:0,desc:'아군 1명 회복'},
@@ -2198,33 +2202,57 @@ function fragCost(sk){ return DBG_FREE()?0:fragBase(sk); }
 function fragBase(sk){ if(!sk||sk.basic)return 0; const L=(typeof skLearnLv==='function')?skLearnLv(sk):1; if(sk.quest)return Math.max(2,Math.min(4,Math.round((sk.mp||0)/24))); if(L<35)return 0; return Math.max(1,Math.min(4,1+Math.floor((L-35)/8))); }
 const fragTxt=sk=>fragBase(sk)?` · 무의 파편 ${fragBase(sk)}개${DBG_FREE()?' (디버그: 소모 없음)':''}`:'';
 const QUESTS={
- q_fire:{name:'업화의 불꽃',npc:'리프',cls:'mage',
-  story:'숲의 바람이 잦아든 뒤, 뿔 달린 숲다람쥐들의 뿔에 꺼지지 않는 불씨가 깃들기 시작했습니다. 그 불씨가 응축된 정수를 가져오시면, 마법사에게 고급 스킬 「파이어 스트라이크」를 전수하겠습니다.',
-  brief:'뿔 달린 숲다람쥐의 정수 5개를 모아 오십시오.',
-  say:{offer:['마법을 다루는 그대여, 마침 청할 일이 있었습니다.','근래 뿔 달린 숲다람쥐의 뿔에 꺼지지 않는 불씨가 깃들고 있습니다. 숲의 바람이 잦아든 뒤부터 일어난 변화입니다.','그 불씨가 응축된 정수를 다섯 개 모아 오십시오. 정수는 이 의뢰를 맡은 동안에만 얻을 수 있습니다.','가져오신다면 고급 마법 「파이어 스트라이크」의 이치를 전해 드리겠습니다.'],going:['정수가 아직 모자랍니다. 서두르지 말고 뿔 달린 숲다람쥐를 더 찾아 보십시오.'],ready:['정수를 모두 모으셨군요. 이 온기… 틀림없는 업화의 불씨입니다.','약속대로 파이어 스트라이크를 전해 드리겠습니다. 불은 지키는 데 쓸 때 가장 밝게 타오르는 법입니다.'],done:['이미 전해 드린 마법입니다. 그 불을 숲을 지키는 데 쓰시기를 바랍니다.'],accept:['고맙습니다. 불씨에 그을리지 않도록 유의하십시오.'],giveup:['알겠습니다. 마음이 닿는 때에 다시 찾아오십시오.'],claim:['약속한 보상입니다. 받아 주십시오.']},
- obj:{type:'collect',mon:'hornSquirrel',item:'sq_ess',need:5,rate:.55},
-  reward:{skill:'mg_fstrike',gold:150},rewardText:'스킬 파이어 스트라이크 · 150G'},
  q_hunt:{name:'숲의 속삭임',npc:'리프',
   story:'숲의 몬스터들이 갑자기 늘어났습니다. 숲 외곽의 몬스터를 10마리 처치해 주십시오.',
   brief:'숲 외곽의 몬스터를 10마리 처치하십시오.',
   say:{offer:['숲의 생명들이 갑자기 늘어나 균형이 흐트러지고 있습니다. 숲의 주민들이 마음 놓고 다니지 못할 정도입니다.','숲 외곽의 몬스터를 열 마리 처치해 주십시오. 사례는 넉넉히 드리겠습니다.'],going:['숲이 아직 어수선합니다. 조금만 더 힘을 빌려 주십시오.'],ready:['숲의 숨결이 한결 고요해졌군요. 수고하셨습니다.'],done:['그대 덕분에 숲의 주민들이 다시 안심하고 거닐 수 있게 되었습니다.'],accept:['부탁드립니다. 부디 몸을 아끼십시오.'],giveup:['알겠습니다. 필요하시다면 언제든 다시 맡아 주십시오.'],claim:['사례입니다. 받아 주십시오.']},
   obj:{type:'kill',need:10},reward:{gold:300},rewardText:'300G'}
 };
-function matSource(q){const o=q.obj; if(o.type!=='collect')return ''; const ds=[]; ZONES.forEach(z=>(z.dungeons||[]).forEach(d=>{if(d.mons.includes(o.mon)||d.boss===o.mon)ds.push(`${z.name}의 「${d.name}〈${d.sub}〉」`);}));
- return `${MATS[o.item].name}은(는) ${ds.join(', ')||'알 수 없는'} 던전에 등장하는 ${MONS[o.mon].name}에게서 얻을 수 있습니다. 이 의뢰를 맡고 있는 동안에만 떨어집니다.`;}
+/* ===== 퀘스트 목표: 하나(obj) 또는 여러 개(obj.parts) =====
+ type: kill(처치) collect(전용 재료 수집, elite=정예만 지님) have(보유 재료 제출) clear(던전 클리어)
+       dboss(던전 보스 정예 처치) talk(다른 NPC와 대화 · q.to) pay(골드 납부)
+ diff: 이 난이도 이상에서만 셉니다 · carry: 수락할 때 받는 전달물(대화 목표) · q.to: 보고할 NPC(없으면 의뢰인) */
+function qParts(q){return (q&&q.obj&&q.obj.parts)||[q.obj];}
+function dgOfNamed(m){let r=null; ZONES.forEach(z=>(z.dungeons||[]).forEach(d=>{if(!r&&d.named===m)r=d;})); return r;}
+function partSrc(o){
+ if(!o)return '';
+ if(o.type==='collect'){const ds=[]; ZONES.forEach(z=>(z.dungeons||[]).forEach(d=>{if(o.elite?d.named===o.mon:(d.mons.includes(o.mon)||d.boss===o.mon))ds.push(`「${d.name}〈${d.sub}〉」`);}));
+  return `<b class="qsrc">${MATS[o.item].name}</b> — ${ds.join(', ')||'알 수 없는 던전'}의 ${o.elite?'정예 ':''}${MONS[o.mon].name}${o.elite?'(네임드·던전 보스)':''}에게서 얻습니다. 이 의뢰를 맡은 동안에만 떨어집니다.`;}
+ if(o.type==='have')return `<b class="qsrc">${MATS[o.item].name}</b> — ${o.hint||(/^frag_/.test(o.item)?'던전에서 몬스터를 쓰러뜨리거나 장비를 해체하면 얻습니다.':'가지고 있는 재료를 제출합니다.')}`;
+ if(o.type==='pay')return `<b class="qsrc">${fmtG(o.need)}골드</b> — 보고할 때 납부합니다.`;
+ if(o.type==='dboss'){const d=dgOfNamed(o.mon); return d?`<b class="qsrc">정예 ${MONS[o.mon].name}</b> — 「${d.name}〈${d.sub}〉」의 보스 방에 나타납니다.`:'';}
+ return o.hint||'';}
+function matSource(q){return qParts(q).map(partSrc).filter(Boolean).join('<br>');}
 function qState(id){S.qs=S.qs||{}; return S.qs[id];}
-function qProg(id){const q=QUESTS[id], st=qState(id); if(!st)return 0; return (q.obj.type==='collect'||q.obj.type==='have')?Math.min(q.obj.need,(S.mats&&S.mats[q.obj.item]?S.mats[q.obj.item].n:0)):Math.min(q.obj.need,st.n||0);}
-function qReady(id){const st=qState(id); return st&&st.st==='active'&&qProg(id)>=QUESTS[id].obj.need;}
+function qPartProg(id,i){const q=QUESTS[id], st=qState(id); if(!st)return 0; const o=qParts(q)[i], need=o.need||1;
+ if(o.type==='collect'||o.type==='have')return Math.min(need,(S.mats&&S.mats[o.item]?S.mats[o.item].n:0));
+ if(o.type==='talk')return 1;
+ if(o.type==='pay')return Math.min(need,S.gold||0);
+ return Math.min(need,q.obj.parts?((st.c||[])[i]||0):(st.n||0));}
+function qPartDone(id,i){const o=qParts(QUESTS[id])[i]; return qPartProg(id,i)>=(o.need||1);}
+function qProg(id){const q=QUESTS[id]; return q.obj.parts?qParts(q).filter((o,i)=>qPartDone(id,i)).length:qPartProg(id,0);}
+function qReady(id){const st=qState(id); return !!st&&st.st==='active'&&qParts(QUESTS[id]).every((o,i)=>qPartDone(id,i));}
+function qBump(id,i){const q=QUESTS[id], st=qState(id); if(q.obj.parts){st.c=st.c||[]; st.c[i]=(st.c[i]||0)+1;} else st.n=(st.n||0)+1;}
+function qDiffOk(o){return !o.diff||(!!R&&!!R.diff&&DIFFS.indexOf(R.diff)>=o.diff);}
 function questOnKill(t){
  if(!S||!S.qs||t.side!=='E')return;
- for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active')continue; const o=q.obj;
-  if(o.type==='collect'&&t.mon===o.mon&&qProg(id)<o.need&&Math.random()<o.rate){S.mats=S.mats||{}; const m=S.mats[o.item]||(S.mats[o.item]={name:MATS[o.item].name,desc:MATS[o.item].desc,n:0}); m.n++; try{floatText(t,'정수 획득','#ffb060'); addLog(`✦ 퀘스트 「${q.name}」: ${m.name} ${qProg(id)}/${o.need}`);}catch(e){} save();}
-  if(o.type==='kill'&&(!o.mon||t.mon===o.mon)&&qProg(id)<o.need){st.n=(st.n||0)+1; try{addLog(`✦ 퀘스트 「${q.name}」: ${qProg(id)}/${o.need}`);}catch(e){} save();}}
+ for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active')continue;
+  qParts(q).forEach((o,i)=>{ if(!o||qPartDone(id,i)||!qDiffOk(o))return;
+   if(o.type==='collect'&&t.mon===o.mon&&(!o.elite||t.named)&&Math.random()<(o.rate||1)){S.mats=S.mats||{}; const m=S.mats[o.item]||(S.mats[o.item]={name:MATS[o.item].name,desc:MATS[o.item].desc,n:0}); m.n++; try{floatText(t,'재료 획득','#ffb060'); addLog(`✦ 퀘스트 「${q.name}」: ${m.name} ${qPartProg(id,i)}/${o.need}`);}catch(e){} save();}
+   else if(o.type==='kill'&&(!o.mon||t.mon===o.mon)){qBump(id,i); try{addLog(`✦ 퀘스트 「${q.name}」: ${o.mon?MONS[o.mon].name+' ':''}${qPartProg(id,i)}/${o.need}`);}catch(e){} save();}
+   else if(o.type==='dboss'&&t.mon===o.mon&&(t.dboss||t.boss)){qBump(id,i); try{addLog(`✦ 퀘스트 「${q.name}」: 던전 보스 처치 ${qPartProg(id,i)}/${o.need}`);}catch(e){} save();}
+  });}
 }
+function qCarryGive(q){qParts(q).forEach(o=>{if(o&&o.carry&&MATS[o.carry])addMat(o.carry,MATS[o.carry].name,MATS[o.carry].desc,1);});}
+function qCarryDrop(q){qParts(q).forEach(o=>{if(o&&o.carry&&S.mats)delete S.mats[o.carry];});}
+function questAccept(id){S.qs=S.qs||{}; S.qs[id]={st:'active',n:0}; qCarryGive(QUESTS[id]); save();}
 function questClaim(id){
- const q=QUESTS[id]; if(!qReady(id))return null; const st=qState(id), o=q.obj, out=[];
+ const q=QUESTS[id]; if(!qReady(id))return null; const st=qState(id), P=qParts(q), out=[];
  if(q.reward.mat){for(const k in q.reward.mat){if(roomFor(S.mats||{},k,MAT_MAX)<q.reward.mat[k]){toast('재료 칸이 가득 차 보상을 받을 수 없습니다. 인벤토리를 정리해 주십시오.'); return null;}}}
- if(o.type==='collect'||o.type==='have'){S.mats[o.item].n-=o.need;}
+ const pay=P.reduce((a,o)=>a+(o.type==='pay'?o.need:0),0); if(pay&&S.gold<pay){toast('골드가 부족합니다.'); return null;}
+ P.forEach(o=>{if(o.type==='collect'||o.type==='have')S.mats[o.item].n-=o.need;});
+ if(pay)S.gold-=pay;
+ qCarryDrop(q);
  st.st='done';
  if(q.reward.mat){for(const k in q.reward.mat){addMat(k,MATS[k].name,MATS[k].desc,q.reward.mat[k]); out.push(MATS[k].name+' '+q.reward.mat[k]+'개');}}
  if(q.type==='rep')delete S.qs[id];
@@ -2232,7 +2260,7 @@ function questClaim(id){
  if(q.reward.exp){S.heroes.forEach(h=>grantExp(h,q.reward.exp)); out.push('EXP '+q.reward.exp);}
  if(q.reward.sp){S.heroes.forEach(h=>h.sp=(h.sp||0)+q.reward.sp); out.push('SP '+q.reward.sp);}
  if(q.reward.cons){for(const k in q.reward.cons){addCons(k,q.reward.cons[k]); out.push(CONS[k].name+' '+q.reward.cons[k]+'개');}}
- if(q.reward.skill){const sk=SK[q.reward.skill]; S.heroes.filter(h=>h.cls===sk.cls).forEach(h=>{if(!h.skills.includes(sk.id)){h.skills.push(sk.id); if(h.equip.length<SK_MAX)h.equip.push(sk.id);}}); out.push('스킬 '+sk.name);}
+ if(q.reward.skill){const sk=SK[q.reward.skill]; S.heroes.filter(h=>h.cls===sk.cls&&!isComp(h)).forEach(h=>{if(!h.skills.includes(sk.id)){h.skills.push(sk.id); if(h.equip.length<SK_MAX)h.equip.push(sk.id);}}); out.push('스킬 '+sk.name);}
  if(q.reward.title){const T=TITLES[q.reward.title]; S.titles=S.titles||[]; if(!S.titles.includes(q.reward.title))S.titles.push(q.reward.title); S.heroes.forEach(h=>{if(!h.title)h.title=q.reward.title;}); out.push('칭호 「'+T.name+'」');}
  save(); return out;
 }
@@ -3007,6 +3035,7 @@ function load(){
   { // 비활성 직업 용사는 지우지 않고 따로 보관합니다
    S.parked=(S.parked||[]).concat((S.heroes||[]).filter(h=>!ENABLED_CLS.includes(h.cls))); S.heroes=(S.heroes||[]).filter(h=>ENABLED_CLS.includes(h.cls));
    if(!S.heroes.length){S.heroes.push(newHero(ENABLED_CLS[0],'P1'));} if(!S.heroes.some(h=>h.ctrl!=='AI'))S.heroes[0].ctrl='P1'; compMigrate(); }
+  if(!S.uqV2){ try{ const OLD=k=>/^u_[bmrgp]\d$/.test(k)||k==='q_fire'; Object.keys(S.qs||{}).forEach(k=>{if(OLD(k))delete S.qs[k];}); ['u_ember','u_shard','u_charcoal','u_nettle','u_ash','u_dew','sq_ess'].forEach(k=>{if(S.mats)delete S.mats[k];}); if(Array.isArray(S.qpin))S.qpin=S.qpin.filter(k=>!OLD(k)); }catch(e){} S.uqV2=true; }   /* v0.5.28 고유 퀘스트 재작성: 예전 진행 초기화 */
   if(!S.itemV6){const DW={blade:'great',brawler:'knuckle',gunner:'revolver',mage:'staff',priest:'mace'}, AT=Object.keys(ATYPES); let n=0;
    const re=it=>{if(!it)return; const q=it.q!=null?it.q:2, tier=it.tier||1; ['pw','def','mdef','hp','mp','pcrit','mcrit','acc','eva','eres','sres','anti','atk','mag','spd','mov'].forEach(k=>delete it[k]);
     if(it.slot==='weapon')it.wt=it.wt||DW[it.cls]||'great'; if(ARMOR.includes(it.slot))it.at=it.at||AT[(n++)%3];
@@ -4359,7 +4388,7 @@ Object.assign(CONS,{
 });
 const CONS_MAX=99, MAT_MAX=9999;   // 인벤토리 한 칸당 보관 한도 (같은 종류도 한도를 넘으면 다음 칸을 사용합니다)
 function slotsOf(store,cap,skip){let u=0; for(const k in store){if(k===skip||(store===S.mats&&isQMat(k)))continue; const n=store[k].n; if(n>0)u+=Math.ceil(n/cap);} return u;}
-function isQMat(k){ try{ if(!isQMat.S){isQMat.S=new Set(); for(const id in QUESTS){const o=QUESTS[id].obj; if(o&&o.type==='collect'&&o.item)isQMat.S.add(o.item);}} return isQMat.S.has(k); }catch(e){return false;} }
+function isQMat(k){ try{ if(!isQMat.S){isQMat.S=new Set(); for(const id in QUESTS)qParts(QUESTS[id]).forEach(o=>{if(o&&o.type==='collect'&&o.item)isQMat.S.add(o.item); if(o&&o.carry)isQMat.S.add(o.carry);});} return isQMat.S.has(k); }catch(e){return false;} }
 function roomFor(store,k,cap){const free=Math.max(0,BAG_MAX-slotsOf(store,cap,k)); return Math.max(0,free*cap-((store[k]&&store[k].n)||0));}
 function dropPotion(){ // 던전 깊이와 난이도가 높을수록 좋은 물약이 나옵니다
  const dgi=(R&&R.dg&&R.dg.idx)||0, df=R&&R.diff?['normal','expert','master','king'].indexOf(R.diff.id):0, top=Math.min(2,Math.floor(dgi/4)+(df>=2?1:0)+(df>=3?1:0)), tier=Math.min(top,Math.random()<.6?top:Math.max(0,top-1));
@@ -4702,7 +4731,7 @@ const TOWNS={
   desc:'거대한 고목의 밑동과 가지 사이에 나무집들이 구름다리로 이어진 마을입니다. 마을 중앙으로 맑은 시냇물이 흐르고, 바람개비와 초롱불이 따뜻하게 빛납니다.',
   story:'숲의 이변을 조사하러 온 모험가들이 처음 발을 딛는 전초기지입니다. 온순한 숲의 요정들과 인간 약초상, 대장장이가 모여 있으며, 기본 장비 정비·물약 보급·초반 퀘스트 수주를 담당합니다.',
   etym:'Sälva(속삭이는, 산들바람) + -ëlia(안식처, 정착지)',range:'요정 영토 전체 (1경계 흐르는 숲 외곽 ~ 3경계 잠든 깊은 숲)',
-  npcs:[['대현자 리프','동행 대현자 · 에픽 의뢰','"저는 그대가 가는 길마다 곁에서 경계의 이변을 지켜보고 있습니다. 새로운 일이 생기면 가장 먼저 알려 드리지요."',['q_fire','q_hunt']],['약초상 마르텐','물약 보급','"숲에서 딴 약초로 만든 물약입니다. 부족하면 언제든 들르십시오."'],['대장장이 오르간','장비 수리 · 판매 · 강화','"장비가 상했다면 맡기십시오. 불꽃이 식기 전에 고쳐 드리겠습니다."'],['경계-이면 감시자 에르시안','경계-이면 입장','"균열 너머에는 비틀린 또 하나의 던전, 경계-이면이 있습니다. 문을 열 열쇠를 구해 드리지요."',['r_echo']]]},
+  npcs:[['대현자 리프','동행 대현자 · 에픽 의뢰','"저는 그대가 가는 길마다 곁에서 경계의 이변을 지켜보고 있습니다. 새로운 일이 생기면 가장 먼저 알려 드리지요."',['q_hunt']],['약초상 마르텐','물약 보급','"숲에서 딴 약초로 만든 물약입니다. 부족하면 언제든 들르십시오."'],['대장장이 오르간','장비 수리 · 판매 · 강화','"장비가 상했다면 맡기십시오. 불꽃이 식기 전에 고쳐 드리겠습니다."'],['경계-이면 감시자 에르시안','경계-이면 입장','"균열 너머에는 비틀린 또 하나의 던전, 경계-이면이 있습니다. 문을 열 열쇠를 구해 드리지요."',['r_echo']]]},
  ciren:{id:'ciren',act:1,name:'시레니아',latin:'Çirënia',sub:'이끼 정원 야영지',actName:'요정 영토',
   desc:'무너진 고대 요정 신전의 하얀 대리석 기둥과 아치 아래에 천막과 모닥불을 피워 만든 학술 탐사 캠프입니다. 낡은 석상 주변에 양피지 지도와 고대 문자 해독 도구들이 놓여 있습니다.',
   story:'숲 깊은 곳에 숨겨져 있던 유적이 열리자, 고대 샐베스어(ש˜ـלـו˜ـת)를 연구하는 학자들과 유물 사냥꾼들이 모여 세운 거점입니다. 석판 해독·유물 감정·장비 강화 및 마법 부여 기능을 제공합니다.',
@@ -4818,7 +4847,7 @@ function npcPlaceholder(name,w0,h0,fit){const w=164,h=206,g=NPC_GENDER[name]==='
  c.globalAlpha=1; c.fillStyle='rgba(255,255,255,.55)'; c.font=`${Math.max(9,Math.round(w*.11))}px sans-serif`; c.textAlign='center'; c.fillText(g?'여성':'남성',cx,h-5); return cv;}
 function npcFaceArt(name,w,h,fit){const s=NPC_ART[name]; if(!s&&NPC_GENDER[name])return npcPlaceholder(name,w,h,fit); if(s){const i=new Image(); i.src=s; i.className='npcl-ph'; i.draggable=false; if(fit){i.style.cssText=`display:block;width:${w}px;height:${h}px;object-fit:cover;border-radius:inherit`;} return i;} return npcFaceEl(name,w,h);}
 function npcFaceEl(name,w,h){const cv=document.createElement('canvas'); cv.width=w*2; cv.height=h*2; cv.style.width=w+'px'; cv.style.height=h+'px'; drawNpcFace(cv,name); return cv;}
-function questAbandon(id){const q=QUESTS[id]; if(q.obj.type==='collect'&&S.mats&&S.mats[q.obj.item])S.mats[q.obj.item].n=0; delete S.qs[id]; save();}
+function questAbandon(id){const q=QUESTS[id]; qParts(q).forEach(o=>{if(o&&o.type==='collect'&&S.mats&&S.mats[o.item])S.mats[o.item].n=0;}); qCarryDrop(q); delete S.qs[id]; save();}
 function qAnyReady(){try{return !!(S&&S.qs&&Object.keys(QUESTS).some(id=>qReady(id)));}catch(e){return false;}}
 setInterval(()=>{const on=qAnyReady(); document.querySelectorAll('#bQuest,#bQuestB,#bhHub .qb,[data-hub=quest]').forEach(b=>b.classList.toggle('qblink',on));},400);
 function qStatus(id){const st=qState(id); if(!st)return ['new','새 의뢰']; if(st.st==='done')return ['done','완료']; return qReady(id)?['ready','완료 가능']:['going','진행 중'];}
@@ -4905,24 +4934,24 @@ function openNpcUI(T){
  let timer=0, K=0; const close=()=>{shopEnd(root); clearInterval(timer); document.removeEventListener('keydown',kd); root.remove();};
  const kd=e=>{if(e.key==='Escape')close();}; document.addEventListener('keydown',kd);
  const list=()=>{clearInterval(timer); shopEnd(root);
-  root.innerHTML=`<div class="npcl-box npcl-list"><div class="npcl-h"><span><b>${T.name}</b> · NPC</span><button id="nx">닫기</button></div><div class="npcl-grid">${T.npcs.map((n,i)=>{const nm=npcNameOf(n[0]), shop=npcShopKind(n[0]), hq=(n[3]||[]).some(qVisible);
-   return `<div class="npcl-card" data-n="${i}"><span class="npcl-face"></span><b>${nm[1]}</b><small>${nm[0]}</small><div class="npcl-btns"><button data-npcshop="${i}" ${shop?'':'disabled title="이 NPC는 물건을 팔지 않습니다."'}>${shop==='craft'?'제작':'상점'}</button><button data-npcq="${i}" class="${(n[3]||[]).some(id=>qVisible(id)&&qReady(id))?'qblink':''}">퀘스트</button></div>${npcBadge(n)}</div>`;}).join('')}</div></div>`;
+  root.innerHTML=`<div class="npcl-box npcl-list"><div class="npcl-h"><span><b>${T.name}</b> · NPC</span><button id="nx">닫기</button></div><div class="npcl-grid${T.npcs.length>5?' many':''}">${T.npcs.map((n,i)=>{const nm=npcNameOf(n[0]), shop=npcShopKind(n[0]), hq=(n[3]||[]).some(qVisible);
+   return `<div class="npcl-card" data-n="${i}"><span class="npcl-face"></span><b>${nm[1]}</b><small>${nm[0]}</small><div class="npcl-btns"><button data-npcshop="${i}" ${shop?'':'disabled title="이 NPC는 물건을 팔지 않습니다."'}>${shop==='craft'?'제작':'상점'}</button><button data-npcq="${i}" class="${npcQIds(n).some(id=>qVisible(id)&&qStatusAt(id,n)[0]==='ready')?'qblink':''}">퀘스트</button></div>${npcBadge(n)}</div>`;}).join('')}</div></div>`;
   root.querySelectorAll('.npcl-card').forEach((b,i)=>{b.querySelector('.npcl-face').appendChild(npcFaceArt(T.npcs[i][0],96,96)); const n=T.npcs[i], k=npcShopKind(n[0]); const sb=b.querySelector('[data-npcshop]'), qb=b.querySelector('[data-npcq]'); sb.onclick=()=>{if(k==='smith')(openSmith.tab='shop',openSmith(root,n,list,close)); else if(k==='craft')openCraft(root,n,list,close); else if(k==='herb')openHerbShop(root,n,list,close);}; qb.onclick=()=>talk(n);});
   $('#nx').onclick=close;};
  const talk=n=>{
   let showDone=false, sel=null, lines=[], li=0, typing=false, full='', pos=0, finished=false, extra='';
-  let quests=(n[3]||[]).filter(qVisible); const rq=()=>{quests=(n[3]||[]).filter(qVisible);};
+  const qSt=id=>qStatusAt(id,n); let quests=npcQIds(n).filter(qVisible); const rq=()=>{quests=npcQIds(n).filter(qVisible);};
   root.innerHTML=`<div class="nq"><div class="nq-top"><div class="nq-left"><div class="nq-ph"><span class="dim">의뢰를 선택하십시오.</span></div></div>
     <div class="nq-right"><div class="nq-rh">${n[0]}의 의뢰<button class="nq-dn" id="nqDone"></button></div><div class="nq-list" id="nql"></div></div></div>
     <div class="nq-dlg" id="nqd"><div class="nq-face" id="nqf"></div><div class="nq-body"><div class="nq-name" id="nqn"></div><div class="nq-text" id="nqt"></div><div class="nq-more" id="nqm">▼</div><button class="nq-dx" id="nqdx">닫기</button><div class="nq-btns" id="nqb"></div></div></div><button class="nq-x" id="nx">× 닫기</button><button class="nq-back" id="nb">NPC 목록</button></div>`;
   $('#nqf').appendChild(npcFaceArt(n[0],170,200,true)); $('#nqdx').onclick=()=>{clearInterval(timer); typing=false; $('#nqd').style.display='none';}; $('#nx').onclick=close; $('#nb').onclick=list;
   const left=()=>{const box=root.querySelector('.nq-left'); if(!sel){box.innerHTML=`<div class="nq-ph"><span class="dim">${quests.length?'의뢰를 선택하십시오.':'현재 받을 수 있는 의뢰가 없습니다.'}</span></div>`; return;}
    const q=QUESTS[sel], o=q.obj, goal=qGoal(sel);
-   box.innerHTML=`<div class="nq-ttl">${qBadge(sel)} ${q.name} <span class="nq-st ${qStatus(sel)[0]}">${qStatus(sel)[1]}</span></div><div class="nq-sheet"><b>조건</b><p>${q.brief}</p>${q.obj.type==='collect'?`<b>획득처</b><p>${matSource(q)}</p>`:''}<b>목표</b><p>${goal}</p><b>보상</b>${rewardIcons(sel)}${q.cls?`<p class="dim">${CLASSES[q.cls].name} 전용</p>`:''}</div>`;};
-  const isDone=id=>qStatus(id)[0]==='done';
+   box.innerHTML=`<div class="nq-ttl">${qBadge(sel)} ${q.name} <span class="nq-st ${qSt(sel)[0]}">${qSt(sel)[1]}</span></div><div class="nq-sheet">${q.story?`<b>내용</b><p>${q.story}</p>`:''}<b>조건</b><p>${q.brief}</p>${matSource(q)?`<b>획득처</b><p>${matSource(q)}</p>`:''}<b>목표</b><p>${goal}</p><b>보상</b>${rewardIcons(sel)}${q.cls?`<p class="dim">${CLASSES[q.cls].name} 전용</p>`:''}</div>`;};
+  const isDone=id=>qSt(id)[0]==='done';
   const rlist=()=>{const l=$('#nql'), vis=quests.filter(id=>showDone?isDone(id):!isDone(id)), nd=quests.filter(isDone).length, tb=$('#nqDone'); if(tb){tb.textContent=showDone?'← 진행 가능 의뢰':`완료한 의뢰 (${nd})`; tb.onclick=()=>{showDone=!showDone; sel=null; left(); rlist(); const d=$('#nqd'); if(d)d.style.display='none'; clearInterval(timer); typing=false;};}
-   l.innerHTML=vis.length?vis.map(id=>`<button class="nq-row ${id===sel?'sel':''} ${qStatus(id)[0]==='done'?'done':''}" data-q="${id}"><span class="nq-b ${qStatus(id)[0]}">${qStatus(id)[1]}</span>${qBadge(id)} ${QUESTS[id].name}</button>`).join(''):`<div class="dim" style="padding:10px">${showDone?'완료한 의뢰가 없습니다.':'이 NPC는 지금 맡길 의뢰가 없습니다.'}</div>`; l.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>pick(b.dataset.q));};
-  const btns=()=>{const b=$('#nqb'); if(!sel){b.innerHTML=''; return;} const id=sel, q=QUESTS[id], st=qStatus(id)[0], can=!q.cls||S.heroes.some(h=>h.cls===q.cls); let h='';
+   l.innerHTML=vis.length?vis.map(id=>`<button class="nq-row ${id===sel?'sel':''} ${qSt(id)[0]==='done'?'done':''}" data-q="${id}"><span class="nq-b ${qSt(id)[0]}">${qSt(id)[1]}</span>${qBadge(id)} ${QUESTS[id].name}</button>`).join(''):`<div class="dim" style="padding:10px">${showDone?'완료한 의뢰가 없습니다.':'이 NPC는 지금 맡길 의뢰가 없습니다.'}</div>`; l.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>pick(b.dataset.q));};
+  const btns=()=>{const b=$('#nqb'); if(!sel){b.innerHTML=''; return;} const id=sel, q=QUESTS[id], st=qSt(id)[0], can=qClsOk(q,true); let h='';
    if(st==='new')h=can?`<button class="pri" data-a="acc">수락</button><button data-a="no">거절</button>`:`<span class="dim" style="font-size:12.5px">${CLASSES[q.cls].name}만 수락할 수 있습니다.</span>`;
    else if(st==='going')h=`<button data-a="give">포기</button>`;
    else if(st==='ready')h=`<button class="pri" data-a="claim">보상 받기</button>`;
@@ -4931,13 +4960,13 @@ function openNpcUI(T){
    timer=setInterval(()=>{if(!$('#nqt')){clearInterval(timer);return;} pos++; $('#nqt').textContent=full.slice(0,pos); if(pos>=full.length)endLine();},22);};
   const endLine=()=>{clearInterval(timer); typing=false; $('#nqt').textContent=full; if(li<lines.length-1){$('#nqm').style.visibility='visible';} else {finished=true; $('#nqb').style.visibility='visible';}};
   const say=(ls,nm)=>{$('#nqd').style.display=''; lines=(ls&&ls.length)?ls:['…']; li=0; finished=false; $('#nqn').textContent=nm; btns(); type();};
-  const speak=()=>{const q=QUESTS[sel], st=qStatus(sel)[0]; say(q.say[st==='new'?'offer':st==='going'?'going':st==='ready'?'ready':'done']||q.say.accept, `${n[0]} / ${q.name}`);};
+  const speak=()=>{const q=QUESTS[sel], st=qSt(sel)[0]; say(q.say[st==='new'?'offer':st==='going'?'going':st==='ready'?'ready':'done']||q.say.accept, `${n[0]} / ${q.name}`);};
   const pick=id=>{sel=id; left(); rlist(); speak();};
   const act=a=>{const id=sel, q=QUESTS[id];
-   if(a==='acc'){S.qs=S.qs||{}; S.qs[id]={st:'active',n:0}; save(); left(); rlist(); clearInterval(timer); typing=false; $('#nqd').style.display='none'; toast(`「${q.name}」 의뢰를 수락했습니다. 퀘스트 버튼에서 진행 상황을 확인할 수 있습니다.`); if(SCREEN==='town'&&S.tab==='home')render();}
+   if(a==='acc'){questAccept(id); left(); rlist(); clearInterval(timer); typing=false; $('#nqd').style.display='none'; toast(`「${q.name}」 의뢰를 수락했습니다. 퀘스트 버튼에서 진행 상황을 확인할 수 있습니다.`); if(SCREEN==='town'&&S.tab==='home')render();}
    else if(a==='no'){clearInterval(timer); typing=false; $('#nqd').style.display='none';}
    else if(a==='give'){questAbandon(id); left(); rlist(); say(q.say.giveup||['알겠습니다. 마음이 바뀌면 언제든 다시 말씀해 주십시오.'],`${n[0]} / ${q.name}`);}
-   else if(a==='claim'){const prev=new Set(quests), out=questClaim(id); if(out){rq(); questRewardWin(id); if(SCREEN==='town'&&S.tab==='home')render(); const nxt=quests.find(x=>!prev.has(x)&&qStatus(x)[0]==='new'&&(!QUESTS[x].cls||S.heroes.some(h=>h.cls===QUESTS[x].cls))); const cl=(q.say.claim||['수고하셨습니다.']); if(nxt){ sel=nxt; left(); rlist(); say(cl.concat(QUESTS[nxt].say.offer||[]),`${n[0]} / ${QUESTS[nxt].name}`); } else { left(); rlist(); say(cl,`${n[0]} / ${q.name}`); } const g=document.querySelector('.thead .tag.gold'); if(g)g.innerHTML=gI(S.gold);}}};
+   else if(a==='claim'){const prev=new Set(quests), out=questClaim(id); if(out){rq(); questRewardWin(id); if(SCREEN==='town'&&S.tab==='home')render(); const nxt=quests.find(x=>!prev.has(x)&&qSt(x)[0]==='new'&&qClsOk(QUESTS[x],true)); const cl=(q.say.claim||['수고하셨습니다.']); if(nxt){ sel=nxt; left(); rlist(); say(cl.concat(QUESTS[nxt].say.offer||[]),`${n[0]} / ${QUESTS[nxt].name}`); } else { left(); rlist(); say(cl,`${n[0]} / ${q.name}`); } const g=document.querySelector('.thead .tag.gold'); if(g)g.innerHTML=gI(S.gold);}}};
   $('#nqd').onclick=e=>{if(e.target.closest('button'))return; if(typing)endLine(); else if(li<lines.length-1){li++; type();}};
   rlist(); left(); say(quests.length?['어서 오십시오. '+n[2].replace(/^"|"$/g,'')]:[n[2].replace(/^"|"$/g,'')],n[0]);
  };
@@ -5272,7 +5301,7 @@ const SELL_IN_INV=false; // 장비 판매는 마을 대장장이와 성소 대�
 const BAG_MAX=40, SK_MAX=6, QS_MAX=6;
 let INV_SEL=-1;
 function storeTip(sub,k,noHint){const it=(sub==='cons'?S.cons:S.mats)[k], d=sub==='cons'?CONS[k]:null, pr=sellPrice(sub,k);
- let h=`<div class="st-h"><b>${esc(it.name)}</b><span class="st-n">× ${it.n}</span></div>${sirenLine(it.name)}`; if(sub!=='cons'&&isQMat(k)){const qid=Object.keys(QUESTS).find(id=>QUESTS[id].obj&&QUESTS[id].obj.item===k); h+=`<div class="st-q"><b>퀘스트 전용 재료</b>${qid?` · 「${esc(QUESTS[qid].name)}」`:''}<br><span>퀘스트를 진행하는 동안에만 얻을 수 있습니다 · 버리기·판매 불가</span></div>`;} if(it.desc)h+=`<div class="st-d">${esc(it.desc)}</div>`;
+ let h=`<div class="st-h"><b>${esc(it.name)}</b><span class="st-n">× ${it.n}</span></div>${sirenLine(it.name)}`; if(sub!=='cons'&&isQMat(k)){const qid=Object.keys(QUESTS).find(id=>qParts(QUESTS[id]).some(o=>o&&(o.item===k||o.carry===k))), cr=qid&&qParts(QUESTS[qid]).some(o=>o&&o.carry===k); h+=`<div class="st-q"><b>${cr?'퀘스트 전달물':'퀘스트 전용 재료'}</b>${qid?` · 「${esc(QUESTS[qid].name)}」`:''}<br><span>${cr?'의뢰를 마치면 사라집니다':'퀘스트를 진행하는 동안에만 얻을 수 있습니다'} · 버리기·판매 불가</span></div>`;} if(it.desc)h+=`<div class="st-d">${esc(it.desc)}</div>`;
  h+=`<div class="st-p">${pr?`판매가 <b class="gold">${gI(pr)}</b>`:'<span class="dim">판매할 수 없습니다</span>'}</div>`;
  if(sub==='cons'&&!noHint&&d&&d.stat){const t=TOUCH_UI; h+=`<div class="dnf-hint">${t?'누르면 나오는 [사용] 버튼으로 사용합니다':'우클릭하면 사용합니다 (마을에서만)'}</div>`;}   // 빠른 칸 등록 안내 문구는 삭제
  return '<div class="storetip">'+h+'</div>';}
@@ -5921,9 +5950,11 @@ function dselIntro(){ if(!DSEL_INTRO)return; DSEL_INTRO=false; const wm=document
  setTimeout(()=>{ wm.classList.remove('dsintro'); nodes.forEach(n=>{ if(!n.isConnected)return; n.classList.remove('dsh'); n.classList.add('dsin'); }); },1080); }
 function dgQuestMark(z,i){ // 진행 중인 퀘스트가 이 던전을 가리키면 {col,names}
  const d=z.dungeons[i], hit=[]; if(!S||!S.qs)return null;
- for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active'||qReady(id))continue; const o=q.obj; let ok=false;
-  if(o.type==='clear')ok=o.zone===z.id&&o.dg===i;
-  else if((o.type==='kill'||o.type==='collect')&&o.mon)ok=d.mons.includes(o.mon)||d.boss===o.mon;
+ for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active'||qReady(id))continue; let ok=false;
+  qParts(q).forEach((o,j)=>{ if(ok||!o||qPartDone(id,j))return;
+   if(o.type==='clear')ok=o.zone===z.id&&o.dg===i;
+   else if(o.type==='dboss'||(o.type==='collect'&&o.elite))ok=d.named===o.mon;
+   else if((o.type==='kill'||o.type==='collect')&&o.mon)ok=d.mons.includes(o.mon)||d.boss===o.mon;});
   if(ok)hit.push(id);}
  if(!hit.length)return null;
  const ty=['unique','epic','achv','normal','rep'].find(t=>hit.some(id=>(QUESTS[id].type||'normal')===t));
@@ -7582,181 +7613,289 @@ const LEATHER={id:'leather',name:'질긴 가죽',desc:'짐승과 몬스터에게
 const QTYPE={normal:['일반','#c8c0a8'],epic:['에픽','#ffd23a'],achv:['업적','#ff9a3c'],rep:['반복','#5fd0a0']};
 /* ===== 고유 퀘스트: 직업마다 고유한 스토리, 마지막 퀘스트 보상이 특수 스킬 (캐릭터 레벨 18부터) ===== */
 QTYPE.unique=['고유','#c77dff'];
+const QM=q=>' 퀘스트 「'+q+'」를 진행하는 동안에만 떨어집니다.';
 Object.assign(MATS,{
- u_ember:{name:'타다 남은 도깨비불의 재',desc:'꺼진 도깨비불이 남긴 온기 있는 재입니다. 퀘스트 「도깨비불의 재」를 진행하는 동안에만 떨어집니다.'},
- u_shard:{name:'균열의 쇳조각',desc:'갈라진 틈에서 떨어져 나온 검은 쇳조각입니다. 퀘스트 「균열에서 새는 쇳빛」을 진행하는 동안에만 떨어집니다.'},
- u_charcoal:{name:'고목의 숯',desc:'오래된 고목 병정의 몸에서 나온 단단한 숯입니다. 퀘스트 「불꽃 속의 단련」을 진행하는 동안에만 떨어집니다.'},
- u_nettle:{name:'독 쐐기풀 가시',desc:'덩굴 채찍에 박혀 있던 독 쐐기풀 가시입니다. 퀘스트 「독초 채집」을 진행하는 동안에만 떨어집니다.'},
- u_ash:{name:'그림자 망령의 잿가루',desc:'그림자 망령이 흩어질 때 남는 차가운 잿가루입니다. 퀘스트 「잿빛 화약」을 진행하는 동안에만 떨어집니다.'},
- u_dew:{name:'이슬 정령의 눈물',desc:'이슬 정령이 흘린 맑은 물방울입니다. 퀘스트 「이슬의 기도」를 진행하는 동안에만 떨어집니다.'}});
+ uq_bshard:{name:'균열의 쇳조각',desc:'균열 곁의 이끼 골렘 몸에서 떨어져 나온 검은 쇳조각입니다.'+QM('균열을 견디는 쇠')},
+ uq_bcoal:{name:'단단한 고목 숯',desc:'고목 목각병의 몸에서 나온, 오래 타는 숯입니다.'+QM('균열을 견디는 쇠')},
+ uq_bfeather:{name:'흑요 깃털',desc:'정예 계곡 까마귀만 지닌 검은 깃털입니다. 담금질할 때 날에 바릅니다.'+QM('균열을 견디는 쇠')},
+ uq_mash:{name:'붉은 결정이 박힌 재',desc:'뜨겁게 타오르던 도깨비불이 남긴 재입니다. 붉은 결정이 박혀 있습니다.'+QM('흩어지는 불꽃')},
+ uq_mcore:{name:'불씨 먹은 심재',desc:'정예 고목 목각병의 몸속에서 오래 타오른 나무의 심입니다.'+QM('업화의 촉매')},
+ uq_rdew:{name:'이슬 정령의 눈물',desc:'이슬 정령이 흘린 맑은 물방울입니다. 손의 열을 식혀 줍니다.'+QM('철사장 고약')},
+ uq_rtoad:{name:'은빛 두꺼비의 섬수',desc:'정예 은빛 두꺼비만 지닌 하얀 독입니다. 아주 조금만 쓰면 뼈를 단단하게 합니다.'+QM('철사장 고약')},
+ uq_gbeak:{name:'물총새의 강철 부리',desc:'정예 물총새의 쇠보다 단단한 부리입니다. 깎아서 탄두 심으로 씁니다.'+QM('침탄의 재료')},
+ uq_gash:{name:'그림자 망령의 잿가루',desc:'그림자 망령이 흩어질 때 남는 차가운 잿가루입니다. 화약에 섞으면 연기가 거의 나지 않습니다.'+QM('침탄의 재료')},
+ uq_gthorn:{name:'독 쐐기풀 가시',desc:'가시 덩굴 채찍에 박혀 있던 독 쐐기풀 가시입니다. 찔린 상처가 쉽게 아물지 않습니다.'+QM('독을 바르는 법')},
+ uq_gvenom:{name:'독 개구리 병정의 독샘',desc:'정예 독 개구리 병정만 지닌 독샘입니다. 독을 몸 깊이 번지게 합니다.'+QM('독을 바르는 법')},
+ uq_pbadge:{name:'빛바랜 순찰대 휘장',desc:'숲 순찰대 잔영이 흩어지며 남긴 빛바랜 휘장입니다.'+QM('잠들지 못한 순찰대')},
+ uq_ppollen:{name:'꽃봉오리 요정의 꽃가루',desc:'빛을 오래 머금는 꽃봉오리 요정의 꽃가루입니다.'+QM('성역의 등불')},
+ uq_pfeather:{name:'숲 솔새의 은빛 깃',desc:'정예 숲 솔새만 지닌 은빛 깃털입니다. 요정 등불의 심지로 엮습니다.'+QM('성역의 등불')},
+ uq_mnote:{name:'세라의 연구 노트',desc:'붉은 결정에 대한 세라의 연구가 빼곡히 적힌 노트입니다. 대현자 리프에게 전해야 합니다.'},
+ uq_mcat:{name:'깨어난 업화의 촉매',desc:'안에서 불씨가 숨 쉬는 연금술 촉매입니다. 대현자 리프에게 전해야 합니다.'},
+ uq_gbullet:{name:'침탄 시제품',desc:'탄두 끝에 독을 채울 홈을 판 리넷의 침탄 시제품입니다. 약초상 마르텐에게 보여 주어야 합니다.'},
+ uq_pbadge2:{name:'순찰대 휘장 한 점',desc:'테오란이 맡긴 요정 순찰대의 휘장입니다. 대현자 리프에게 보여 주어야 합니다.'},
+});
 // 특수 스킬 (각 직업 · 캐릭터 레벨 18 · 고유 퀘스트 완료 보상)
 Object.assign(SK,{
- bl_rift:{cls:'blade',name:'균열참',t:'line',len:5,pow:.45,hits:5,stun:.15,mp:56,cd:5,lv:7,learnLv:18,quest:'u_b4',desc:'전방 5칸에 균열을 일으키며 5연속으로 벱니다. (고유 퀘스트 보상)'},
- br_dragon:{cls:'brawler',name:'승룡권',t:'single',range:1,pow:2.8,stun:.7,mp:44,cd:4,lv:7,learnLv:18,quest:'u_r4',desc:'인접한 적을 하늘로 쳐올리는 일격입니다. 높은 확률로 기절시킵니다. (고유 퀘스트 보상)'},
- gn_venom:{cls:'gunner',name:'독침탄',t:'single',range:6,pow:.9,hits:3,poison:.7,bleed:.3,mp:48,cd:4,lv:7,learnLv:18,quest:'u_g4',desc:'독이 발린 탄환을 3연발로 쏩니다. 중독과 출혈을 일으킵니다. (고유 퀘스트 보상)'},
- pr_sanct:{cls:'priest',name:'성역',t:'allies',heal:1.0,shield:1.4,mp:60,cd:5,lv:7,learnLv:18,quest:'u_p4',desc:'아군 전체를 회복하고 보호막을 둘러 줍니다. (고유 퀘스트 보상)'}});
+ bl_rift:{cls:'blade',name:'균열참',t:'line',len:5,pow:.45,hits:5,stun:.15,mp:56,cd:5,lv:7,learnLv:18,quest:'uq_b6',desc:'전방 5칸에 균열을 일으키며 5연속으로 벱니다. (고유 퀘스트 보상)'},
+ br_dragon:{cls:'brawler',name:'승룡권',t:'single',range:1,pow:2.8,stun:.7,mp:44,cd:4,lv:7,learnLv:18,quest:'uq_r4',desc:'인접한 적을 하늘로 쳐올리는 일격입니다. 높은 확률로 기절시킵니다. (고유 퀘스트 보상)'},
+ gn_venom:{cls:'gunner',name:'독침탄',t:'single',range:6,pow:.9,hits:3,poison:.7,bleed:.3,mp:48,cd:4,lv:7,learnLv:18,quest:'uq_g5',desc:'독이 발린 탄환을 3연발로 쏩니다. 중독과 출혈을 일으킵니다. (고유 퀘스트 보상)'},
+ pr_sanct:{cls:'priest',name:'성역',t:'allies',heal:1.0,shield:1.4,mp:60,cd:5,lv:7,learnLv:18,quest:'uq_p4',desc:'아군 전체를 회복하고 보호막을 둘러 줍니다. (고유 퀘스트 보상)'}});
 for(const id of ['bl_rift','br_dragon','gn_venom','pr_sanct'])SK[id].id=id;
-SK.mg_fstrike.learnLv=18; QUESTS.q_fire.type='unique'; QUESTS.q_fire.prev='u_m4'; QUESTS.q_fire.name='업화의 불꽃';
+SK.mg_fstrike.learnLv=18;
 Object.assign(VFX_MAP,{bl_rift:{b:9,i:4,m:'tile',s:1.5,line:1},br_dragon:{b:25,i:11,m:'tile',s:1.9},gn_venom:{f:18,bt:57,b:57,i:13,m:'tile',s:1.6},pr_sanct:{b:73,i:24,m:'allies',s:2}});
-const UQ=(id,o)=>{QUESTS[id]={type:'unique',cls:o.cls,npc:o.npc,name:o.name,story:o.story,brief:o.brief,prev:o.prev,minLv:o.minLv,
+const UQ=(id,o)=>{QUESTS[id]={type:'unique',cls:o.cls,npc:o.npc,to:o.to,name:o.name,story:o.story,brief:o.brief,prev:o.prev,minLv:o.minLv,
  say:{offer:o.offer,going:o.going,ready:o.ready,done:o.done||['이 의뢰는 이미 마무리되었습니다.'],accept:o.accept||['부탁드립니다.'],giveup:['알겠습니다. 마음이 서면 다시 오십시오.'],claim:o.claim},obj:o.obj,reward:o.reward,rewardText:o.rt};};
 /* [대현자 리프 말투 지침] 리프는 탐험가와 함께 다니는 동행 대현자입니다. 앞으로 추가하는 리프의 의뢰 대사도 이 규칙을 따릅니다.
    · 차분하고 품위 있는 하십시오체 ("~입니다 / ~해 주십시오 / ~하시기를 바랍니다"). "~해요 / ~할게요" 같은 말끝은 쓰지 않습니다.
    · 플레이어는 "그대" 또는 직업 호칭("마법을 다루는 그대여")으로 부르고, 스스로 "요정"이라 칭하지 않습니다.
    · 상황을 한 걸음 물러나 짚어 주는 짧은 통찰을 곁들이고, 보상은 "받아 주십시오"처럼 격식 있게 건넵니다.
    · 이야기가 이어지는 의뢰는 다음 여정을 암시하며 끝맺습니다. */
-/* --- 마법사 · 리프 : 꺼지지 않는 불씨 (5부작, 마지막은 「업화의 불꽃」) --- */
-UQ('u_m1',{cls:'mage',npc:'리프',minLv:18,name:'불씨를 쫓는 발자국',
- story:'반딧불이 샛길 깊은 곳에서 꺼지지 않는 불씨의 흔적이 발견되었습니다. 숲에는 불이 날 이유가 없는데도 그을린 발자국이 길을 따라 이어져 있다고 합니다.',
- brief:'「뤼멘-베인〈반딧불이 샛길〉」을 Expert 이상 난이도로 클리어하십시오.',
- offer:['마법을 다루는 그대라면 이제 믿고 맡길 수 있겠습니다.','반딧불이 샛길에 그을린 발자국이 나 있습니다. 숲의 주민들은 불을 쓰지 않는데도 말입니다.','Expert 난이도로 샛길을 끝까지 걸어, 그 불씨가 어디서 시작되는지 살펴봐 주십시오.'],
- going:['샛길은 어둡습니다. 불씨가 보이거든 그 빛을 따라가십시오.'],ready:['발자국을 보셨군요. 어디로 이어지던가요?'],
- claim:['불씨가 도깨비불에게서 번지고 있었군요. 다음 단서를 찾아 주십시오.'],
- obj:{type:'clear',zone:'a1z1',dg:3,need:1,diff:1},reward:{exp:700,sp:10,gold:300},rt:'EXP 700 · SP 10 · 300G'});
-UQ('u_m2',{cls:'mage',npc:'리프',prev:'u_m1',name:'도깨비불의 재',
- story:'도깨비불의 몸에서 번진 불씨가 숲을 달구고 있습니다. 타고 남은 재를 살펴보면 어떤 힘이 깃들었는지 알 수 있을 것입니다.',
- brief:'빛무리 도깨비불에게서 「타다 남은 도깨비불의 재」 4개를 모아 오십시오.',
- offer:['도깨비불들이 평소와 달리 뜨겁게 타오르고 있습니다. 불길한 조짐입니다.','그들이 남기는 재를 네 개 모아 오십시오. 재는 이 의뢰를 맡은 동안에만 떨어집니다.'],
- going:['재가 아직 모자랍니다. 빛무리 도깨비불은 뤼멘-베인에 나타납니다.'],ready:['이 재… 아직 온기가 남아 있군요.'],
- claim:['보십시오. 재 속에 붉은 결정이 박혀 있습니다. 불씨의 정체는 굳어 버린 마력이었습니다.'],
- obj:{type:'collect',mon:'firefly',item:'u_ember',need:4,rate:.5},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
-UQ('u_m3',{cls:'mage',npc:'리프',prev:'u_m2',name:'숨죽인 포자 밭',
- story:'불씨의 마력이 번지는 곳마다 버섯 병정들이 이상하게 굳어 갑니다. 포자 밭의 버섯 병정을 처치해 마력이 더 번지는 것을 막아야 합니다.',
- brief:'포자 버섯 병정을 15마리 처치하십시오.',
- offer:['불씨의 마력이 은빛 버섯 군락까지 번졌습니다.','버섯 병정들이 마력에 취해 있습니다. 열다섯 마리를 쓰러뜨려 그 마력을 흩어 주십시오.'],
- going:['아직 포자가 자욱합니다. 조금만 더 힘을 빌려 주십시오.'],ready:['군락이 한결 잠잠해졌군요.'],
- claim:['덕분에 마력이 더는 번지지 않습니다. 이제 그 근원을 찾아야 합니다.'],
- obj:{type:'kill',mon:'sporeSoldier',need:15},reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
-UQ('u_m4',{cls:'mage',npc:'리프',prev:'u_m3',name:'바람을 막는 덩굴',
- story:'불씨의 근원은 숲 외곽 가장 깊은 곳, 거대 떡갈나무 아래에 있습니다. 덩굴이 바람길을 막아 마력이 한곳에 고여 있다고 합니다.',
- brief:'「샐바 그레니아〈수호자의 떡갈나무〉」를 Expert 이상 난이도로 클리어하십시오.',
- offer:['근원은 떡갈나무 아래에 있습니다. 덩굴이 바람길을 막아 마력이 고이고 있습니다.','Expert 난이도로 그곳을 돌파해 덩굴을 걷어 주십시오. 이것이 마지막 준비입니다.'],
- going:['떡갈나무 아래에는 브람블혼이 있습니다. 방심하지 마십시오.'],ready:['돌아오셨군요. 바람이 다시 불기 시작했습니다.'],
- claim:['이제 불씨가 정수로 응축될 것입니다. 마지막으로 그 정수를 모아 오십시오.'],
- obj:{type:'clear',zone:'a1z1',dg:9,need:1,diff:1},reward:{exp:1100,sp:15,gold:400},rt:'EXP 1100 · SP 15 · 400G'});
-/* --- 검사 · 에르시안 : 균열을 가르는 검 (4부작) --- */
-UQ('u_b1',{cls:'blade',npc:'에르시안',minLv:18,name:'벌어진 틈',
- story:'경계-이면 감시자 에르시안은 숲 곳곳에서 작은 균열이 벌어지는 것을 감지했습니다. 바람이 가장 세게 모이는 언덕이 그 시작이라고 합니다.',
- brief:'「아엘렌-베인〈민들레 언덕〉」을 Expert 이상 난이도로 클리어하십시오.',
- offer:['검을 쥔 분이시군요. 균열은 힘으로 닫을 수 없지만, 날로 가를 수는 있습니다.','먼저 균열이 벌어지는 민들레 언덕을 확인해 주십시오. Expert 난이도로 끝까지 가셔야 틈이 드러납니다.'],
- going:['언덕에서는 돌풍이 눈을 가립니다. 칼끝을 낮추십시오.'],ready:['틈을 보셨습니까? 어떤 모양이던가요?'],
- claim:['얇은 선처럼 갈라져 있었다니, 검으로 낸 상처와 닮았군요. 다음을 알아봐 주십시오.'],
- obj:{type:'clear',zone:'a1z1',dg:2,need:1,diff:1},reward:{exp:700,sp:10,gold:300},rt:'EXP 700 · SP 10 · 300G'});
-UQ('u_b2',{cls:'blade',npc:'에르시안',prev:'u_b1',name:'균열에서 새는 쇳빛',
- story:'균열 가까이에서 이끼 골렘이 검은 쇳빛을 띠기 시작했습니다. 균열의 기운이 스며든 쇳조각을 모아 성질을 확인해야 합니다.',
- brief:'이끼 골렘(소형)에게서 「균열의 쇳조각」 4개를 모아 오십시오.',
- offer:['균열 곁의 이끼 골렘들이 검은 쇳빛을 띠고 있습니다.','그 몸에서 떨어지는 쇳조각을 네 개 가져오십시오. 이 의뢰를 맡은 동안에만 얻을 수 있습니다.'],
- going:['쇳조각이 모자랍니다. 이끼 골렘은 바엘렌-베인에 나타납니다.'],ready:['이 쇳조각… 날을 세운 듯 날카롭군요.'],
- claim:['균열의 기운이 쇠를 벼리고 있었군요. 당신의 검과 같은 이치입니다.'],
- obj:{type:'collect',mon:'mossGolem',item:'u_shard',need:4,rate:.45},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
-UQ('u_b3',{cls:'blade',npc:'에르시안',prev:'u_b2',name:'흔들리는 검의 눈',
- story:'균열의 기운에 취한 사나운 늑대들이 검을 든 이를 먼저 노립니다. 늑대의 기세를 베어 내면 검에 깃든 균열의 기운도 가라앉을 것입니다.',
- brief:'사나운 늑대를 12마리 처치하십시오.',
- offer:['균열 근처의 늑대들이 이상하게 날카로워졌습니다.','그들의 기세를 직접 베어 보십시오. 열두 마리를 처치하면 검의 눈이 틔울 것입니다.'],
- going:['아직 늑대들의 기세가 남아 있습니다.'],ready:['검끝이 한결 맑아졌군요.'],
- claim:['충분합니다. 이제 균열을 가르는 마지막 시험을 받을 자격이 있습니다.'],
- obj:{type:'kill',mon:'wildWolf',need:12},reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
-UQ('u_b4',{cls:'blade',npc:'에르시안',prev:'u_b3',name:'균열을 베는 자',
- story:'숲 외곽의 마지막 관문, 브람블혼이 균열의 기운을 가장 많이 머금었습니다. 그를 두 번 쓰러뜨려 균열의 뿌리를 끊어야 합니다.',
- brief:'덩굴 멧돼지 브람블혼을 2번 쓰러뜨리십시오.',
- offer:['이제 마지막입니다. 브람블혼이 균열의 기운을 가장 많이 머금었습니다.','그를 두 번 쓰러뜨려 뿌리를 끊으십시오. 성공하시면 균열을 베는 검술을 전수해 드리겠습니다.'],
- going:['브람블혼은 강합니다. 만반의 준비를 하십시오.'],ready:['해내셨군요. 균열이 잠잠해졌습니다.'],
- claim:['받으십시오. 이것이 균열을 가르는 검술, 「균열참」입니다.'],
- obj:{type:'kill',mon:'brambleHorn',need:2},reward:{skill:'bl_rift',gold:500},rt:'스킬 균열참 · 500G'});
-/* --- 격투가 · 오르간 : 맨손으로 불꽃을 쥐는 법 (4부작) --- */
-UQ('u_r1',{cls:'brawler',npc:'오르간',minLv:18,name:'식지 않는 모루',
- story:'대장장이 오르간이 젊은 시절 맨손으로 달군 쇠를 두드렸다는 이야기를 꺼냈습니다. 그 단련의 시작은 시냇가에서 식히는 일이었다고 합니다.',
- brief:'「플뢰리스 메로스〈맑은 시냇물가〉」를 Expert 이상 난이도로 클리어하십시오.',
- offer:['주먹으로 싸우는 분이시군요. 나도 한때 맨손으로 쇠를 두드렸지.','먼저 시냇가에서 몸을 식히는 법부터 배워야 하네. Expert 난이도로 그곳을 지나 보게.'],
- going:['물살이 거세니 발을 단단히 딛게.'],ready:['물에서 뭘 배웠나?'],
- claim:['중심을 잃지 않았군. 좋네, 이제 쇠를 두드리는 일을 해 보세.'],
- obj:{type:'clear',zone:'a1z1',dg:5,need:1,diff:1},reward:{exp:700,sp:10,gold:300},rt:'EXP 700 · SP 10 · 300G'});
-UQ('u_r2',{cls:'brawler',npc:'오르간',prev:'u_r1',name:'쇠를 두드리는 주먹',
- story:'주먹은 두드린 횟수만큼 단단해집니다. 오르간은 숲의 몬스터를 상대로 주먹을 단련하라고 합니다.',
- brief:'몬스터를 25마리 처치하십시오.',
- offer:['주먹은 두드린 만큼 단단해지네.','숲의 몬스터 스물다섯 마리를 상대하게. 어떤 놈이든 상관없네.'],
- going:['아직 손이 덜 여물었군. 조금만 더.'],ready:['손등을 보여 보게. 굳은살이 제법이군.'],
- claim:['이제 불을 쥘 차례일세.'],
- obj:{type:'kill',need:25},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
-UQ('u_r3',{cls:'brawler',npc:'오르간',prev:'u_r2',name:'불꽃 속의 단련',
- story:'맨손으로 불꽃을 쥐려면 불이 오래 머문 숯으로 몸을 길들여야 합니다. 고목 병정의 몸에서 단단한 숯을 얻을 수 있습니다.',
- brief:'고목 목각병에게서 「고목의 숯」 5개를 모아 오십시오.',
- offer:['불을 쥐려면 불에 길들여져야 하네.','오래된 고목 병정의 몸에서 나오는 숯을 다섯 개 가져오게. 이 일을 맡은 동안에만 얻을 수 있네.'],
- going:['숯이 부족하군. 고목 병정은 뤼멘-베인에 있다네.'],ready:['좋은 숯일세. 아직 열기가 남아 있군.'],
- claim:['이 숯으로 화로를 달궈 두겠네. 마지막 단련이 남았지.'],
- obj:{type:'collect',mon:'barkBeetle',item:'u_charcoal',need:5,rate:.5},reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
-UQ('u_r4',{cls:'brawler',npc:'오르간',prev:'u_r3',name:'철산의 마지막 한 수',
- story:'마지막 단련은 돌처럼 단단한 상대를 맨손으로 무너뜨리는 것입니다. 이끼 골렘이 그 상대입니다.',
- brief:'이끼 골렘(소형)을 8마리 처치하십시오.',
- offer:['마지막 단련일세. 돌처럼 단단한 놈을 맨주먹으로 쓰러뜨려 보게.','이끼 골렘 여덟 마리면 충분하네. 해내면 내 비전의 한 수를 알려 주지.'],
- going:['골렘은 단단하네. 급하게 치지 말고 틈을 노리게.'],ready:['해냈군! 자네 주먹은 이제 쇠와 같네.'],
- claim:['받게. 이것이 하늘을 가르는 일격, 「승룡권」일세.'],
- obj:{type:'kill',mon:'mossGolem',need:8},reward:{skill:'br_dragon',gold:500},rt:'스킬 승룡권 · 500G'});
-/* --- 거너 · 마르텐 : 약초와 화약 (4부작) --- */
-UQ('u_g1',{cls:'gunner',npc:'마르텐',minLv:18,name:'독초 채집',
- story:'약초상 마르텐은 약초에서 얻은 독과 화약을 섞으면 특별한 탄환이 된다고 말합니다. 먼저 독이 오른 쐐기풀 가시가 필요합니다.',
- brief:'가시 덩굴 채찍에게서 「독 쐐기풀 가시」 5개를 모아 오십시오.',
- offer:['총을 쓰는 분이시군요. 약초와 화약은 생각보다 궁합이 좋답니다.','독 쐐기풀 가시를 다섯 개만 구해 주세요. 덩굴 채찍들이 지닌 가시가 제일 좋아요. 이 의뢰를 맡은 동안에만 얻을 수 있어요.'],
- going:['가시가 아직 모자라요. 샐바 로리스에서 구할 수 있어요.'],ready:['어머, 가시가 아주 싱싱하네요.'],
- claim:['이걸 갈아서 탄환 속에 넣어 볼게요. 다음엔 맛을 봐 주셔야 해요.'],
- obj:{type:'collect',mon:'thornVine',item:'u_nettle',need:5,rate:.5},reward:{exp:700,sp:10,gold:300},rt:'EXP 700 · SP 10 · 300G'});
-UQ('u_g2',{cls:'gunner',npc:'마르텐',prev:'u_g1',name:'탄환에 새길 맛',
- story:'독이 얼마나 잘 퍼지는지 시험하려면 독이 오른 개구리 병정을 상대로 시험 사격을 해야 합니다.',
- brief:'독 개구리 병정을 10마리 처치하십시오.',
- offer:['독이 잘 듣는지 시험해야 해요.','독 개구리 병정 열 마리를 쏘아 보세요. 반응이 달라지는 걸 기록해 두겠어요.'],
- going:['조금만 더 쏘아 주세요. 데이터가 모자라요.'],ready:['기록이 충분해요. 독이 제대로 듣네요!'],
- claim:['이제 화약을 섞을 차례예요. 재료가 하나 더 필요해요.'],
- obj:{type:'kill',mon:'beeSoldier',need:10},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
-UQ('u_g3',{cls:'gunner',npc:'마르텐',prev:'u_g2',name:'잿빛 화약',
- story:'차가운 잿가루를 화약에 섞으면 불길이 천천히 번져 독을 오래 머물게 합니다. 그림자 망령이 남기는 잿가루가 필요합니다.',
- brief:'그림자 망령에게서 「그림자 망령의 잿가루」 4개를 모아 오십시오.',
- offer:['화약에 차가운 잿가루를 섞으면 불이 천천히 번져요.','그림자 망령이 흩어질 때 잿가루가 남는답니다. 네 개만 모아 주세요. 이 의뢰를 맡은 동안에만 떨어져요.'],
- going:['잿가루가 모자라요. 그림자 망령은 뤼멘-베인에 나타나요.'],ready:['어머, 차갑네요. 딱 좋아요.'],
- claim:['이제 탄환을 만들 수 있어요. 마지막으로 시험 사격을 부탁드려요.'],
- obj:{type:'collect',mon:'shadowMoth',item:'u_ash',need:4,rate:.5},reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
-UQ('u_g4',{cls:'gunner',npc:'마르텐',prev:'u_g3',name:'독침탄 시험 사격',
- story:'완성된 독침탄을 실전에서 시험할 차례입니다. 가장 거친 계곡에서 끝까지 버텨야 합니다.',
- brief:'「바엘렌-베인〈이끼 낀 돌다리〉」를 Expert 이상 난이도로 클리어하십시오.',
- offer:['드디어 완성했어요! 독침탄이에요.','이끼 낀 돌다리에서 시험 사격을 해 주세요. Expert 난이도로 끝까지 가 주시면 탄환의 제조법을 알려 드릴게요.'],
- going:['돌다리 주변은 골렘이 많아요. 거리를 벌리고 쏘세요.'],ready:['다녀오셨군요! 탄환은 어땠어요?'],
- claim:['성공이에요! 제조법을 알려 드릴게요. 이게 바로 「독침탄」이에요.'],
- obj:{type:'clear',zone:'a1z1',dg:7,need:1,diff:1},reward:{skill:'gn_venom',gold:500},rt:'스킬 독침탄 · 500G'});
-/* --- 사제 · 리프 : 숲의 기도 (4부작) --- */
-UQ('u_p1',{cls:'priest',npc:'리프',minLv:18,name:'시든 제단',
- story:'이슬 맺힌 풀밭의 오래된 작은 제단이 시들어 가고 있습니다. 숲의 정령들에게 기도를 올리던 곳입니다.',
- brief:'「플뢰리스-엘〈이슬 맺힌 풀밭〉」을 Expert 이상 난이도로 클리어하십시오.',
- offer:['기도를 올리는 그대여, 숲의 정령들도 그 마음을 기억하고 있습니다.','풀밭의 작은 제단이 시들어 가고 있습니다. Expert 난이도로 그곳을 지나며 제단의 상태를 살펴봐 주십시오.'],
- going:['제단은 풀밭 한가운데에 있습니다. 부디 조심해서 다녀오십시오.'],ready:['제단은 어떠했습니까?'],
- claim:['아직 기도가 닿고 있었군요. 이제 정령들의 눈물이 필요합니다.'],
- obj:{type:'clear',zone:'a1z1',dg:1,need:1,diff:1},reward:{exp:700,sp:10,gold:300},rt:'EXP 700 · SP 10 · 300G'});
-UQ('u_p2',{cls:'priest',npc:'리프',prev:'u_p1',name:'이슬의 기도',
- story:'제단을 되살리려면 이슬 정령의 맑은 눈물이 필요합니다. 정령들이 눈물을 흘리게 하려면 기도의 마음으로 다가가야 합니다.',
- brief:'이슬 방울 정령에게서 「이슬 정령의 눈물」 5개를 모아 오십시오.',
- offer:['제단을 되살리려면 이슬 정령의 눈물이 필요합니다.','정령들이 아파서 흘리는 눈물이니, 부디 상냥하게 다가가 주십시오. 다섯 개면 충분합니다. 이 의뢰를 맡은 동안에만 떨어집니다.'],
- going:['눈물이 아직 모자랍니다. 이슬 정령은 플뢰리스-엘에 나타납니다.'],ready:['맑은 눈물이군요… 고맙습니다.'],
- claim:['제단이 다시 빛나기 시작했습니다. 이제 잠든 정령들을 깨워야 합니다.'],
- obj:{type:'collect',mon:'dewSpirit',item:'u_dew',need:5,rate:.5},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
-UQ('u_p3',{cls:'priest',npc:'리프',prev:'u_p2',name:'잠든 정령들',
- story:'시냇가의 물결 정령들이 불안한 꿈에 갇혀 사나워졌습니다. 그들의 꿈을 잠재워야 제단의 빛이 숲에 퍼집니다.',
- brief:'물결 정령을 10마리 처치하십시오.',
- offer:['시냇가의 물결 정령들이 악몽에 갇혀 사나워졌습니다.','마음 아픈 일이나, 열 마리를 쓰러뜨려 그들을 꿈에서 풀어 주십시오.'],
- going:['아직 시냇가가 소란스럽습니다.'],ready:['정령들이 편안히 잠들었군요.'],
- claim:['고맙습니다. 이제 제단에서 마지막 기도를 올릴 수 있습니다.'],
- obj:{type:'kill',mon:'waveSpirit',need:10},reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
-UQ('u_p4',{cls:'priest',npc:'리프',prev:'u_p3',name:'성역의 노래',
- story:'마지막 기도는 숲 외곽 깊은 곳, 순찰대의 잔영이 떠도는 곳에서 올려야 합니다. 그곳에 성역을 펼쳐야 합니다.',
- brief:'「그레니아-엘〈순찰대의 잔영〉」을 Expert 이상 난이도로 클리어하십시오.',
- offer:['마지막 기도는 숲 깊은 곳에서 올려야 합니다.','순찰대의 잔영이 떠도는 그곳에 성역을 펼칩니다. Expert 난이도로 끝까지 가 주십시오. 성공하신다면 성역의 기도를 전해 드리겠습니다.'],
- going:['그곳의 잔영들은 슬퍼하고 있습니다. 부디 위로해 주십시오.'],ready:['돌아오셨군요. 숲이 노래하는 듯합니다.'],
- claim:['받으십시오. 아군을 감싸는 성역의 기도, 「성역」입니다.'],
- obj:{type:'clear',zone:'a1z1',dg:8,need:1,diff:1},reward:{skill:'pr_sanct',gold:500},rt:'스킬 성역 · 500G'});
-// NPC 연결
-TOWNS.salv.npcs[0][3].push('u_m1','u_m2','u_m3','u_m4','u_p1','u_p2','u_p3','u_p4');
-TOWNS.salv.npcs[1][3]=['u_g1','u_g2','u_g3','u_g4'];
-TOWNS.salv.npcs[2][3]=['u_r1','u_r2','u_r3','u_r4'];
-TOWNS.salv.npcs[3][3].push('u_b1','u_b2','u_b3','u_b4');
+/* ====================================================================
+   고유 퀘스트 (v0.5.28 재작성) — 직업마다 배경 스토리를 따라 여러 NPC를 거쳐 특수 스킬을 얻습니다.
+   흐름은 던전앤파이터 전직 퀘스트를 참고했습니다: 스승 NPC → 전문가 NPC → 재료 모으기 → 제작 → 스승에게 돌아가 전수.
+   · 검사   「균열을 가르는 검」   6부작  에르시안 · 오르간       → 균열참
+   · 마법사 「꺼지지 않는 불씨」   5부작  세라 · 리프              → 파이어 스트라이크
+   · 격투가 「바람을 타는 주먹」   4부작  바룬(신규) · 마르텐       → 승룡권
+   · 거너   「숲을 꿰뚫는 탄환」   5부작  리넷(신규) · 마르텐       → 독침탄
+   · 사제   「잠들지 못한 순찰대」 4부작  테오란(신규) · 리프       → 성역
+   말투: 리프=차분한 하십시오체 · 에르시안=정중한 하십시오체 · 오르간=하게체 · 세라=밝은 해요체
+         마르텐=조용한 존댓말 · 바룬=무뚝뚝한 반말(격투가를 "막내"라 부름) · 리넷=빠른 해요체 · 테오란=온화한 존댓말
+   ==================================================================== */
 
-QUESTS.q_fire.type='unique';
+/* --------------------------------------------------------------------
+   검사 · 「균열을 가르는 검」 (6부작) — 에르시안 → 오르간 → 에르시안
+   배경: 검사는 경계 바깥 변경 수비대 출신. 수비대가 지키던 성채 한복판에 균열이 열린 날,
+         그 틈으로 쏟아진 것들을 베어 내며 홀로 살아남았다. 그날부터 검에는 가는 금이 가 있고
+         균열 가까이 가면 검이 낮게 운다. 그 까닭을 찾아 균열이 잦은 요정 영토로 왔다.
+   -------------------------------------------------------------------- */
+UQ('uq_b1',{cls:'blade',npc:'에르시안',minLv:18,name:'검이 우는 소리',
+ story:'경계-이면 감시자 에르시안이 그대의 검에서 나는 낮은 울림을 알아챘습니다. 작은 균열이 자주 벌어지는 민들레 언덕에서 검이 어떻게 반응하는지 확인해 보자고 합니다.',
+ brief:'「아엘렌-베인〈민들레 언덕〉」을 Expert 이상 난이도로 클리어하십시오.',
+ offer:['잠시만요. …방금, 그대의 검이 울었습니다.','저는 오랫동안 균열을 지켜봐 왔습니다. 균열 가까이에서 쇠가 우는 소리를 내는 일은 흔치 않습니다.','민들레 언덕에는 요즘 작은 균열이 자주 벌어집니다. Expert 난이도로 언덕 끝까지 가서, 그 검이 어떻게 반응하는지 느껴 보십시오.'],
+ going:['언덕의 돌풍이 거셉니다. 검의 울림에 귀를 기울이십시오.'],
+ ready:['돌아오셨군요. 검이… 어땠습니까?'],
+ claim:['균열 앞에서 칼날이 떨렸다고요. 역시 그렇군요.','변경의 성채에 균열이 열린 날부터 검이 울기 시작했다… 그날 그 틈으로 쏟아진 것들을, 그 검으로 베셨군요.','칼날에 간 가는 금이 보이십니까? 망치로 낸 상처가 아닙니다. 균열에 베인 상흔입니다.','보통 쇠라면 다음에 균열을 베는 순간 부러질 겁니다. 대장장이 오르간에게 검을 보여 주십시오.'],
+ obj:{type:'clear',zone:'a1z1',dg:2,need:1,diff:1},reward:{exp:600,sp:8,gold:200},rt:'EXP 600 · SP 8 · 200G'});
+UQ('uq_b2',{cls:'blade',npc:'에르시안',to:'오르간',prev:'uq_b1',name:'금 간 칼날',
+ story:'에르시안은 검에 남은 금이 균열에 베인 상처라고 말했습니다. 이대로라면 칼날이 버티지 못합니다. 대장장이 오르간에게 검을 보여 주어야 합니다.',
+ brief:'대장장이 오르간에게 검을 보여 주십시오.',
+ offer:['오르간은 이 마을에서 쇠를 가장 잘 아는 사람입니다.','제가 본 것을 그대로 전해 주십시오. "균열이 남긴 금"이라고요. 그러면 알아들을 겁니다.'],
+ going:['오르간에게 검을 보여 주십시오. 그 사람이라면 금의 정체를 알아볼 겁니다.'],
+ ready:['응? 에르시안이 보냈다고? 어디, 칼 좀 보세.'],
+ claim:['…허, 이건 망치 자국이 아니군. 무언가를 "베다가" 생긴 금일세.','쇠 안쪽까지 낯선 기운이 배어 있어. 이대로 두면 다음 한 번에 두 동강 나겠군.','다시 벼려야 하네. 다만 보통 쇠로는 안 돼. 이 기운을 버틸 재료가 필요하지.'],
+ obj:{type:'talk'},reward:{exp:200},rt:'EXP 200'});
+UQ('uq_b3',{cls:'blade',npc:'오르간',prev:'uq_b2',name:'균열을 견디는 쇠',
+ story:'오르간은 균열의 기운을 견딜 수 있도록 검을 다시 벼리겠다고 했습니다. 균열에 물든 쇳조각, 오래 타는 숯, 담금질에 쓸 흑요 깃털과 파편, 그리고 화로 값이 필요합니다.',
+ brief:'검을 다시 벼릴 재료를 모아 오르간에게 가져가십시오.',
+ offer:['재료는 이렇게 필요하네. 잘 듣게.','첫째, 균열의 쇳조각 다섯 개. 균열 곁의 이끼 골렘들이 몸에 쇳빛을 띠고 있지. 그놈들을 부수면 떨어지네.','둘째, 단단한 고목 숯 세 개. 고목 목각병 몸뚱이가 오래 타는 숯이 되네. 보통 숯으로는 이 쇠가 녹지도 않아.','셋째, 흑요 깃털 하나. 돌다리의 정예 계곡 까마귀만 지닌 검은 깃이지. 담금질할 때 날에 바르면 기운이 밖으로 새지 않네.','마지막으로 무의 파편 서른 개와 화로 값 500골드. …뭘 그리 보나. 화로는 공짜로 타지 않네.'],
+ going:['아직 재료가 덜 모였군. 하나라도 빠지면 칼은 못 벼리네.'],
+ ready:['오, 다 모아 왔군! 쇳조각 빛깔이 아주 좋아.'],
+ claim:['좋네, 하룻밤만 주게. 화로를 밤새 달궈 두겠네.','…자, 받게. 금은 지우지 않았네. 그 금이 검의 일부가 되도록 벼렸지.','이제 이 칼은 균열의 기운을 머금어도 부러지지 않을 걸세. 다만 새 칼은 손에 익혀야 하는 법이지.'],
+ obj:{parts:[{type:'collect',mon:'mossGolem',item:'uq_bshard',need:5,rate:.45},{type:'collect',mon:'barkBeetle',item:'uq_bcoal',need:3,rate:.5},{type:'collect',mon:'valleyCrow',item:'uq_bfeather',need:1,rate:1,elite:1},{type:'have',item:'frag_n',need:30},{type:'pay',need:500}]},
+ reward:{exp:900,sp:10,gold:300},rt:'EXP 900 · SP 10 · 300G'});
+UQ('uq_b4',{cls:'blade',npc:'오르간',to:'에르시안',prev:'uq_b3',name:'새 날을 길들이다',
+ story:'다시 벼린 검은 아직 손에 익지 않았습니다. 오르간은 실전에서 날을 길들이라고 합니다. 길들인 검은 에르시안에게 보여 주어야 합니다.',
+ brief:'Expert 이상 난이도에서 사나운 늑대를 12마리 처치한 뒤, 에르시안에게 보고하십시오.',
+ offer:['칼은 베어 봐야 자리를 잡네. 숲 안쪽의 사나운 늑대들이 딱 좋은 상대지.','Expert 이상 난이도에서 열두 마리를 베게. 쉬운 상대로는 날이 깨어나지 않아.','다 길들였으면 내게 올 것 없이 에르시안에게 가게. 칼끝의 일은 그쪽이 더 잘 알지.'],
+ going:['아직 칼이 손에서 노는군. 더 베어 보게.'],
+ ready:['…검의 울림이 달라졌습니다. 떨림이 아니라, 숨소리 같군요.'],
+ claim:['오르간다운 솜씨입니다. 금을 지우지 않고 검의 일부로 만들다니.','이제 말씀드리지요. 그대의 검이 우는 건, 균열의 기운을 기억하기 때문입니다.','그 기억을 날에 실으면 균열을 베어 닫을 수 있습니다. 그 전에 확인할 것이 하나 있습니다.'],
+ obj:{type:'kill',mon:'wildWolf',need:12,diff:1},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
+UQ('uq_b5',{cls:'blade',npc:'에르시안',prev:'uq_b4',name:'돌다리의 봉인',
+ story:'이끼 낀 돌다리 난간의 고대 시렌스 문자는 균열을 막던 봉인이라고 합니다. 다시 벼린 검으로 봉인이 아직 숨 쉬는지 확인해야 합니다.',
+ brief:'「바엘렌-베인〈이끼 낀 돌다리〉」를 Expert 이상 난이도로 클리어하십시오.',
+ offer:['계곡 위 돌다리 난간에 옛 시렌스 문자가 새겨져 있는 것을 아십니까?','그 문자는 장식이 아닙니다. 옛사람들이 균열을 막으려고 새긴 봉인입니다.','다시 벼린 검을 들고 Expert 난이도로 다리를 건너 보십시오. 봉인이 살아 있다면, 검이 그 리듬을 따라 울 겁니다.'],
+ going:['다리 위에서는 골렘들이 길을 막습니다. 문자를 지날 때 검에 귀를 기울이십시오.'],
+ ready:['어떻습니까. 문자를 지날 때 검이 울던가요?'],
+ claim:['…검이 문자의 리듬을 따라 울었다니. 봉인은 아직 살아 있습니다. 다만 아주 희미하게.','봉인이 약해진 까닭도 알았습니다. 균열의 뿌리가 수호자의 떡갈나무 아래까지 뻗어 있습니다. 브람블혼이 취한 탁한 수액도 거기서 흘러나온 것이지요.','마지막입니다. 그 뿌리를 베십시오.'],
+ obj:{type:'clear',zone:'a1z1',dg:7,need:1,diff:1},reward:{exp:900,sp:12,gold:300},rt:'EXP 900 · SP 12 · 300G'});
+UQ('uq_b6',{cls:'blade',npc:'에르시안',prev:'uq_b5',name:'균열을 베는 자',
+ story:'균열의 뿌리는 수호자의 떡갈나무 아래에 있습니다. 균열의 기운을 머금은 브람블혼을 쓰러뜨리고, 다시 벼린 검으로 그 뿌리를 베어야 합니다.',
+ brief:'Expert 이상 난이도에서 덩굴 멧돼지 브람블혼을 쓰러뜨리십시오.',
+ offer:['떡갈나무 아래의 균열은 브람블혼의 몸을 빌려 날뛰고 있습니다.','Expert 이상 난이도에서 브람블혼을 쓰러뜨리십시오. 쓰러지는 순간 균열이 드러날 겁니다.','그때 검이 기억하는 대로 베십시오. 생각하지 말고, 검의 울림을 따라서.'],
+ going:['브람블혼은 강합니다. 하지만 지금의 그대와 그 검이라면 해낼 수 있습니다.'],
+ ready:['…돌아오셨군요. 떡갈나무 쪽의 균열 기운이 사라졌습니다.'],
+ claim:['그대가 벤 것은 짐승이 아니라 균열 그 자체였습니다.','그 검이 기억하던 상처는 이제 그대의 힘이 되었습니다. 균열을 따라 내달리며 다섯 번 베는 검, 「균열참」입니다.','균열은 이 숲에만 있지 않습니다. 언젠가 그대가 살아남은 그 성채의 균열도, 그 검으로 닫을 수 있을 겁니다.'],
+ obj:{type:'kill',mon:'brambleHorn',need:1,diff:1},reward:{skill:'bl_rift',gold:500},rt:'스킬 균열참 · 500G'});
+
+/* --------------------------------------------------------------------
+   마법사 · 「꺼지지 않는 불씨」 (5부작) — 세라 → 리프 → 세라 → 리프
+   배경: 마법사는 숲 어딘가에서 "꺼지지 않는 불씨"가 발견되었다는 소문을 쫓아 왔다.
+         그러나 바람이 머무는 이 숲에서는 바람이 불꽃을 흩어 버려 큰 화염 마법을 펼치기 어렵다.
+   -------------------------------------------------------------------- */
+UQ('uq_m1',{cls:'mage',npc:'세라',minLv:18,name:'흩어지는 불꽃',
+ story:'연금술사 세라는 이 숲에서 큰 불꽃 마법이 자꾸 흩어지는 까닭을 연구하고 있습니다. 근래 유난히 뜨겁게 타오르는 도깨비불이 남긴 재에 단서가 있을지 모른다고 합니다.',
+ brief:'빛무리 도깨비불에게서 「붉은 결정이 박힌 재」 4개를 모아 오십시오.',
+ offer:['어, 혹시 마법사세요? 방금 손끝에서 불꽃이 피었다가 바로 흩어졌죠? 다 봤어요.','꺼지지 않는 불씨 소문 듣고 오셨구나. 요즘 그런 분이 꽤 있거든요. 그런데 이 숲에선 바람이 불꽃을 자꾸 흩어 버려요.','그런데 요즘 뤼멘-베인의 도깨비불들이 이상할 만큼 뜨겁게 타요. 꺼진 자리에 남는 재를 네 개만 가져다주실래요? 이 의뢰를 맡은 동안에만 떨어져요.'],
+ going:['재가 아직 모자라요. 빛무리 도깨비불은 뤼멘-베인에 나와요.'],
+ ready:['와, 아직 따뜻해요! 이거 봐요, 재 속에 붉은 알갱이가 박혀 있어요.'],
+ claim:['이 붉은 결정… 제가 연구하는 홍염 파편이랑 성분이 같아요. 그런데 훨씬 오래된 마력이에요.','이렇게 오래된 마력은 제 책으로는 못 읽어요. 대현자님이라면 아실 텐데.','제 연구 노트를 드릴게요. 리프 님께 보여 드리고 의견을 여쭤봐 주세요.'],
+ obj:{type:'collect',mon:'firefly',item:'uq_mash',need:4,rate:.5},reward:{exp:700,sp:10,gold:200},rt:'EXP 700 · SP 10 · 200G'});
+UQ('uq_m2',{cls:'mage',npc:'세라',to:'리프',prev:'uq_m1',name:'대현자의 견해',
+ story:'세라는 붉은 결정이 아주 오래된 마력이라 자신의 지식으로는 풀 수 없다고 했습니다. 세라의 연구 노트를 대현자 리프에게 보여 주어야 합니다.',
+ brief:'세라의 연구 노트를 대현자 리프에게 전하십시오.',
+ offer:['노트는 제 글씨라 좀 지저분하지만… 리프 님은 알아보실 거예요.','혹시 리프 님이 글씨 얘기 하시면… 못 들은 걸로 해 주세요!'],
+ going:['리프 님께 노트를 전해 주세요. 마을에 계실 거예요.'],
+ ready:['세라의 노트로군요. …잠시 읽어 보겠습니다.'],
+ claim:['이 결정은 "업화(業火)의 씨앗"입니다. 아주 오래전, 숲을 태우던 불을 요정들이 잠재우며 바람 속에 봉해 둔 불이지요.','바람이 잦아들자 봉해 둔 불씨가 하나둘 깨어나고 있습니다. 숲에서 불꽃이 흩어지는 것도, 도깨비불이 뜨거워진 것도 같은 까닭입니다.','마법을 다루는 그대여. 그 씨앗을 다스릴 수 있다면 바람에도 흩어지지 않는 불꽃을 얻을 것입니다. 필요한 것을 말씀드리지요.'],
+ obj:{type:'talk',carry:'uq_mnote'},reward:{exp:200},rt:'EXP 200'});
+UQ('uq_m3',{cls:'mage',npc:'리프',to:'세라',prev:'uq_m2',name:'업화의 촉매',
+ story:'리프는 업화의 씨앗을 다스리려면 불씨를 담을 촉매가 필요하다고 했습니다. 재료를 모아 세라에게 가져가면 촉매로 합성해 줄 것입니다.',
+ brief:'업화의 촉매에 쓸 재료를 모아 세라에게 가져가십시오.',
+ offer:['씨앗을 손에 담으려면 그릇이 필요합니다. 연금술로 빚는 촉매이지요.','뿔 달린 숲다람쥐의 정수 다섯 개. 바람이 잦아든 뒤 그들의 뿔에도 불씨가 깃들었습니다.','홍염 파편 다섯 개. 불의 기운을 띤 몬스터에게서 드물게 얻거나, 장비를 해체해 얻을 수 있습니다.','그리고 뤼멘-베인의 정예 고목 목각병이 품은 「불씨 먹은 심재」 하나. 오래 타오른 나무만이 불씨를 버팁니다.','재료가 모이면 세라에게 가져가십시오. 촉매를 빚는 일은 그 아이가 저보다 낫습니다.'],
+ going:['재료는 서두르지 말고 하나씩 모으십시오. 다 모이면 세라에게 가져가시면 됩니다.'],
+ ready:['리프 님이 그렇게 말씀하셨다고요? 헤헤… 맡겨 주세요!'],
+ claim:['정수를 녹이고, 파편을 갈아 넣고, 마지막에 심재로 감싸서…','됐다! 업화의 촉매예요. 보세요, 손에 쥐어도 하나도 안 뜨거운데 안에서 불씨가 숨 쉬고 있어요.','하지만 아직 잠들어 있어요. 깨우려면 마력이 아주 진하게 고인 곳이 필요해요.'],
+ obj:{parts:[{type:'collect',mon:'hornSquirrel',item:'sq_ess',need:5,rate:.55},{type:'have',item:'frag_fire',need:5},{type:'collect',mon:'barkBeetle',item:'uq_mcore',need:1,rate:1,elite:1}]},
+ reward:{exp:1000,sp:12,gold:300},rt:'EXP 1000 · SP 12 · 300G'});
+UQ('uq_m4',{cls:'mage',npc:'세라',prev:'uq_m3',name:'촉매를 깨우는 곳',
+ story:'업화의 촉매는 마력이 진하게 고인 곳에서만 깨어납니다. 덩굴이 바람길을 막아 마력이 고여 있는 수호자의 떡갈나무 아래가 그곳입니다.',
+ brief:'「샐바 그레니아〈수호자의 떡갈나무〉」를 Expert 이상 난이도로 클리어하십시오.',
+ offer:['제가 마력 흐름을 재 봤는데요, 숲에서 제일 진하게 고인 곳은 수호자의 떡갈나무 아래예요. 덩굴이 바람길을 막고 있거든요.','거기서 촉매를 지니고 싸우면 촉매가 마력을 빨아들여서 깨어날 거예요.','Expert 난이도로 끝까지 가셔야 해요. 브람블혼도 있으니까… 꼭 조심하세요!'],
+ going:['촉매에서 아직 아무 소리도 안 나요. 떡갈나무 아래로 가 보세요.'],
+ ready:['아, 촉매가 웅웅 울려요! 깨어났어요!'],
+ claim:['됐어요! 촉매가 완전히 깨어났어요.','이제 이 불씨를 마법으로 엮는 일은 제 몫이 아니에요. 리프 님께 가져가세요.','…있잖아요, 나중에 그 마법 한 번만 보여 주세요. 제 촉매가 만든 불꽃이 어떤지 정말 궁금하거든요.'],
+ obj:{type:'clear',zone:'a1z1',dg:9,need:1,diff:1},reward:{exp:1300,sp:13,gold:400},rt:'EXP 1300 · SP 13 · 400G'});
+UQ('uq_m5',{cls:'mage',npc:'세라',to:'리프',prev:'uq_m4',name:'업화의 불꽃',
+ story:'깨어난 업화의 촉매를 대현자 리프에게 가져가면, 바람에도 흩어지지 않는 불꽃 마법을 전해 줄 것입니다.',
+ brief:'깨어난 업화의 촉매를 대현자 리프에게 전하십시오.',
+ offer:['촉매가 식기 전에 얼른 가세요! …아, 식지는 않는구나. 그래도 얼른요!'],
+ going:['리프 님께 촉매를 보여 드리세요.'],
+ ready:['깨어났군요. 업화의 숨결이 여기까지 느껴집니다.'],
+ claim:['씨앗을 깨운 것은 촉매이지만, 그 불을 다스리는 것은 그대의 마력입니다.','바람이 흩어 놓지 못하도록, 불꽃을 한 줄기 기둥으로 세워 내리꽂으십시오. 이것이 「파이어 스트라이크」입니다. 받아 주십시오.','옛 요정들은 이 불을 두려워해 봉했습니다. 하지만 그대라면 태우는 불이 아니라 지키는 불로 쓰시리라 믿습니다.'],
+ obj:{type:'talk',carry:'uq_mcat'},reward:{skill:'mg_fstrike',gold:500},rt:'스킬 파이어 스트라이크 · 500G'});
+
+/* --------------------------------------------------------------------
+   격투가 · 「바람을 타는 주먹」 (4부작) — 바룬 → 마르텐 → 바룬
+   배경: 격투가는 맨손 무술 도장 철산문(鐵山門)의 마지막 제자. 사부는 "주먹이 바람을 타면 용이 된다"는
+         말만 남기고 오의 「승룡권」을 전하지 못한 채 세상을 떠났다. 그 뜻을 찾아 바람이 머무는 숲에 왔다.
+   신규 NPC 바룬: 사부와 크게 다투고 먼저 문파를 떠난 사형. 같은 오의를 찾아 이 숲에 머물고 있다.
+   -------------------------------------------------------------------- */
+UQ('uq_r1',{cls:'brawler',npc:'바룬',minLv:18,name:'낯익은 자세',
+ story:'떠돌이 권사 바룬이 그대의 자세를 보고 철산문의 것임을 알아보았습니다. 사부의 소식을 묻기 전에, 먼저 주먹부터 확인하겠다고 합니다.',
+ brief:'물가 들개를 12마리 처치하십시오.',
+ offer:['…잠깐. 그 발 디딤, 그 허리. 철산문이로군.','난 바룬이다. 너보다 먼저 철산문 문을 나선 놈이지. 사부님과 크게 다투고 말이야.','사부님 이야기는 나중에 듣지. 먼저 주먹이 어떤지 보자. 맑은 시냇물가의 물가 들개 열두 마리. 물살 위에서 중심을 잃지 말고 맨손으로 상대해 봐.'],
+ going:['아직이냐? 들개한테 밀려 물에 빠지면 철산문 이름이 운다.'],
+ ready:['손등 좀 보자. …흠, 굳은살이 제대로 박혔군.'],
+ claim:['사부님이 돌아가셨다고… 그래. "주먹이 바람을 타면 용이 된다." 그 말씀만 남기셨겠지.','그건 철산문의 오의, 승룡권 이야기다. 사부님은 끝내 그 바람을 찾지 못하셨지. 나도 그걸 찾으러 이 숲까지 왔고.','하지만 지금 네 주먹으로 승룡권을 치면 팔이 먼저 부서진다. 약초상 마르텐에게 가 봐라. 그 사람이 손을 단련할 고약을 만들 줄 안다.'],
+ obj:{type:'kill',mon:'pincerCray',need:12},reward:{exp:800,sp:10,gold:300},rt:'EXP 800 · SP 10 · 300G'});
+UQ('uq_r2',{cls:'brawler',npc:'마르텐',prev:'uq_r1',name:'철사장 고약',
+ story:'바룬은 승룡권을 버틸 손을 만들려면 약초상 마르텐의 철사장 고약이 필요하다고 했습니다. 마르텐은 고약에 쓸 약재를 구해 오라고 합니다.',
+ brief:'철사장 고약에 쓸 약재를 모아 마르텐에게 가져가십시오.',
+ offer:['바룬이 보냈군요. 그 사람도 예전에 이 고약을 바르고 손이 퉁퉁 부었지요.','철사장 고약에는 세 가지가 듭니다. 먼저 이슬 정령의 눈물 네 방울. 플뢰리스-엘의 이슬 정령이 흘리는 물은 손의 열을 식혀 줍니다.','다음은 은빛 두꺼비의 섬수 하나. 실벤-엘의 정예 은빛 두꺼비만 지닌 독인데, 아주 조금만 쓰면 뼈를 단단하게 하지요.','마지막으로 약재값 300골드입니다. 나머지 약초는 제가 채워 넣겠습니다.'],
+ going:['약재가 아직 모자랍니다. 섬수는 정예 은빛 두꺼비만 지니고 있습니다.'],
+ ready:['이슬 눈물도, 섬수도 좋습니다. 바로 달여 보지요.'],
+ claim:['…다 됐습니다. 매일 밤 손에 바르고, 아침마다 단단한 것을 치십시오. 처음 며칠은 불에 덴 것처럼 아플 겁니다.','바룬에게 가 보세요. 손이 준비됐으니, 이제 그 사람이 무엇을 치게 할지 압니다.'],
+ obj:{parts:[{type:'collect',mon:'dewSpirit',item:'uq_rdew',need:4,rate:.5},{type:'collect',mon:'silverToad',item:'uq_rtoad',need:1,rate:1,elite:1},{type:'pay',need:300}]},
+ reward:{exp:1200,sp:12,gold:300},rt:'EXP 1200 · SP 12 · 300G'});
+UQ('uq_r3',{cls:'brawler',npc:'바룬',prev:'uq_r2',name:'돌을 깨는 주먹',
+ story:'고약을 바른 손은 단단해졌지만, 아직 바람을 탈 만큼 가볍지 않습니다. 바룬은 돌처럼 단단한 이끼 골렘을 맨손으로 부수며 힘을 빼는 법을 익히라고 합니다.',
+ brief:'Expert 이상 난이도에서 이끼 골렘(소형)을 10마리 처치하십시오.',
+ offer:['마르텐 고약 냄새가 여기까지 나는군. 손은 좀 어떠냐?','이제 돌을 쳐라. 이끼 골렘. Expert 이상에서 열 마리.','힘으로 깨려 들면 손만 깨진다. 내지르기 직전까지 힘을 빼. 맞는 순간에만 쥐어라. 그게 바람을 타는 첫걸음이다.'],
+ going:['힘이 너무 들어가 있다. 어깨를 내려.'],
+ ready:['…골렘 부스러기가 아주 곱게 부서졌군. 힘을 뺄 줄 알게 됐어.'],
+ claim:['이제 마지막이다. 사부님이 끝내 찾지 못한 "바람"을 보여 주마.','아엘렌-베인, 민들레 언덕. 이 숲의 바람은 거기서 땅을 박차고 하늘로 솟는다.'],
+ obj:{type:'kill',mon:'mossGolem',need:10,diff:1},reward:{exp:1200,sp:13,gold:400},rt:'EXP 1200 · SP 13 · 400G'});
+UQ('uq_r4',{cls:'brawler',npc:'바룬',prev:'uq_r3',name:'승룡',
+ story:'민들레 언덕은 숲의 바람이 하늘로 솟구치는 곳입니다. 언덕을 지키는 정예 돌풍 족제비를 솟구치는 바람과 함께 쳐올려 승룡권을 완성해야 합니다.',
+ brief:'Expert 이상 난이도의 「아엘렌-베인〈민들레 언덕〉」에서 던전 보스 「정예 돌풍 족제비」를 쓰러뜨리십시오.',
+ offer:['언덕 꼭대기의 돌풍 족제비는 바람을 타고 논다. 그 바람이 솟을 때, 같이 솟아라.','땅을 박차고 무릎, 허리, 어깨, 주먹 순서로. 바람이 등을 밀어 올릴 때 주먹을 하늘로 꽂아.','Expert 이상에서 그 정예를 쳐올려 봐. 사부님 대신, 내가 지켜보마.'],
+ going:['바람을 기다려라. 억지로 솟으면 그냥 뜀뛰기일 뿐이다.'],
+ ready:['…봤다. 방금 그건 분명히 용이었어.'],
+ claim:['사부님이 남긴 말, 이제 알겠지? 주먹이 바람을 타면 용이 된다.','철산문의 오의, 「승룡권」. 이제 네 것이다.','나는 끝내 못 했던 걸 막내가 해냈군. 사부님 묘에 가거든… 바룬이 미안했다고 전해 다오.'],
+ obj:{type:'dboss',mon:'gustWeasel',need:1,diff:1},reward:{skill:'br_dragon',gold:500},rt:'스킬 승룡권 · 500G'});
+
+/* --------------------------------------------------------------------
+   거너 · 「숲을 꿰뚫는 탄환」 (5부작) — 리넷 → 마르텐 → 리넷
+   배경: 거너는 바깥 세계에서 이름난 몬스터 사냥꾼. 사냥감을 쫓아 숲에 왔지만,
+         이 숲의 몬스터는 나무껍질과 덩굴 갑옷 같은 질긴 몸을 지녀 보통 탄환이 박히지 않는다.
+   신규 NPC 리넷: 탐사대를 따라온 총포공. 설계도는 많지만 재료가 없어 만들지 못한 탄이 많다.
+   -------------------------------------------------------------------- */
+UQ('uq_g1',{cls:'gunner',npc:'리넷',minLv:18,name:'박히지 않는 탄',
+ story:'총포공 리넷은 이 숲의 몬스터들이 몸이 질겨 보통 탄환이 잘 박히지 않는다고 말합니다. 단단한 고목 목각병을 상대로 직접 확인해 보자고 합니다.',
+ brief:'고목 목각병을 10마리 처치하십시오.',
+ offer:['어, 총잡이네요? 반가워요! 이 숲에서 총 든 사람 보기 힘들거든요.','사냥감 쫓아서 여기까지 왔다면… 솔직히 말할게요. 이 숲 몬스터들은 몸이 질겨서 보통 탄은 튕겨 나가요. 특히 고목 목각병은 거의 통나무예요.','열 마리만 상대해 보세요. 뭐가 문제인지 직접 느껴 봐야 제 말을 믿죠.'],
+ going:['어때요, 탄이 튕기죠? 열 마리 채우고 와요.'],
+ ready:['총열 좀 봐요. …역시, 탄이 껍질에 막혀서 납이 다 뭉개졌네.'],
+ claim:['해결책은 "침탄"이에요. 탄두 끝을 바늘처럼 뾰족하게 깎아서 껍질을 뚫는 탄이요.','설계도는 벌써 다 그려 놨어요. 재료만 없었을 뿐이죠.'],
+ obj:{type:'kill',mon:'barkBeetle',need:10},reward:{exp:800,sp:10,gold:200},rt:'EXP 800 · SP 10 · 200G'});
+UQ('uq_g2',{cls:'gunner',npc:'리넷',prev:'uq_g1',name:'침탄의 재료',
+ story:'리넷은 껍질을 뚫는 침탄을 만들겠다고 합니다. 탄두 심에 쓸 강철 부리, 연기가 적은 화약을 만들 잿가루, 탄피에 녹일 무의 파편이 필요합니다.',
+ brief:'침탄에 쓸 재료를 모아 리넷에게 가져가십시오.',
+ offer:['재료 목록 불러 줄게요. 받아 적어요!','하나, 물총새의 강철 부리 한 개. 플뢰리스 메로스의 정예 물총새 부리는 쇠보다 단단해요. 그걸 깎아서 탄두 심으로 써요.','둘, 그림자 망령의 잿가루 네 개. 뤼멘-베인 그림자 망령이 흩어질 때 남는 가루인데, 화약에 섞으면 연기가 거의 안 나요. 숲에서 연기 피우면 몬스터가 다 몰려오거든요.','셋, 무의 파편 스무 개. 녹여서 탄피를 만들 거예요. 이건 아무 몬스터나 잡아도 나와요.'],
+ going:['아직 덜 모였네요. 부리는 정예 물총새만 갖고 있어요!'],
+ ready:['오오, 이 부리 광택 봐! 완벽해요.'],
+ claim:['탄두 깎고, 화약 다지고, 탄피 씌우고… 짠! 침탄 시제품이에요.','근데 하나 아쉬워요. 뚫고 들어가긴 하는데 한 방에 안 쓰러져요. 박힌 다음에 뭔가 더 해 줘야 하는데…','아! 마르텐 씨! 그 사람 약초뿐 아니라 독초도 엄청 잘 알아요.'],
+ obj:{parts:[{type:'collect',mon:'striderRider',item:'uq_gbeak',need:1,rate:1,elite:1},{type:'collect',mon:'shadowMoth',item:'uq_gash',need:4,rate:.5},{type:'have',item:'frag_n',need:20}]},
+ reward:{exp:1000,sp:12,gold:300},rt:'EXP 1000 · SP 12 · 300G'});
+UQ('uq_g3',{cls:'gunner',npc:'리넷',to:'마르텐',prev:'uq_g2',name:'약초상의 독',
+ story:'리넷은 침탄이 박힌 뒤 효과를 더할 방법으로 독을 떠올렸습니다. 침탄 시제품을 약초상 마르텐에게 보여 주어야 합니다.',
+ brief:'침탄 시제품을 약초상 마르텐에게 보여 주십시오.',
+ offer:['이 시제품, 마르텐 씨한테 보여 줘요. 탄두 끝에 홈을 파 뒀거든요. 거기 독을 채우면 될 것 같아요.','저요? 저는… 지난번에 그분 약초밭에 탄피를 떨어뜨려서 좀 혼났어요. 하하.'],
+ going:['마르텐 씨한테 시제품 보여 드렸어요?'],
+ ready:['리넷이 보냈군요. 탄환을… 약초상에게요?'],
+ claim:['…홈에 독을 채운다라. 무모하지만 영리한 생각이군요.','이 숲의 독 중에는 몸에 들어가면 상처가 아물지 않게 하는 것이 있습니다. 중독과 출혈을 함께 일으키지요.','만들어 드리지요. 다만 재료는 직접 구해 오셔야 합니다.'],
+ obj:{type:'talk',carry:'uq_gbullet'},reward:{exp:200},rt:'EXP 200'});
+UQ('uq_g4',{cls:'gunner',npc:'마르텐',prev:'uq_g3',name:'독을 바르는 법',
+ story:'마르텐은 중독과 출혈을 함께 일으키는 독을 조합해 주겠다고 합니다. 독 쐐기풀 가시와 독 개구리 병정의 독샘이 필요합니다.',
+ brief:'독 재료를 모아 마르텐에게 가져가십시오.',
+ offer:['독 쐐기풀 가시 다섯 개가 필요합니다. 샐바 로리스의 가시 덩굴 채찍에 박혀 있지요. 찔리면 상처가 쉽게 아물지 않습니다.','그리고 독 개구리 병정의 독샘 하나. 같은 정원의 정예 독 개구리 병정만 지니고 있습니다. 이것이 독을 몸 깊이 번지게 하지요.','둘을 섞으면, 박힌 자리부터 독이 퍼지고 피가 멎지 않습니다. …다루실 때 손을 조심하십시오.'],
+ going:['독샘은 정예 독 개구리 병정만 지니고 있습니다. 서두르지 마십시오.'],
+ ready:['잘 구해 오셨습니다. 가시가 아직 싱싱하군요.'],
+ claim:['…완성입니다. 침탄의 홈에 한 방울씩, 그 이상은 넣지 마십시오.','이것을 리넷에게 가져가십시오. 그리고 전해 주십시오. 약초밭 일은 이제 잊었다고요.'],
+ obj:{parts:[{type:'collect',mon:'thornVine',item:'uq_gthorn',need:5,rate:.5},{type:'collect',mon:'beeSoldier',item:'uq_gvenom',need:1,rate:1,elite:1}]},
+ reward:{exp:1100,sp:13,gold:400},rt:'EXP 1100 · SP 13 · 400G'});
+UQ('uq_g5',{cls:'gunner',npc:'리넷',prev:'uq_g4',name:'독침탄 시험 사격',
+ story:'독을 채운 침탄, 독침탄이 완성되었습니다. 리넷은 숲에서 가장 노련한 사냥꾼인 덩굴 사냥꾼을 상대로 시험 사격을 해 보자고 합니다.',
+ brief:'Expert 이상 난이도의 「그레니아-엘〈갈림길 쉼터〉」에서 던전 보스 「정예 덩굴 사냥꾼」을 쓰러뜨리십시오.',
+ offer:['마르텐 씨가 그렇게 말했어요? …헤헤, 다행이다.','자, 독침탄 완성! 이제 시험 사격만 남았어요.','그레니아-엘의 정예 덩굴 사냥꾼, 그놈 덩굴 갑옷이 이 숲에서 제일 질겨요. 사냥꾼 대 사냥꾼이네요. Expert 이상에서 그놈한테 박히면 합격!'],
+ going:['세 발 연속으로 쏘세요. 첫 발이 뚫고, 두 번째가 독을 넓히고, 세 번째가 끝내요.'],
+ ready:['어땠어요?! 박혔어요? 쓰러졌어요?'],
+ claim:['됐다! 덩굴 갑옷을 뚫었다니!','이제 정식 이름을 붙여 줄게요. 독을 품은 침탄 세 발 연속, 「독침탄」! 탄은 넉넉히 만들어 둘 테니 언제든 꺼내 쓰세요.','그리고… 고마워요. 제 설계도가 진짜 탄이 된 건 처음이에요.'],
+ obj:{type:'dboss',mon:'vineHunter',need:1,diff:1},reward:{skill:'gn_venom',gold:500},rt:'스킬 독침탄 · 500G'});
+
+/* --------------------------------------------------------------------
+   사제 · 「잠들지 못한 순찰대」 (4부작) — 테오란 → 리프 → 테오란
+   배경: 사제는 새벽 성당의 젊은 사제. "바람이 멈춘 숲에 잠들지 못한 영혼이 있다"는 계시가 내려와,
+         먼저 숲에 들어간 순례 사제 테오란을 돕도록 파견되었다.
+   신규 NPC 테오란: 같은 성당의 노사제. 숲 입구에서 부러진 지팡이가 발견된 요정 순찰대의 혼을 위로하려 한다.
+   -------------------------------------------------------------------- */
+UQ('uq_p1',{cls:'priest',npc:'테오란',minLv:18,name:'잠들지 못한 순찰대',
+ story:'순례 사제 테오란은 갈림길 쉼터를 떠도는 숲 순찰대의 잔영들이 아직 잠들지 못했다고 말합니다. 잔영을 쉬게 해 주고, 그들이 남긴 휘장을 모아 와야 합니다.',
+ brief:'숲 순찰대 잔영을 8마리 처치하고, 「빛바랜 순찰대 휘장」 3개를 모아 오십시오.',
+ offer:['오, 성당에서 보낸 사제가 그대였군요. 먼 길 오느라 고생 많았습니다.','부른 까닭을 말씀드리지요. 그레니아-엘 갈림길에 요정 순찰대의 잔영이 떠돌고 있습니다. 숲 입구에서 부러진 지팡이가 발견된, 바로 그 순찰대입니다.','그들은 악령이 아닙니다. 끝내 지키지 못한 길을 아직 지키고 있을 뿐이지요. 여덟을 쉬게 해 주시고, 그들이 남기는 휘장을 셋 거두어 오십시오.'],
+ going:['잔영을 쓰러뜨릴 때 미워하지 마십시오. 수고했다고, 이제 쉬어도 된다고 말해 주십시오.'],
+ ready:['돌아왔군요. 휘장에서 아직 숲 내음이 나는군요.'],
+ claim:['…이 휘장의 문양은 제가 아는 어떤 교단의 것과도 다릅니다. 요정들의 것이겠지요.','이들을 온전히 잠재우려면 그들의 이름과 노래를 알아야 합니다. 대현자 리프 님이라면 아실지 모릅니다.'],
+ obj:{parts:[{type:'kill',mon:'patrolWraith',need:8},{type:'collect',mon:'patrolWraith',item:'uq_pbadge',need:3,rate:.45}]},
+ reward:{exp:1100,sp:14,gold:300},rt:'EXP 1100 · SP 14 · 300G'});
+UQ('uq_p2',{cls:'priest',npc:'테오란',to:'리프',prev:'uq_p1',name:'대현자의 기억',
+ story:'테오란은 순찰대를 온전히 잠재우려면 그들의 이름과 노래를 알아야 한다고 했습니다. 순찰대 휘장 한 점을 대현자 리프에게 보여 주어야 합니다.',
+ brief:'순찰대 휘장을 대현자 리프에게 보여 주십시오.',
+ offer:['이 휘장 한 점을 리프 님께 보여 드리십시오. 나머지는 제가 정성껏 보관해 두겠습니다.'],
+ going:['리프 님께 휘장을 보여 드렸습니까?'],
+ ready:['그 휘장은…'],
+ claim:['…샐벨리아 바람 순찰대의 휘장입니다. 바람길을 따라 숲을 돌며, 길 잃은 이를 쉼터의 등불까지 데려다주던 이들이었지요.','바람이 잦아들던 날, 그들은 마지막까지 갈림길의 요정 등불을 지키다 돌아오지 못했습니다.','그들을 잠재울 노래는 「성역의 노래」입니다. 꺼진 등불을 다시 밝히고 그 빛 안에서 부르면, 순찰대는 비로소 임무를 내려놓을 것입니다. 등불에 필요한 것을 알려 드리지요.'],
+ obj:{type:'talk',carry:'uq_pbadge2'},reward:{exp:300},rt:'EXP 300'});
+UQ('uq_p3',{cls:'priest',npc:'리프',to:'테오란',prev:'uq_p2',name:'성역의 등불',
+ story:'리프는 갈림길의 꺼진 요정 등불을 다시 밝혀야 순찰대가 잠들 수 있다고 했습니다. 등불의 재료를 모아 테오란에게 가져가면 축복을 담아 줄 것입니다.',
+ brief:'요정 등불을 밝힐 재료를 모아 테오란에게 가져가십시오.',
+ offer:['요정 등불은 기름이 아니라 빛으로 탑니다.','휘광 파편 여덟 개. 빛의 기운을 띤 몬스터에게서 드물게 얻거나, 장비를 해체해 얻을 수 있습니다.','꽃봉오리 요정의 꽃가루 네 개. 샐바 로리스의 꽃봉오리 요정들이 지닌 꽃가루는 빛을 오래 머금습니다.','그리고 샐바-베인의 정예 숲 솔새가 지닌 은빛 깃 하나. 등불의 심지로 엮을 것입니다.','모두 모이면 테오란 님께 가져가십시오. 빛에 기도를 담는 일은 사제의 몫입니다.'],
+ going:['서두르지 마십시오. 순찰대는 오래 기다려 왔으니, 조금 더 기다릴 수 있습니다.'],
+ ready:['리프 님께 노래의 이름을 들었다고요? 그렇다면 이것이 등불의 재료로군요.'],
+ claim:['파편을 갈아 꽃가루와 섞고, 은빛 깃으로 심지를 엮어…','…자, 이 등불에 축복을 담았습니다. 하지만 노래는 제가 아니라 그대가 불러야 합니다.','그대가 성당에서 처음 배운 기도를 기억하십니까? 성역의 노래는 그 기도와 같은 뿌리에서 나왔습니다.'],
+ obj:{parts:[{type:'have',item:'frag_light',need:8},{type:'collect',mon:'budFairy',item:'uq_ppollen',need:4,rate:.5},{type:'collect',mon:'wingBug',item:'uq_pfeather',need:1,rate:1,elite:1}]},
+ reward:{exp:1500,sp:16,gold:400},rt:'EXP 1500 · SP 16 · 400G'});
+UQ('uq_p4',{cls:'priest',npc:'테오란',prev:'uq_p3',name:'성역의 노래',
+ story:'축복을 담은 요정 등불이 준비되었습니다. 갈림길 쉼터로 가서 등불을 밝히고 성역의 노래를 불러, 순찰대를 잠재워야 합니다.',
+ brief:'「그레니아-엘〈갈림길 쉼터〉」를 Expert 이상 난이도로 클리어하십시오.',
+ offer:['갈림길의 석등에 이 등불을 옮겨 붙이십시오. Expert 이상 난이도로 쉼터 끝까지 가셔야 합니다.','길을 막는 이들이 있을 겁니다. 하지만 등불이 켜지면, 잔영들은 싸우기를 멈추고 그대의 노래를 들을 것입니다.','두려워 마십시오. 그대의 기도는 제 기도보다 맑습니다.'],
+ going:['노래는 크게 부르지 않아도 됩니다. 진심이면 충분합니다.'],
+ ready:['…바람이 불어오는군요. 갈림길 쪽에서요.'],
+ claim:['순찰대가 잠들었습니다. 그들이 지키던 바람길이 다시 열렸군요.','그대가 부른 노래는 이제 그대의 기도가 되었습니다. 아군을 감싸고 치유하는 빛의 울타리, 「성역」입니다.','성당에 보낼 편지에는 이렇게 쓰겠습니다. 바람이 멈춘 숲에, 젊은 사제가 다시 바람을 불러왔다고요.'],
+ obj:{type:'clear',zone:'a1z1',dg:8,need:1,diff:1},reward:{skill:'pr_sanct',gold:500},rt:'스킬 성역 · 500G'});
+
+
 QUESTS.r_echo={name:'마력 잔향 수집',npc:'에르시안',type:'rep',
   story:'경계 보스가 쓰러질 때 흩어지는 일렁이는 마력 잔향을 다섯 개 모아 오면, 경계-이면으로 통하는 시렌스의 경계석 한 개로 바꿔 드립니다. 이 의뢰는 완료해도 다시 받을 수 있습니다.',
   brief:'일렁이는 마력 잔향 5개를 가져오십시오.',
@@ -7805,10 +7944,32 @@ Object.assign(QUESTS,{
   brief:'휘광 파편 30개를 모아 오십시오.',
   say:{offer:['파편은 무의만 있는 게 아니에요. 홍염, 냉기, 암영, 휘광 — 속성 파편은 조금 귀하죠.','그중 휘광 파편을 서른 개 모아 오세요. 속성 파편은 몬스터가 드물게 떨구고, 레어 이상 장비를 해체해도 나옵니다.'],going:['휘광 파편이 아직 모자라요. 서두를 것 없어요.'],ready:['반짝이는 게 잔뜩이네요. 고마워요.'],done:['앞으로도 파편이 쌓이면 들러 주세요.'],accept:['부탁할게요.']},
   obj:{type:'have',item:'frag_light',need:30},reward:{gold:800,mat:{frag_n:30}},rewardText:'800G · 무의 파편 30개'}});
-TOWNS.salv.npcs[0][3]=['e1','e2','e3','e4','q_fire','q_hunt','u_m1','u_m2','u_m3','u_m4','u_p1','u_p2','u_p3','u_p4','a_clean','a_border','a_guard'];
+TOWNS.salv.npcs[0][3]=['e1','e2','e3','e4','q_hunt','a_clean','a_border','a_guard'];
+/* v0.5.28 고유 퀘스트 담당 신규 NPC (일러스트가 생기기 전까지는 실루엣으로 보입니다) */
+TOWNS.salv.npcs.push(['떠돌이 권사 바룬','권법 수련 · 고유 의뢰','"주먹은 거짓말을 안 하지. 몸이 근질거리면 언제든 와라."',[]],
+ ['총포공 리넷','총기 정비 · 고유 의뢰','"총이든 탄이든 고장 났으면 가져와요. 녹 하나 없이 돌려드릴게요."',[]],
+ ['순례 사제 테오란','순례 · 축복 · 고유 의뢰','"바람이 멎은 숲에는 길 잃은 마음도 많지요. 지친 분은 잠시 쉬어 가십시오."',[]]);
+NPC_GENDER['떠돌이 권사 바룬']='M'; NPC_GENDER['총포공 리넷']='F'; NPC_GENDER['순례 사제 테오란']='M';
+/* 고유 퀘스트는 의뢰인(q.npc)의 목록에 자동으로 들어갑니다 */
+Object.keys(QUESTS).filter(id=>/^uq_/.test(id)).forEach(id=>{const q=QUESTS[id]; for(const k in TOWNS){const n=TOWNS[k].npcs.find(n=>npcNameOf(n[0])[1]===q.npc); if(n){n[3]=n[3]||[]; if(!n[3].includes(id))n[3].push(id); break;}}});
 
-function qVisible(id){const q=QUESTS[id], st=qState(id); if(q.cls&&!S.heroes.some(h=>h.cls===q.cls&&(st||h.lv>=(q.minLv||0))))return false; if(q.prev&&!st&&!(qState(q.prev)&&qState(q.prev).st==='done'))return false; return true;}
-function qGoal(id){const q=QUESTS[id], o=q.obj, p=qProg(id); if(o.type==='collect'||o.type==='have')return `${MATS[o.item].name} ${p}/${o.need}`; if(o.type==='clear'){const z=zoneById(o.zone), d=z&&z.dungeons[o.dg]; return `「${d?d.name:'던전'}」${o.diff?' '+DIFFS[o.diff].name+' 이상':''} 클리어 ${p}/${o.need}`;} if(o.mon)return `${MONS[o.mon].name} 처치 ${p}/${o.need}`; return `몬스터 처치 ${p}/${o.need}`;}
+/* 고유 퀘스트는 내 캐릭터(동료 제외)의 직업만 봅니다 */
+function qClsOk(q,st){ if(!q.cls)return true; const hs=q.type==='unique'?S.heroes.slice(0,1):S.heroes; return hs.some(h=>h.cls===q.cls&&(st||h.lv>=(q.minLv||0))); }
+function qVisible(id){const q=QUESTS[id], st=qState(id); if(!qClsOk(q,st))return false; if(q.prev&&!st&&!(qState(q.prev)&&qState(q.prev).st==='done'))return false; return true;}
+function npcFull(sh){for(const k in TOWNS){const n=TOWNS[k].npcs.find(n=>npcNameOf(n[0])[1]===sh); if(n)return n[0];} const rn=(typeof REST_NPCS!=='undefined')&&REST_NPCS.find(n=>npcNameOf(n[0])[1]===sh); return rn?rn[0]:sh;}
+function npcShortOf(n){return npcNameOf(n[0])[1];}
+/* NPC가 보여 줄 의뢰: 자기가 주는 의뢰 + 자기에게 보고하러 온(완료 가능) 의뢰 */
+function npcQIds(n){const sh=npcShortOf(n), own=(n[3]||[]).filter(id=>QUESTS[id]); return own.concat(Object.keys(QUESTS).filter(id=>!own.includes(id)&&QUESTS[id].to===sh&&qReady(id)));}
+function qStatusAt(id,n){const s=qStatus(id), q=QUESTS[id]; if(q.to&&n&&npcShortOf(n)!==q.to&&(s[0]==='ready'||s[0]==='going'))return ['going',s[0]==='ready'?npcNameOf(npcFull(q.to))[1]+'에게 보고':'진행 중']; return s;}
+function qPartGoal(id,i){const q=QUESTS[id], o=qParts(q)[i], p=qPartProg(id,i), need=o.need||1, dt=o.diff?' ('+DIFFS[o.diff].name+' 이상)':'';
+ if(o.type==='collect'||o.type==='have')return `${MATS[o.item].name} ${p}/${need}`;
+ if(o.type==='clear'){const z=zoneById(o.zone), d=z&&z.dungeons[o.dg]; return `「${d?d.name:'던전'}」${o.diff?' '+DIFFS[o.diff].name+' 이상':''} 클리어 ${p}/${need}`;}
+ if(o.type==='talk')return `${npcFull(q.to)}에게 가서 이야기하기`;
+ if(o.type==='pay')return `${fmtG(need)}골드 (보고할 때 납부${(S.gold||0)>=need?'':' · 골드 부족'})`;
+ if(o.type==='dboss'){const d=dgOfNamed(o.mon); return `${d?'「'+d.name+'」 ':''}던전 보스 정예 ${MONS[o.mon].name} 처치${dt} ${p}/${need}`;}
+ if(o.mon)return `${MONS[o.mon].name} 처치${dt} ${p}/${need}`;
+ return `몬스터 처치${dt} ${p}/${need}`;}
+function qGoal(id){const P=qParts(QUESTS[id]); if(P.length===1)return qPartGoal(id,0); return P.map((o,i)=>{const ok=qPartDone(id,i); return `<span class="qpart${ok?' ok':''}">${ok?'✔':'·'} ${qPartGoal(id,i)}</span>`;}).join('<br>');}
 const fmtG=n=>Number(n||0).toLocaleString('en-US');
 function goldIcon(sz){const c=(x,y,r)=>`<ellipse cx="${x}" cy="${y+1.4}" rx="${r}" ry="${r*.55}" fill="#9a6c10"/><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*.55}" fill="#f2c540" stroke="#fff0a8" stroke-width=".8"/><ellipse cx="${x}" cy="${y}" rx="${r*.6}" ry="${r*.3}" fill="none" stroke="#b88414" stroke-width=".7"/>`;
  return `<span class="cic" style="${sz?`width:${sz}px;height:${sz}px`:'width:86%;height:86%'}"><svg viewBox="0 0 32 32" width="100%" height="100%">${c(9,23,5.6)}${c(21,24,5.6)}${c(15,19,5.8)}${c(9,14.5,5.2)}${c(21,15,5.2)}${c(15,9.5,5.6)}</svg></span>`;}
@@ -7822,7 +7983,7 @@ const QTRK_TOP=184; // 마을·성소·던전 어디서나 같은 자리 (던전
 function qTrackSync(force){ try{
  const sc=(typeof SCREEN!=='undefined')?SCREEN:'', show=S&&S.heroes&&S.heroes.length&&(sc==='rest'||sc==='battle'||sc==='map'||(sc==='town'&&S.tab==='home'));
  let el=document.getElementById('qtrk'); const ids=show?qPins():[];
- const html=ids.map(id=>`<div class="tqs">${qBadge(id)} <b>${QUESTS[id].name}</b><br>${qReady(id)?`<span style="color:#7dffa0">완료 — ${QUESTS[id].npc}에게 보고하십시오</span>`:qGoal(id)}</div>`).join('');
+ const html=ids.map(id=>`<div class="tqs">${qBadge(id)} <b>${QUESTS[id].name}</b><br>${qReady(id)?`<span style="color:#7dffa0">완료 — ${npcFull(QUESTS[id].to||QUESTS[id].npc)}에게 보고하십시오</span>`:qGoal(id)}</div>`).join('');
  const open=!(S&&S.qtrkHide), sig=sc+'|'+open+'|'+html;
  if(sig!==QTRK_SIG||force){ QTRK_SIG=sig;
   if(!html){ if(el)el.remove(); return; }
@@ -7851,14 +8012,14 @@ function rewardIcons(id){const q=QUESTS[id], w=q.reward||{}, o=[];
  if(w.title){const T=TITLES[w.title]; o.push(rwCell(medalIcon(),null,'칭호 「'+T.name+'」',T.desc+' · '+titleBonusText(T)));}
  return `<div class="rwrow">${o.join('')}</div>`;}
 function npcBadge(n){ // ! = 완료할 퀘스트 / ? = 받을 수 있는 퀘스트 (색: 고유→에픽→업적→일반·반복 순으로 중요한 분류)
- const ids=(n[3]||[]).filter(id=>QUESTS[id]&&qVisible(id)); if(ids.some(id=>qStatus(id)[0]==='ready'))return '<i class="npcl-bang">!</i>';
- const nw=ids.filter(id=>qStatus(id)[0]==='new'); if(!nw.length)return '';
+ const ids=npcQIds(n).filter(id=>QUESTS[id]&&qVisible(id)); if(ids.some(id=>qStatusAt(id,n)[0]==='ready'))return '<i class="npcl-bang">!</i>';
+ const nw=ids.filter(id=>qStatusAt(id,n)[0]==='new'); if(!nw.length)return '';
  const ty=['unique','epic','achv','normal','rep'].find(t=>nw.some(id=>(QUESTS[id].type||'normal')===t)); return `<i class="npcl-bang npcl-q" style="--qc:${QTYPE[ty][1]}">?</i>`;}
 function qBadge(id){const t=QTYPE[QUESTS[id].type||'normal']; return `<span class="qtb" style="color:${t[1]};border-color:${t[1]}">${t[0]}</span>`;}
-function questOnClear(dg){ if(!S||!S.qs)return; for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active'||q.obj.type!=='clear')continue; if(q.obj.zone===dg.zone&&q.obj.dg===dg.idx&&(q.obj.diff||0)<=DIFFS.indexOf(R.diff)&&qProg(id)<q.obj.need){st.n=(st.n||0)+1; save();}}}
+function questOnClear(dg){ if(!S||!S.qs)return; for(const id in QUESTS){const q=QUESTS[id], st=S.qs[id]; if(!st||st.st!=='active')continue; qParts(q).forEach((o,i)=>{ if(!o||o.type!=='clear'||qPartDone(id,i))return; if(o.zone===dg.zone&&o.dg===dg.idx&&(o.diff||0)<=DIFFS.indexOf(R.diff)){qBump(id,i); save();}});}}
 function openQuestLog(){
  const TORD=['unique','normal','epic','achv','rep'], ids=Object.keys(QUESTS).filter(id=>qState(id)&&qState(id).st==='active').sort((a,b)=>TORD.indexOf(QUESTS[a].type||'normal')-TORD.indexOf(QUESTS[b].type||'normal')), done=Object.keys(QUESTS).filter(id=>qState(id)&&qState(id).st==='done');
- const row=id=>{const q=QUESTS[id]; return `<div class="ql-row"><div class="ql-t">${qBadge(id)} <b>${q.name}</b> <span class="nq-st ${qStatus(id)[0]}">${qStatus(id)[1]}</span><span class="dim" style="margin-left:auto;font-size:11.5px">의뢰인: ${q.npc}</span><button class="ql-pin ${qPins().includes(id)?'on':''}" data-pin="${id}" title="화면에 항상 표시되는 퀘스트 알리미 (최대 3개)">${qPins().includes(id)?'★ 알리미':'☆ 알리미'}</button></div><div class="ql-b">${q.brief}</div>${q.obj.type==='collect'?`<div class="ql-s">${matSource(q)}</div>`:''}<div class="ql-g"><span>목표: ${qGoal(id)}</span><span class="rwl">보상 ${rewardIcons(id)}</span></div></div>`;};
+ const row=id=>{const q=QUESTS[id]; return `<div class="ql-row"><div class="ql-t">${qBadge(id)} <b>${q.name}</b> <span class="nq-st ${qStatus(id)[0]}">${qStatus(id)[1]}</span><span class="dim" style="margin-left:auto;font-size:11.5px">의뢰인: ${q.npc}${q.to&&q.to!==q.npc?' → 보고: '+q.to:''}</span><button class="ql-pin ${qPins().includes(id)?'on':''}" data-pin="${id}" title="화면에 항상 표시되는 퀘스트 알리미 (최대 3개)">${qPins().includes(id)?'★ 알리미':'☆ 알리미'}</button></div><div class="ql-b">${q.brief}</div>${matSource(q)?`<div class="ql-s">${matSource(q)}</div>`:''}<div class="ql-g"><span>목표: ${qParts(q).length>1?'<br>':''}${qGoal(id)}</span><span class="rwl">보상 ${rewardIcons(id)}</span></div></div>`;};
  modal(`<div class="ql"><div class="ql-h"><b>퀘스트</b><button id="qlx">닫기</button></div><div class="ql-body">${ids.length?ids.map(row).join(''):'<div class="dim" style="padding:20px;text-align:center">진행 중인 퀘스트가 없습니다. 마을의 NPC에게서 의뢰를 받으십시오.</div>'}${done.length?`<div class="ql-sep">완료한 퀘스트</div>`+done.map(id=>`<div class="ql-done">${qBadge(id)} ${QUESTS[id].name}</div>`).join(''):''}</div></div>`,ov=>{ov.classList.add('qlog'); ov.querySelector('#qlx').onclick=()=>ov.remove(); ov.querySelectorAll('[data-pin]').forEach(b=>b.onclick=()=>{ if(qPinToggle(b.dataset.pin)||true){ const pins=qPins(); ov.querySelectorAll('[data-pin]').forEach(x=>{const on=pins.includes(x.dataset.pin); x.classList.toggle('on',on); x.textContent=on?'★ 알리미':'☆ 알리미';}); } });});
 }
 
