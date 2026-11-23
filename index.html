@@ -1420,7 +1420,7 @@ body.bt .overlay.qlog,body.bt .overlay.auglist,body.bt .overlay.qlog>.modal,body
 #bhudB .bh-tags{align-items:center;overflow:visible}
 #postclr .pc-en{text-align:center;font:italic 900 22px/1 Georgia,'Times New Roman',serif;letter-spacing:4px;color:#ffe08a;text-shadow:0 0 10px #ffb40088,0 2px 3px #000,0 0 2px #000;margin:0 0 2px}
 #app #bhudB .qcell.off,#app .bhud .qcell.on.off{filter:grayscale(.95) brightness(.5)!important;opacity:.8}
-#bQuit,#bQuitB,#rQuit{color:#ff4a3a!important;text-shadow:0 0 4px #000,0 1px 2px #000;font-weight:800}
+#bQuit,#bQuitB,#rQuit{color:#ff9a3c!important;text-shadow:0 0 4px #000,0 1px 2px #000;font-weight:800}
 .icell>*{pointer-events:none}.icell img{-webkit-user-drag:none;user-select:none}.icell{cursor:pointer;user-select:none}
 .tqwrap{z-index:40!important}
 #gtip{z-index:2000!important}
@@ -1824,7 +1824,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.76';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.77';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6675,7 +6675,10 @@ function bexpHtml(){const h=(R&&R.party.find(p=>p.h.ctrl!=='AI')||R.party[0]).h,
  return `<div class="bexp" title="EXP ${h.exp} / ${need}"><b>Lv.${h.lv}</b><span class="bexp-b"><i style="width:${pc.toFixed(1)}%"></i><i class="pend" style="left:${pc.toFixed(1)}%;width:${pend.toFixed(1)}%"></i></span><small>${pc.toFixed(1)}%${R.exp?` (+${Math.round(R.exp*expRate(h,R.dg))} 획득 예정)`:''}</small></div>`;}
 function exp10Html(pc,pend){ return `<i class="x10f" style="width:${(+pc).toFixed(2)}%"></i>${pend>0?`<i class="x10p" style="left:${(+pc).toFixed(2)}%;width:${(+pend).toFixed(2)}%"></i>`:''}<b class="x10g"></b>`; }
 function lootPosApply(){ const a=$('#bhudB'), hp=!!(S&&S.opt&&S.opt.lootPos==='hp'); if(!a)return; a.classList.toggle('lootHp',hp); const ap=$('#app'); if(ap)ap.classList.toggle('lootHp',hp);
- const Ln=a.querySelector('#bhLoot'); if(Ln&&ap){ ap.querySelectorAll(':scope>#bhLoot').forEach(x=>x.remove()); ap.appendChild(Ln); } const L=$('#bhLoot'); const tg=$(hp?'#einfoTog':'#infoTog'); if(L&&tg){ const w=(tg.offsetWidth||90)+14; L.style.left=hp?w+'px':'auto'; L.style.right=hp?'auto':w+'px'; } }
+ const Ln=a.querySelector('#bhLoot'); if(Ln&&ap){ ap.querySelectorAll(':scope>#bhLoot').forEach(x=>x.remove()); ap.appendChild(Ln); } const L=$('#bhLoot'); const tg=$(hp?'#einfoTog':'#infoTog'); if(L&&tg){ const w=(tg.offsetWidth||90)+14; L.style.left=hp?w+'px':'auto'; L.style.right=hp?'auto':w+'px';
+   // MP 구슬 쪽(기본): [모두 줍기] 왼쪽 끝을 위의 전투로그 창 왼쪽 끝선에 맞춤
+   const card=$('#infocard'); if(!hp&&card&&ap){ const cs=getComputedStyle(card), rt=parseFloat(cs.right), cw=card.offsetWidth||parseFloat(cs.width)||0;
+     if(cw>0&&isFinite(rt)){ L.style.right='auto'; L.style.left=Math.round(ap.clientWidth-rt-cw)+'px'; } } } }
 window.addEventListener('resize',()=>{try{lootPosApply();}catch(e){}});
 function updateBexp(){const e=$('#bexpw'); if(e&&R)e.innerHTML=bexpHtml(); const x=$('#bhExp'); if(x&&R){const h=(R.party.find(p=>p.h.ctrl!=='AI')||R.party[0]).h, need=expNeed(h.lv), pc=Math.min(100,h.exp/need*100), pend=R.exp?Math.min(100-pc,R.exp*expRate(h,R.dg)/need*100):0;
  x.title=`EXP ${h.exp} / ${need}`; { const z=$('#bhX10'); if(z){ z.innerHTML=exp10Html(pc,pend); z.setAttribute('data-tip',`<b>Lv.${h.lv}</b> EXP ${h.exp} / ${need} (${pc.toFixed(1)}%)${R.exp?`<br>이번 던전 +${Math.round(R.exp*expRate(h,R.dg))}`:''}`); } } x.innerHTML=`<div class="bx"><b>${h.lv}</b><div class="bxt"><i style="width:${pc.toFixed(1)}%"></i><i class="pend" style="left:${pc.toFixed(1)}%;width:${pend.toFixed(1)}%"></i></div><span>${pc.toFixed(1)}%${R.exp?` (+${Math.round(R.exp*expRate(h,R.dg))})`:''}</span></div>`;}}
