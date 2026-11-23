@@ -1308,8 +1308,9 @@ body .lw-x:hover,body .iw-x:hover{filter:brightness(1.2)}
  .npcl-list .npcl-card>b{margin-top:-46px!important;background:linear-gradient(180deg,rgba(23,17,9,0),rgba(23,17,9,.82) 45%)!important;border-top:0!important;padding-top:14px!important;z-index:1}
  .npcl-list .npcl-card>small{background:rgba(23,17,9,.82)!important;z-index:1}
  .npcl-list .npcl-grid .npcl-face canvas.npcl-ph,.npcl-list .npcl-grid.many .npcl-face canvas.npcl-ph{left:50%!important;right:auto!important;width:auto!important;transform:translateX(-50%)}
- .npcl-list .npcl-h span{font-family:inherit!important;font-weight:700;letter-spacing:.5px;font-size:20px!important}
- .npcl-list .npcl-h{height:70px!important;margin-bottom:10px!important;background-size:auto 100%!important}
+ .npcl-list .npcl-h{height:76px!important;margin-bottom:10px!important}
+ .npcl-list .npcl-h span{position:absolute;left:0;right:0;top:50%;transform:translateY(-46%);margin:0!important;text-align:center;font-family:inherit!important;font-size:22px!important;font-weight:700!important;letter-spacing:1px;color:#f2dca8!important;text-shadow:0 0 6px rgba(0,0,0,.9),0 2px 2px #000!important;pointer-events:none}
+ .npcl-list .npcl-h span b{font-weight:700!important}
  .npcl-list .npcl-btns{margin-top:5px}}
 /* v0.5.44: 의뢰 창 — 대사창은 아래에 겹쳐 뜨고, 위쪽 두 패널은 창 높이를 전부 씀 */
 @media(min-width:701px){.nq{height:min(900px,calc(100% - 44px))!important}
@@ -1908,7 +1909,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.46';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.47';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
