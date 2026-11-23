@@ -1887,7 +1887,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.19';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.20';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -5645,6 +5645,10 @@ function startZone(zid){
 function zoneSaveNow(){
  if(!ZR)return; S.zoneSave={zone:ZR.zone,mods:ZR.mods,augs:ZR.augs,skAug:[...ZR.skAug],done:ZR.done,diff:ZR.diff,sel:ZR.sel,augPlan:ZR.augPlan,augGot:ZR.augGot,pity:ZR.pity||0,hp:ZR.hp,at:Date.now()}; save();
 }
+function soloSync(){ // 고독한 용사: 실제 파티 인원이 1명일 때만 유지 (파티원이 늘면 빼고, 줄면 다시 줌)
+ if(!ZR)return; const solo=S.heroes.length===1, i=ZR.augs.findIndex(a=>a.id==='solo');
+ if(solo&&i<0){ZR.mods.dr+=.15; ZR.augs.unshift({id:'solo',name:'고독한 용사',desc:'1인 보정: 받는 피해 -15%'});}
+ else if(!solo&&i>=0){ZR.augs.splice(i,1); ZR.mods.dr=Math.max(0,ZR.mods.dr-.15);} }
 function zoneLoad(){
  const z=S.zoneSave; if(!z)return false;
  ZR={zone:z.zone,mods:Object.assign(newMods(),z.mods),augs:z.augs||[],skAug:new Set(z.skAug||[]),done:z.done||[],diff:z.diff||0,sel:z.sel||0,augPlan:z.augPlan||planAugs(),augGot:z.augGot||[],pity:z.pity||0,hp:z.hp||{},dsel:{}};
@@ -5795,7 +5799,7 @@ function tabZone(c){
 
 /* ---------- 성소 ---------- */
 let REST_RAF=0;
-function renderRest(app){
+function renderRest(app){ try{soloSync();}catch(e){}
  if(!ZR){go('town');return;}
  const z=zoneById(ZR.zone), tab=S.restTab||'rest';
  app.className='townfs rest tab-'+(tab==='rest'?'home':tab);
@@ -6006,6 +6010,7 @@ function enterDungeon(dg){ showDungeonLoading(dg,()=>enterDungeonNow(dg)); }
 function fbRewind(){ ['field','boss'].forEach(k=>{ try{ if(FB.el[k])FB.el[k].currentTime=0; }catch(e){} }); }
 function enterDungeonNow(dg){
  try{fbRewind();}catch(e){}
+ soloSync();
  const D=ZR.iso?isoDiff(DIFFS[ZR.diff]):DIFFS[ZR.diff];
  const hp=ZR.hp||{}; R={augStat:{},st:{hits:0,miss:0,crit:0,multi:0,kills:0,taken:0,sk:{},rounds:0,fights:0},iso:!!ZR.iso,isoWolf:!!ZR.iso&&Math.random()<ISO_WOLF_RATE,dg,diff:D,mods:ZR.mods,augs:ZR.augs,skAug:ZR.skAug,gold:0,exp:0,party:S.heroes.map(h=>({h,hpR:hp[h.id]?hp[h.id].hpR:1,mpR:hp[h.id]?hp[h.id].mpR:1})),map:genLayout(dg),pos:null,items:[]};
  R.augOK=(ZR.augPlan||[]).includes(dg.idx)&&!ZR.done.includes(dg.idx);
