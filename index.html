@@ -1815,7 +1815,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.69';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.70';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6116,9 +6116,8 @@ function awakenCut(u){
   document.querySelectorAll('.awk').forEach(e=>e.remove());
   const d=document.createElement('div'); d.className='awk'; d.style.setProperty('--awd',AWK_MS+'ms');
   const hp=AWK_HAND[cls]||[.78,.3];
-  d.innerHTML=`<div class="awk-dim"></div><div class="awk-art"><div class="awk-burst" style="left:${hp[0]*100}%;top:${hp[1]*100}%">${awkBurstSvg()}</div><img src="${AWK_ART[cls]}" alt=""></div><div class="awk-flash"></div>`;
+  d.innerHTML=`<div class="awk-dim"></div><div class="awk-art"><div class="awk-burst" style="left:${hp[0]*100}%;top:${hp[1]*100}%">${awkBurstSvg()}</div><img src="${AWK_ART[cls]}" alt=""></div>`;
   document.body.appendChild(d);
-  try{sfx('awaken');}catch(e){}
   setTimeout(()=>{ try{ if(B)B.shake=Math.max(B.shake||0,9); }catch(e){} },220);
   setTimeout(()=>d.remove(),AWK_MS+60);
   return AWK_MS;
