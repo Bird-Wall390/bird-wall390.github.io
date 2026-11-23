@@ -2042,7 +2042,7 @@ body button.dsbtn,.dsbtn{font-family:var(--dsf,'Gaegu'),'Do Hyeon','Malgun Gothi
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.69';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.70';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6165,8 +6165,8 @@ function renderDSel(app){
   ${z.dungeons.map((d,i)=>{const op=dgOpen(z,i), dn=p.dd[i]||0, cl=dn>=1;
    const nd=i===ZR.sel?ZR.diff:(ZR.dsel[i]!=null?ZR.dsel[i]:dgTop(z,i)), isSel=i===ZR.sel;
    return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${isSel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
-    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${isSel&&nd>=3?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>4명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div>`:''}</div></div>`;}).join('')}
-  ${ZR.diff>=3?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
+    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${isSel&&nd>=2?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>'+(nd>=3?4:3)+'명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div>`:''}</div></div>`;}).join('')}
+  ${ZR.diff>=2?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso"><i>☠</i>${iso?'경계-이면 끄기':'경계-이면 켜기'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div><button type="button" class="dsfbtn" id="dFont">Aa 글꼴 선택</button>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
@@ -6179,7 +6179,7 @@ function renderDSel(app){
    pn.querySelectorAll('.dsfi').forEach(b=>b.onclick=()=>{ S.opt.dsFont=b.dataset.f; save(); fx(); pn.querySelectorAll('.dsfi').forEach(x=>x.classList.toggle('on',x===b)); });
   }; }
  $('#dIso').onclick=()=>isoErode(()=>{ZR.iso=!ZR.iso; render();});
- $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{const nx=Math.min(dgTop(z,ZR.sel),ZR.diff+1); ZR._siren=(ZR.diff===2&&nx===3); ZR.dsel[ZR.sel]=nx; render();};
+ $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{const nx=Math.min(dgTop(z,ZR.sel),ZR.diff+1); ZR._siren=false; ZR.dsel[ZR.sel]=nx; render();};
  app.querySelectorAll('canvas.wth').forEach(cv=>{const d=z.dungeons[+cv.dataset.th], th=themeThumb(d,240,90); cv.width=th.width; cv.height=th.height; cv.getContext('2d').drawImage(th,0,0);});
  app.querySelectorAll('canvas.wbp').forEach(cv=>{const d=z.dungeons[+cv.dataset.bp], key=d.boss||d.named; if(!key||!MONS[key])return; cv.width=160; cv.height=180; const g=cv.getContext('2d'); g.imageSmoothingEnabled=false;
   try{const T=document.createElement('canvas'); T.width=T.height=520; const tg=T.getContext('2d'); tg.imageSmoothingEnabled=false; drawUnitSprite(tg,{kind:'mon',mon:key,face:-1,hp:1,maxhp:1,st:{},buffs:[]},260,470,5.2,{t:0});
