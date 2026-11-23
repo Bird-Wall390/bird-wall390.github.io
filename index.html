@@ -1949,13 +1949,52 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 #bhudB #bhHub>button.sk2b{height:88px!important}
 #bhudB .bh-l .qrow,#bhudB .bh-r>.sk2wrap>.qrow:not(.sk2row){height:88px!important;box-sizing:border-box;align-items:center;margin-bottom:3px}
 #bhudB .bh-l .qcell,#bhudB .bh-r .qcell{height:68px!important}
+/* v0.5.65 던전 카드 (킹스로드 스타일) */
+.wplate.dcard{display:block!important;overflow:visible!important;width:188px!important;height:auto!important;padding:0!important;border:2px solid var(--bc,#b8924f)!important;border-radius:7px!important;background:#120c08!important;box-shadow:0 0 0 1px #000,0 3px 10px rgba(0,0,0,.65)!important;white-space:normal}
+.wplate.dcard::after{display:none!important}
+.dc-warn{position:relative;height:20px;line-height:20px;text-align:center;background:linear-gradient(180deg,#b01818,#6a0a0a);border-bottom:1px solid #2a0404;border-radius:5px 5px 0 0;color:#fff;font-size:12px;font-weight:800;text-shadow:0 1px 2px #000;letter-spacing:.3px}
+.dc-warn b{font-size:15px;color:#fff6dc}
+.dc-warn::before{content:"☠";position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-size:15px;color:#e8d8c0;text-shadow:0 1px 2px #000;line-height:1}
+.dc-band{height:23px;display:flex;align-items:center;padding:0 9px;background:linear-gradient(90deg,var(--bc,#888) 0,color-mix(in srgb,var(--bc,#888) 72%,#000) 55%,rgba(0,0,0,.25) 100%);border-bottom:1px solid rgba(0,0,0,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.3);overflow:hidden}
+.dc-band b{display:block;color:#fff;font-size:14px;font-weight:800;letter-spacing:.3px;white-space:nowrap;text-shadow:-1px 0 #000,1px 0 #000,0 -1px #000,0 1px #000,0 2px 3px rgba(0,0,0,.7)}
+.dc-scene{position:relative;height:62px;overflow:hidden;border-radius:0 0 5px 5px;background:#08110a}
+.wplate.dcard .wth{position:absolute;left:0;top:0;width:100%!important;height:100%!important;border:0!important;object-fit:cover}
+.wplate.dcard .wbp{position:absolute;right:2px;bottom:0;height:98%;width:auto;z-index:1}
+.dc-scene::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 55%);pointer-events:none}
+.dc-df{position:absolute;left:7px;bottom:4px;z-index:2;font:italic 900 12px/.95 'Arial Black',Arial,sans-serif;letter-spacing:.2px;color:#fff;-webkit-text-stroke:.6px #000;text-shadow:-1px 0 #000,1px 0 #000,0 -1px #000,0 1px #000,1px 2px 2px #000}
+.dc-df.dcd1{color:#cfe9ff}.dc-df.dcd2{color:#e8d6ff}.dc-df.dcd3{color:#fff}
+.wplate.dcard .wchk{position:absolute;right:6px;top:3px;z-index:3;font-style:normal;color:#ffd860;text-shadow:0 1px 3px #000}
+.wnode.sel .wplate.dcard{width:262px!important;box-shadow:0 0 0 2px #ffd860,0 0 18px rgba(255,216,96,.75),0 4px 14px rgba(0,0,0,.7)!important}
+.wnode.sel .dc-warn{height:24px;line-height:24px;font-size:13.5px}.wnode.sel .dc-warn b{font-size:18px}
+.wnode.sel .dc-band{height:30px;padding:0 12px}.wnode.sel .dc-band b{font-size:19px}
+.wnode.sel .dc-scene{height:92px}.wnode.sel .dc-df{font-size:15px;left:9px;bottom:6px}
+.dc-tab{position:absolute;left:50%;bottom:-19px;transform:translateX(-50%);display:flex;gap:0;z-index:5;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+.dc-tab button{width:38px;height:24px;padding:0!important;margin:0!important;min-height:0!important;border:0!important;border-image:none!important;border-radius:0!important;font-size:12px!important;line-height:24px;color:#222!important;text-shadow:none!important;cursor:pointer}
+.dc-tab button#dfPrev{background:linear-gradient(180deg,#f2f2f2,#b8b8b8)!important;clip-path:polygon(0 50%,42% 0,100% 0,100% 100%,42% 100%);padding-left:8px!important}
+.dc-tab button#dfNext{background:linear-gradient(180deg,#8a8a8a,#3e3e3e)!important;clip-path:polygon(0 0,58% 0,100% 50%,58% 100%,0 100%);color:#eee!important;padding-right:8px!important}
+.dc-tab button:hover:not(:disabled){filter:brightness(1.15)}.dc-tab button:disabled{opacity:.4;cursor:not-allowed}
+.dsbtns{position:absolute;right:2.2%;bottom:3.5%;z-index:7;display:flex;flex-direction:column;align-items:stretch;gap:7px;min-width:min(250px,30%)}
+body button.dsbtn,.dsbtn{display:flex!important;align-items:center;gap:11px;justify-content:flex-start;padding:8px 18px!important;min-height:0!important;font-size:clamp(14px,calc(1.7*var(--vw)),20px)!important;font-weight:800;color:#fff!important;letter-spacing:.5px;white-space:nowrap;background:linear-gradient(90deg,rgba(24,14,8,.86),rgba(24,14,8,.55))!important;border:2px solid #b8924f!important;border-image:none!important;border-radius:9px!important;text-shadow:-1px 0 #000,1px 0 #000,0 -1px #000,0 1px #000,0 2px 4px #000!important;box-shadow:0 3px 10px rgba(0,0,0,.55)!important;clip-path:none!important;cursor:pointer}
+.dsbtn i{font-style:normal;font-size:1.25em;line-height:1;width:1.3em;text-align:center;filter:drop-shadow(0 1px 2px #000)}.dsbtn svg{flex:none;filter:drop-shadow(0 1px 2px #000)}
+.dsbtn.go{border-color:#ffd860!important;background:linear-gradient(90deg,rgba(70,44,8,.92),rgba(40,26,6,.6))!important;color:#ffe9a8!important}
+.dsbtn.iso{border-color:#d4206e!important;color:#ffc4dc!important}
+#app.iso .dsbtn.iso{background:linear-gradient(90deg,rgba(110,10,60,.92),rgba(50,4,28,.6))!important}
+.dsbtn:hover:not(:disabled){filter:brightness(1.25)}.dsbtn:disabled{filter:grayscale(.9) brightness(.7);cursor:not-allowed}
+.dswarn{position:absolute;right:2.2%;top:3%;z-index:7;display:flex;align-items:center;gap:12px;max-width:34%;padding:10px 16px;background:linear-gradient(90deg,#3a1010,#6a2420);border:2px solid #b8924f;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.6);color:#fff3e0;font-size:clamp(12px,calc(1.35*var(--vw)),16px);line-height:1.45;text-shadow:0 1px 2px #000}
+.dswarn i{font-style:normal;font-size:2em;line-height:1;color:#e8d8c0;filter:drop-shadow(0 1px 2px #000)}
+.wt-h{margin:-10px -12px 8px;padding:5px 10px;text-align:center;font-weight:800;color:#ffe9b8;background:rgba(0,0,0,.65);border-radius:8px 8px 0 0}
+.wmap.dsintro .dsbtns,.wmap.dsintro .dswarn{display:none!important}
+.dc-warn b{display:inline!important}
+.wnode.sel .wplate.dcard{height:auto!important}
+.dswarn{top:7.5%!important}
+@media(max-height:640px){.wnode .wplate.dcard{zoom:.76}.wnode .wpin{zoom:.8}.dsbtns{zoom:.8}.dswarn{zoom:.85}}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.64';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.65';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6064,18 +6103,21 @@ function dgQuestMark(z,i){ // 진행 중인 퀘스트가 이 던전을 가리키
  if(!hit.length)return null;
  const ty=['unique','epic','achv','normal','rep'].find(t=>hit.some(id=>(QUESTS[id].type||'normal')===t));
  return {col:QTYPE[ty][1],names:hit.map(id=>QUESTS[id].name)}; }
+const DF_BAND=['#9aa3b0','#2f86e0','#8a3fe0','#d4206e'], DF_TXT=['NORMAL','EXPERT','MASTER<br>LORD',"KING'S<br>ROAD"];
 function renderDSel(app){
  if(!ZR){go('town');return;}
  const z=zoneById(ZR.zone), p=zprog(z.id);
  const iso=!!ZR.iso; app.classList.toggle('iso',iso);
  ZR.dsel=ZR.dsel||{}; {let mx=0; while(mx<9&&dgOpen(z,mx+1))mx++; ZR.sel=Math.min(ZR.sel,mx);}
  ZR.diff=ZR.dsel[ZR.sel]!=null?ZR.dsel[ZR.sel]:dgTop(z,ZR.sel); ZR.keepSel=false; const selOpen=dgDiffOpen(z,ZR.sel,ZR.diff);   // 난이도는 던전마다 따로 고릅니다
- app.innerHTML=`<div class="topbar"><div class="logo">던전 선택 · ${z.name}${iso?' · 경계-이면':''}</div><div class="row"><span class="tag isostone" data-tip="${esc('<div class="tipcard"><b style="color:#ff6a8a">'+MATS.sirens.name+'</b><div style="margin-top:3px">'+MATS.sirens.desc+'</div><div class="dim" style="margin-top:3px">보유 수량 '+((S.mats&&S.mats.sirens&&S.mats.sirens.n)||0)+'개</div></div>')}">${consIcon('sirens',18)} ${(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0}</span><button id="dIso" class="isobtn ${iso?'on':''}">${iso?'일반 던전':'경계-이면'}</button><button id="dBack">성소로</button></div></div>
+ app.innerHTML=`<div class="topbar"><div class="logo">던전 선택 · ${z.name}${iso?' · 경계-이면':''}</div><div class="row"><span class="tag isostone" data-tip="${esc('<div class="tipcard"><b style="color:#ff6a8a">'+MATS.sirens.name+'</b><div style="margin-top:3px">'+MATS.sirens.desc+'</div><div class="dim" style="margin-top:3px">보유 수량 '+((S.mats&&S.mats.sirens&&S.mats.sirens.n)||0)+'개</div></div>')}">${consIcon('sirens',18)} ${(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0}</span></div></div>
  <div class="wmapwrap"><div class="wmap" id="wmap"><canvas id="wmcv"></canvas><div class="wmtitle"><span>${z.name}${iso?' · 경계-이면':''}</span><small>${sirenHtml(z.latin)}</small></div>
   ${z.dungeons.map((d,i)=>{const op=dgOpen(z,i), dn=p.dd[i]||0, cl=dn>=1;
-   return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${i===ZR.sel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
-    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="wtx"><b>${d.name}</b><small>${d.sub}</small><small class="wlv">${lvTxt(d.lv)}</small></div>${cl?'<i class="wchk">✔</i>':''}</div></div>`;}).join('')}
-  <div class="wsel" id="wsel"><div class="wselt" id="wselt" style="display:none"></div><div class="dfsel"><button id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><div class="dfname ${ZR.diff>dgTop(z,ZR.sel)?'locked':''}" style="color:${DIFFS[ZR.diff].col};border-color:${DIFFS[ZR.diff].col}">${DIFFS[ZR.diff].name}</div><button id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div><button class="pri" id="dGo" ${selOpen?'':'disabled'}>${selOpen?(iso?'진입':'입장'):'잠김'}</button></div>
+   const nd=i===ZR.sel?ZR.diff:(ZR.dsel[i]!=null?ZR.dsel[i]:dgTop(z,i)), isSel=i===ZR.sel;
+   return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${isSel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
+    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${DF_BAND[nd]}">${nd>=3?'<div class="dc-warn">위험! 권장인원 <b>4명</b></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도">◀</button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도">▶</button></div>`:''}</div></div>`;}).join('')}
+  ${ZR.diff>=3?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
+  <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso"><i>☠</i>${iso?'경계-이면 끄기':'경계-이면 켜기'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
  $('#dBack').onclick=()=>{ZR.iso=false; go('rest');};
@@ -6089,7 +6131,7 @@ function renderDSel(app){
   }catch(e){}});
  const tip=$('#wtip'), wmap=$('#wmap');
  const showTip=(i,el)=>{const d=z.dungeons[i], op=dgOpen(z,i), ex=dgExclusive(d);
-  tip.innerHTML=`<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${lvTxt(d.lv)}${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?` <span style="color:#ffb070">· 현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,8).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>8?`<div class="dim">외 ${ex.length-8}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
+  tip.innerHTML=`${d.lv?`<div class="wt-h">추천레벨 : Lv. ${d.lv[0]}~${d.lv[1]}</div>`:''}<b style="font-size:15px">${d.name} 〈${d.sub}〉${d.boss?' <span style="color:#ff6a6a">[경계 보스]</span>':''}</b><div class="zlat" style="margin-bottom:4px">${sirenHtml(d.latin)}</div><p>${d.story}</p><div style="font-size:12.5px;color:#9ed88a;margin-bottom:3px">${lvTxt(d.lv)}${(()=>{const h=S.heroes[0]; if(!h||!d.lv)return ''; const rt=expRate(h,d); return rt<1?` <span style="color:#ffb070">· 현재 레벨로는 EXP ${Math.round((1-rt)*100)}% 감소</span>`:'';})()}</div>${ex.length?`<div class="tipdrop"><div class="dim">이 던전에서만 일정 확률로 얻을 수 있는 아이템 (유니크 이상)</div>${ex.slice(0,8).map(t=>`<div style="color:${RAR_COL[t.r]}">◆ ${esc(t.name)} <small>${RAR[t.r].n}</small></div>`).join('')}${ex.length>8?`<div class="dim">외 ${ex.length-8}종</div>`:''}</div>`:''}${op?'':'<div style="color:#ff8a8a;font-size:12px;margin-top:4px">앞 던전을 클리어하면 열립니다.</div>'}`;
   tip.style.display='block'; const r=el.getBoundingClientRect(), mr=wmap.getBoundingClientRect(); let x=r.left-mr.left+r.width/2, y=r.top-mr.top;
   const tw=Math.min(300,mr.width-20); tip.style.width=tw+'px'; x=clamp(x-tw/2,8,mr.width-tw-8); tip.style.left=x+'px';
   const ws=$('#wsel'); let top=y>mr.height*.5?Math.max(6,y-tip.offsetHeight-10):y+r.height+10;
@@ -6097,12 +6139,11 @@ function renderDSel(app){
   tip.style.top=top+'px';};
  app.querySelectorAll('.wnode').forEach(el=>{const i=+el.dataset.i;
   el.onmouseenter=()=>showTip(i,el); el.onmouseleave=()=>{tip.style.display='none';};
-  el.onclick=()=>{if(!dgOpen(z,i)){showTip(i,el); return;} ZR.sel=i; render();};});
-const place=()=>{const sel=$('#wsel'), el=app.querySelector(`.wnode[data-i="${ZR.sel}"]`); if(!sel||!el)return;
-  const tx=el.querySelector('.wtx'); if(tx){ if(sel.parentNode!==tx){tx.appendChild(sel); sel.onclick=sel.onmousedown=e=>e.stopPropagation();} return; }   // 선택한 던전 카드 안(적정레벨 자리)에 난이도·입장 버튼을 넣습니다
-  const r=el.getBoundingClientRect(), mr=wmap.getBoundingClientRect(), pin=el.querySelector('.wpin').getBoundingClientRect(), pl=el.querySelector('.wplate').getBoundingClientRect();
-  const left=Math.min(pin.left,pl.left)-mr.left, w=sel.offsetWidth, h=sel.offsetHeight, bot=Math.max(r.bottom,pin.bottom,pl.bottom); sel.style.left=clamp(left,6,mr.width-w-6)+'px'; sel.style.top=(bot-mr.top+6)+'px';};
- const info=()=>{const d=z.dungeons[ZR.sel]; const op=dgDiffOpen(z,ZR.sel,ZR.diff), g=$('#dGo'); const have=(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0; g.disabled=!op||(iso&&have<1); g.textContent=!op?'잠김':iso?'진입':'입장'; g.title=op?'':`이 던전을 ${DIFFS[Math.max(0,ZR.diff-1)].name} 난이도에서 먼저 클리어하면 열립니다.`; place();};
+  el.onclick=()=>{if(!dgOpen(z,i)){showTip(i,el); return;} const nw=Date.now(), dbl=ZR._dc&&ZR._dc.i===i&&nw-ZR._dc.t<500; ZR._dc={i,t:nw};
+   if(i===ZR.sel){ if(dbl){ ZR._dc=null; const g=$('#dGo'); if(g&&!g.disabled)g.click(); } return; }
+   ZR.sel=i; render();};});
+ const tb=app.querySelector('.dc-tab'); if(tb){ tb.onclick=tb.onmousedown=e=>e.stopPropagation(); }
+ const info=()=>{const d=z.dungeons[ZR.sel]; const op=dgDiffOpen(z,ZR.sel,ZR.diff), g=$('#dGo'); const have=(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0; g.disabled=!op||(iso&&have<1); g.innerHTML=`<i>⚔</i>${!op?'잠김':iso?'경계-이면 진입':'던전으로 가기'}`; g.title=op?'':`이 던전을 ${DIFFS[Math.max(0,ZR.diff-1)].name} 난이도에서 먼저 클리어하면 열립니다.`;};
  info();$('#dGo').onclick=()=>{ if(!dgDiffOpen(z,ZR.sel,ZR.diff))return; const dg=z.dungeons[ZR.sel];
   if(!iso){enterDungeon(dg); return;}
   if(!(S.mats&&S.mats.sirens&&S.mats.sirens.n>0)){toast('시렌스의 경계석이 없습니다.'); return;}
