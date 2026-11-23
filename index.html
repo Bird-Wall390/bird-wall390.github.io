@@ -1479,6 +1479,7 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 .qcell.gok::before{content:'';position:absolute;inset:0;border:2px solid #ffe27a;border-radius:6px;box-shadow:0 0 10px #ffc83a,inset 0 0 8px rgba(255,200,58,.6);pointer-events:none;animation:goRing .9s ease-in-out infinite;z-index:5}
 @keyframes goPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @keyframes goRing{0%,100%{opacity:.65}50%{opacity:1}}
+.ei-ini{margin-top:4px;padding:3px 6px;border:1px solid rgba(255,210,90,.35);border-radius:5px;background:rgba(60,40,10,.35)}.ei-ini .ei-r{margin:0}.ei-f{font-size:10.5px;color:#ffe2a0;opacity:.9}
 #tZone:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,210,90,.95))!important}
 @keyframes rEnP{0%,100%{filter:brightness(1.05) drop-shadow(0 0 5px rgba(255,190,60,.75))}50%{filter:brightness(1.25) drop-shadow(0 0 14px rgba(255,220,110,1))}}
 #qy{filter:hue-rotate(-24deg) saturate(1.9) brightness(.95);color:#fff!important;font-weight:800!important;text-shadow:0 0 4px #300,0 1px 2px #000}
@@ -1823,7 +1824,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.73';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.74';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -3863,7 +3864,7 @@ function soundPanel(el){
 function screenPanel(el){
  let cur=ST_COARSE?'ph195':'pc195'; try{cur=localStorage.getItem('rod_ratio')||cur;}catch(e){}
  const grp=(t,g)=>`<div class="card" style="margin-bottom:10px"><h3>${t}</h3><div class="row" style="flex-wrap:wrap;gap:6px">${RATIOS.filter(r=>r[3]===g||(g==='pc'&&r[0]==='auto')&&false||r[3]===g).map(r=>`<button data-rt="${r[0]}" class="${cur===r[0]?'sel pri':''}" style="padding:10px 14px">${r[1]}</button>`).join('')}</div></div>`;
- el.innerHTML=`<div class="card" style="margin-bottom:10px"><h3>화면 비율</h3><div class="dim" style="font-size:13px;margin-bottom:8px">고른 비율로 게임 화면을 맞추고 남는 곳은 검은 띠로 채웁니다. 현재: <b>${(RATIOS.find(r=>r[0]===cur)||RATIOS[0])[1]}</b></div><button data-rt="auto" class="${cur==='auto'?'sel pri':''}" style="padding:10px 14px">자동 (창 크기에 맞춤)</button></div>`+grp('PC용','pc').replace(/<button data-rt="auto"[^>]*>[^<]*<\/button>/,'')+grp('스마트폰용 (가로 화면)','ph')+`<div class="dim" style="font-size:12px;margin-bottom:10px">스마트폰은 가로로 돌려서 플레이하세요. 화면 비율은 이 기기에만 저장됩니다.</div>`+`<div class="card" style="margin-bottom:10px"><h3>전투 연출</h3><label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" data-opt="critZoom" ${optOn('critZoom')?'checked':''}> 크리티컬 시 피격 대상 줌인</label><label class="row" style="gap:8px;cursor:pointer;margin-top:6px"><input type="checkbox" data-opt="bossFx" ${optOn('bossFx')?'checked':''}> 보스 처치 연출 (붉은 화면 + 천천히 줌인/줌아웃)</label></div>`;
+ el.innerHTML=`<div class="card" style="margin-bottom:10px"><h3>화면 비율</h3><div class="dim" style="font-size:13px;margin-bottom:8px">고른 비율로 게임 화면을 맞추고 남는 곳은 검은 띠로 채웁니다. 현재: <b>${(RATIOS.find(r=>r[0]===cur)||RATIOS[0])[1]}</b></div><button data-rt="auto" class="${cur==='auto'?'sel pri':''}" style="padding:10px 14px">자동 (창 크기에 맞춤)</button></div>`+grp('PC용','pc').replace(/<button data-rt="auto"[^>]*>[^<]*<\/button>/,'')+grp('스마트폰용 (가로 화면)','ph')+`<div class="dim" style="font-size:12px;margin-bottom:10px">스마트폰은 가로로 돌려서 플레이하세요. 화면 비율은 이 기기에만 저장됩니다.</div>`+`<div class="card" style="margin-bottom:10px"><h3>전투 연출</h3><label class="row" style="gap:8px;cursor:pointer"><input type="checkbox" data-opt="critZoom" ${optOn('critZoom')?'checked':''}> 크리티컬 시 피격 대상 줌인</label><label class="row" style="gap:8px;cursor:pointer;margin-top:6px"><input type="checkbox" data-opt="bossFx" ${optOn('bossFx')?'checked':''}> 보스 처치 연출 (붉은 화면 + 천천히 줌인/줌아웃)</label><label class="row" style="gap:8px;cursor:pointer;margin-top:6px"><input type="checkbox" data-opt="iniBadge" ${optOn('iniBadge')?'checked':''}> 이름표 옆 행동 순서 번호 (공격속도 + 운으로 정해진 이번 라운드 순서)</label></div>`;
  el.querySelectorAll('[data-opt]').forEach(c=>c.onchange=()=>{S.opt=S.opt||{}; S.opt[c.dataset.opt]=c.checked; save();});
  el.querySelectorAll('[data-rt]').forEach(b=>b.onclick=()=>{ stSet(b.dataset.rt); const ov=document.querySelector('.overlay.guide'); if(ov){ openSettings('screen'); } });
 }
@@ -6332,7 +6333,9 @@ function winBattle(){
 
 const VIT_PER_TURN=false; // 체력·정신력은 턴마다가 아니라 방을 클리어할 때 회복합니다
 /* ---- 턴 진행 ---- */
-function newRound(){B.round++; if(B.zones)B.zones=B.zones.map(z=>({...z,t:z.t-1})).filter(z=>z.t>0); B.order=alive().sort((a,b)=>(b.spd+Math.random()*3)-(a.spd+Math.random()*3)); B.oi=0;}
+function newRound(){B.round++; if(B.zones)B.zones=B.zones.map(z=>({...z,t:z.t-1})).filter(z=>z.t>0); const al=alive(); al.forEach(u=>{const roll=Math.round(Math.random()*300)/100; u.ini={spd:u.spd,roll,tot:+(u.spd+roll).toFixed(2)};}); B.order=al.sort((a,b)=>b.ini.tot-a.ini.tot); B.order.forEach((u,i)=>u.ini.rank=i+1); B.oi=0;}
+/* 공격속도 적용 방식: 매 라운드 시작에 (공격속도 + 무작위 0~3) 값이 큰 순서대로 행동합니다 */
+function iniInfo(u){ if(!B||!u||!u.ini||B.kind==='room')return null; const n=B.order.length, idx=B.order.indexOf(u); const done=idx>=0&&idx<B.oi, now=u===B.cur; return {...u.ini,rank:idx>=0?idx+1:u.ini.rank,n,done,now}; }
 function isPlayerTurn(){return B.cur&&B.cur.side==='A'&&B.cur.ctrl!=='AI'&&!B.busy&&!B.over;}
 async function nextTurn(){
  if(B.over)return;
@@ -6707,12 +6710,12 @@ function bhudRefresh(){
 }
 function updateInfo(){
  const el=$('#uinfo'); if(!el)return; const t=B.info; if(!t)return;
- { const sk=[t.id,t.shield>0?1:0,JSON.stringify(t.st),t.buffs.map(b=>b.k+b.turns).join(),t.side].join('|'), hp=Math.max(0,t.hp);
+ { const sk=[t.id,B.round,t.shield>0?1:0,JSON.stringify(t.st),t.buffs.map(b=>b.k+b.turns).join(),t.side].join('|'), hp=Math.max(0,t.hp);
   if(el._sk===sk&&el.querySelector('.ei-bar.hp')){ const pc=Math.max(0,hp/t.maxhp*100), f=el.querySelector('.ei-bar.hp .f'), tr=el.querySelector('.ei-bar.hp .tr');
    if(f){ const old=parseFloat(f.style.width||'100'); f.style.width=pc+'%'; if(pc<old-.01){ tr.style.transition='none'; tr.style.background='#fff3dc'; tr.style.opacity='1'; tr.style.width=old+'%'; tr.style.left='0'; void tr.offsetWidth; clearTimeout(el._t1); clearTimeout(el._t2); el._t1=setTimeout(()=>{tr.style.transition='background .43s linear, opacity .1s linear .43s'; tr.style.background='#7a3f1c'; tr.style.opacity='0';},120); el._t2=setTimeout(()=>{tr.style.transition='none'; const f2=el.querySelector('.ei-bar.hp .f'); if(f2)tr.style.width=f2.style.width; tr.style.opacity='1';},660); } else if(pc>old){tr.style.width=pc+'%';} if(false&&!el._tt){ el._tt=setTimeout(()=>{ el._tt=0; const f2=el.querySelector('.ei-bar.hp .f'); if(f2&&tr.isConnected)tr.style.width=f2.style.width; },120); } el.querySelector('.ei-bar.hp em').textContent=`HP ${hp} / ${t.maxhp}`; const pp=el._pc==null?pc:el._pc; if(pc<pp-.01){const b=el.querySelector('.ei-bar.hp'); b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit');} el._pc=pc;}
    const m=el.querySelector('.ei-bar.mp'); if(m){m.querySelector('.f').style.width=(t.mp/t.maxmp*100)+'%'; m.querySelector('em').textContent=`MP ${t.mp} / ${t.maxmp}`;}
    const sh=el.querySelector('.ei-sh'); if(sh)sh.textContent='보호막 '+t.shield; const dd=el.querySelector('.ei-dead'); if(dd)dd.style.display=t.dead?'':'none';
-   const V={atk:t.atk,mag:t.mag,def:t.def,mdef:t.mdef||0,spd:t.spd,mov:t.mov,acc:t.acc||0,eva:t.eva||0,sres:(t.sres||0)+'%',rng:t.rng}; el.querySelectorAll('[data-ev]').forEach(b=>{const v=String(V[b.dataset.ev]); if(b.textContent!==v){b.textContent=v; b.classList.remove('chg'); void b.offsetWidth; b.classList.add('chg');}});
+   const _ii=iniInfo(t); const V={ini:_ii?`${_ii.rank} / ${_ii.n}번째${_ii.now?' (행동 중)':_ii.done?' (행동 끝)':''}`:'-',inif:_ii?`공격속도 ${_ii.spd} + 운 ${_ii.roll.toFixed(2)} = ${_ii.tot.toFixed(2)}`:'전투 중이 아님',atk:t.atk,mag:t.mag,def:t.def,mdef:t.mdef||0,spd:t.spd,mov:t.mov,acc:t.acc||0,eva:t.eva||0,sres:(t.sres||0)+'%',rng:t.rng}; el.querySelectorAll('[data-ev]').forEach(b=>{const v=String(V[b.dataset.ev]); if(b.textContent!==v){b.textContent=v; b.classList.remove('chg'); void b.offsetWidth; b.classList.add('chg');}});
    return; }
   el._sk=sk; el._pc=hp/t.maxhp*100; }
  const st=Object.entries(t.st).filter(([k,v])=>v).map(([k])=>`<span class="ei-chip" style="border-color:${ST_COL[k]};color:${ST_COL[k]}">${ST_NAME[k]}</span>`).concat(t.buffs.map(b=>`<span class="ei-chip buf">${({atk:'공격↑',def:'방어↑',mdef:'마법방어↑',defF:'방어↑',mdefF:'마법방어↑'}[b.k]||b.k)} ${b.turns}턴</span>`));
@@ -6721,6 +6724,7 @@ function updateInfo(){
  el.innerHTML=`<div class="ei-h"><span class="ei-tag ${isA?'a':boss?'b':t.named?'n':'e'}">${isA?'아군':boss?'보스':t.named?'정예':'적'}</span><b class="ei-nm" style="color:${isA?'#8fd0ff':boss?'#ff7a5a':'#ffb0a0'}">${lv?`Lv.${lv} `:''}${esc(t.name)}</b><span class="ei-dead" style="${t.dead?'':'display:none'}">쓰러짐</span></div>
   <div class="ei-bar hp"><i class="tr" style="width:${hpP}%"></i><i class="f" style="width:${hpP}%"></i><em>HP ${Math.max(0,t.hp)} / ${t.maxhp}</em></div>${t.shield>0?`<div class="ei-sh">보호막 ${t.shield}</div>`:''}${isA?`<div class="ei-bar mp"><i class="f" style="width:${t.mp/t.maxmp*100}%"></i><em>MP ${t.mp} / ${t.maxmp}</em></div>`:''}
   <div class="ei-g">${row('물리공격력',t.atk,'atk')}${row('마법공격력',t.mag,'mag')}${row('물리방어력',t.def,'def')}${row('마법방어력',t.mdef||0,'mdef')}${row('공격속도',t.spd,'spd')}${row('이동속도',t.mov,'mov')}${row('적중률',t.acc||0,'acc')}${row('회피율',t.eva||0,'eva')}${row('상태이상저항',(t.sres||0)+'%','sres')}${row('사거리',t.rng,'rng')}</div>
+  ${(()=>{const ii=iniInfo(t); return `<div class="ei-ini" data-tip="${esc('<b>공격속도가 적용되는 방식</b><br>매 라운드가 시작될 때 모든 유닛이 <b class=gold>공격속도 + 무작위 0~3</b> 값을 굴립니다.<br>이 값이 큰 유닛부터 차례대로 행동합니다.<br>공격속도가 3 이상 높으면 운과 관계없이 항상 먼저 행동합니다.')}"><div class="ei-r"><span>행동 순서</span><b data-ev="ini">${ii?`${ii.rank} / ${ii.n}번째${ii.now?' (행동 중)':ii.done?' (행동 끝)':''}`:'-'}</b></div><div class="ei-f" data-ev="inif">${ii?`공격속도 ${ii.spd} + 운 ${ii.roll.toFixed(2)} = ${ii.tot.toFixed(2)}`:'전투 중이 아님'}</div></div>`;})()}
   ${(t.elems||[]).length?`<div class="ei-l">공격 속성: <b>${t.elems.map(e=>ELEM[e]).join('·')}</b></div>`:''}${t.res&&Object.keys(t.res).length&&resText(t.res)?`<div class="ei-l">${resText(t.res)}</div>`:''}${st.length?`<div class="ei-st">${st.join('')}</div>`:''}${t.fx&&fxSummary(t.fx)?`<div class="ei-l">${fxSummary(t.fx)}</div>`:''}`;
 }
 function resText(r){const w=Object.entries(r).filter(([k,v])=>v<0).map(([k,v])=>`${ELEM[k]}(${v})`), s=Object.entries(r).filter(([k,v])=>v>0).map(([k,v])=>`${ELEM[k]}(+${v})`); return (w.length?`<span style="color:#9fe6ff">약점: ${w.join('·')}</span> `:'')+(s.length?`<span class="dim">내성: ${s.join('·')}</span>`:'');}
@@ -6953,7 +6957,9 @@ function drawBattle(){
    if(u.st.stun){g.fillStyle='#ffe066';g.font='bold 11px sans-serif';g.fillText('★',u.px+(u.side==='A'?bw/2+6:-4)+Math.sin(now/150)*6,by-(u.side==='A'?6:4));}
    if(u.st.burn){g.fillStyle='#ff7a2a';g.fillRect(bx+bw+3,by,4,4);} if(u.st.poison){g.fillStyle='#a6e84a';g.fillRect(bx+bw+8,by,4,4);} if(u.st.bleed){g.fillStyle='#ff3a4a';g.fillRect(bx+bw+13,by,4,4);}
    if(u.side==='A'&&u.ctrl!=='AI'){g.fillStyle='#ffd23f';g.font='bold 10px sans-serif';g.save();g.textAlign='center';g.lineWidth=3;g.strokeStyle='#000';g.strokeText(u.ctrl,u.px,by-18);g.fillText(u.ctrl,u.px,by-18);g.restore();}
-   if(!u.dead){g.save(); g.font='bold 9px sans-serif'; g.textAlign='center'; const isB=u.side==='E'&&(u.boss||u.dboss), nm=u.h?`Lv.${u.h.lv} ${u.name}`:u.side==='E'?`Lv.${monLv(u)} ${isB?'보스 - ':''}${u.name}`:u.name, nw=g.measureText(nm).width+8, ny=by-7; u._ny=ny; g.fillStyle='rgba(0,0,0,.6)'; g.fillRect(u.px-nw/2,ny-9,nw,12); g.fillStyle=u.side==='A'?'#fff6dc':isB?'#ff6a6a':u.named?'#7fe68f':'#ffffff'; g.fillText(nm,u.px,ny); g.restore();}
+   if(!u.dead){g.save(); g.font='bold 9px sans-serif'; g.textAlign='center'; const isB=u.side==='E'&&(u.boss||u.dboss), nm=u.h?`Lv.${u.h.lv} ${u.name}`:u.side==='E'?`Lv.${monLv(u)} ${isB?'보스 - ':''}${u.name}`:u.name, nw=g.measureText(nm).width+8, ny=by-7; u._ny=ny; g.fillStyle='rgba(0,0,0,.6)'; g.fillRect(u.px-nw/2,ny-9,nw,12); g.fillStyle=u.side==='A'?'#fff6dc':isB?'#ff6a6a':u.named?'#7fe68f':'#ffffff'; g.fillText(nm,u.px,ny);
+    const ii=optOn('iniBadge')?iniInfo(u):null; if(ii){ const cx=u.px-nw/2-8, cy=ny-3; g.globalAlpha=ii.done?.45:1; g.beginPath(); g.arc(cx,cy,6.5,0,Math.PI*2); g.fillStyle=ii.now?'#ffd23f':u.side==='A'?'#2a5aa8':'#a83a3a'; g.fill(); g.lineWidth=1.2; g.strokeStyle='#000'; g.stroke(); g.fillStyle=ii.now?'#2a1600':'#fff'; g.font='bold 9px sans-serif'; g.fillText(String(ii.rank),cx,cy+3); g.globalAlpha=1; }
+    g.restore();}
    if(u===B.cur){g.fillStyle='#ffd23f'; const ay=by-(u.side==='A'?44:24)+Math.sin(now/150)*3; g.beginPath(); g.moveTo(u.px-5,ay);g.lineTo(u.px+5,ay);g.lineTo(u.px,ay+6);g.fill();}
    g.restore();
   }
