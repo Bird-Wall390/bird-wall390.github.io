@@ -1887,7 +1887,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.7';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.8';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -2631,7 +2631,7 @@ const BLADE_ILLUST={face:[.68,.21,.22],key:'blade',cx:.68,eyeY:.18,footY:.985,un
 CLASSIC_SPEC.blade.img=BLADE_ILLUST; ANIME_SPEC.blade.img=BLADE_ILLUST; CLASSIC_SPEC.blade.barH=112; ANIME_SPEC.blade.barH=112;
 const BRAWLER_ILLUST={face:[.61,.16,.18],key:'brawler',cx:.52,eyeY:.15,footY:.985,unit:50,faceLeft:true,float:4,tip:[.84,.55],hand:[.78,.40],grounded:true,col:'#ffd870'};
 const GUNNER_ILLUST={face:[.565,.25,.19],key:'gunner',cx:.55,eyeY:.215,footY:.985,unit:52,faceLeft:true,float:4,tip:[.09,.33],hand:[.31,.37],grounded:true,col:'#ffd870'};
-const PRIEST_ILLUST={face:[.455,.31,.17],key:'priest',pm:1.22,cx:.5,eyeY:.35,footY:.985,unit:52,faceLeft:false,float:9,tip:[.175,.11],hand:[.34,.43],col:'#ffe39a'};
+const PRIEST_ILLUST={face:[.47,.225,.17],key:'priest',pm:1.22,cx:.44,eyeY:.21,footY:.995,unit:64,faceLeft:false,float:9,tip:[.81,.68],hand:[.5,.4],col:'#ffe39a'};
 [['brawler',BRAWLER_ILLUST,112],['gunner',GUNNER_ILLUST,118],['priest',PRIEST_ILLUST,124]].forEach(([k,d,bh])=>{CLASSIC_SPEC[k].img=d; ANIME_SPEC[k].img=d; CLASSIC_SPEC[k].barH=bh; ANIME_SPEC[k].barH=bh;});
 function setArt(mode,persist){
  ART=mode==='classic'?'classic':'anime'; OUTC=ART==='anime'?'#3a161c':'#0a070b';
@@ -3581,7 +3581,7 @@ function drawAnimSprite(ctx,X,Y,s,spec,o,A){
  ctx.restore();
 }
 function drawImgSprite(ctx,X,Y,s,spec,o){
- {const A=SPR_ANIM[spec.img.key]; if(A&&A.ready&&SPRITE_IMG[spec.img.key]&&SPRITE_IMG[spec.img.key].ready)return drawAnimSprite(ctx,X,Y,s,spec,o,A);}
+ {const A=SPR_ANIM[spec.img.key]; if(A&&A.ready&&SCREEN==='battle'&&!o.prev&&SPRITE_IMG[spec.img.key]&&SPRITE_IMG[spec.img.key].ready)return drawAnimSprite(ctx,X,Y,s,spec,o,A);}
  const I=SPRITE_IMG[spec.img.key], im=I.im, d=spec.img, k=s*.68*(spec.scale||1), t=o.t||0;
  const ppu=(d.footY-d.eyeY)*im.naturalHeight/(d.unit||52);
  const W=im.naturalWidth/ppu*k, H=im.naturalHeight/ppu*k, iw=im.naturalWidth, ih=im.naturalHeight;
@@ -5086,6 +5086,7 @@ function groundDrop(sub,key){
  const st=sub==='cons'?S.cons:S.mats, e=st&&st[key]; if(!e||!(e.n>0))return;
  if(sub!=='cons'&&isQMat(key)){toast('퀘스트 전용 재료는 버릴 수 없습니다.'); return;}
  if(sub!=='cons'&&MATS[key]&&!/^(frag|core)_/.test(key)){toast('특수 재료는 바닥에 둘 수 없습니다.'); return;}
+ if(sub==='cons'&&CONS[key]&&CONS[key].stat){toast('능력치 돌은 바닥에 둘 수 없습니다.'); return;}
  const kind=sub==='cons'?'cons':'mat';
  const go2=c=>{ const cur=st[key]; if(!cur||cur.n<c)return; cur.n-=c; if(sub==='cons'&&cur.n<=0&&S.qs6)S.qs6=S.qs6.map(x=>x===key?null:x); dropGround(spot(),kind,key,c); save(); refreshBW(); };
  if(e.n<=1)go2(1);
@@ -5361,7 +5362,7 @@ function skPrevAnim(cv,sk,h){
   // 유닛 (위쪽 줄부터 그림)
   const ak=t>=A0&&t<A0+700?(t-A0)/700:null, pose=t<A0&&t>A0-260?'wind':ak!=null?'atk':'idle';
   const hitK=dummyHit&&t>=IMP&&t<IMP+500?(t-IMP)/500:0;
-  const draws=[[hp.cy,()=>{ try{drawUnitSpriteBase(g,hero,hp.cx,hp.cy+8,SPR*1.25,{t:now,pose,ak,ult:false,col,flip:false});}catch(e){} }]];
+  const draws=[[hp.cy,()=>{ try{drawUnitSpriteBase(g,hero,hp.cx,hp.cy+8,SPR*1.25,{prev:1,t:now,pose,ak,ult:false,col,flip:false});}catch(e){} }]];
   if(!sup)draws.push([dp.cy,()=>drawDummy(dp.cx,dp.cy+8,hitK,now)]);
   draws.sort((a,b)=>a[0]-b[0]).forEach(d=>d[1]());
   // 이펙트
@@ -6432,8 +6433,8 @@ async function moveUnit(u,[x,y]){
    0.07~1.00초  일러스트가 아주 천천히 오른쪽으로 흐르며 확대 (전투 이펙트는 뒤에서 계속 진행)
    0.22초       화면 전체 주황빛 섬광
    1.03~1.26초  일러스트가 다시 왼쪽으로 빠르게 빨려 들어가며 퇴장 ---- */
-const AWK_ART={blade:'img/blade.webp',brawler:'img/brawler.webp',gunner:'img/gunner.webp',mage:'img/mage2.webp',priest:'img/priest.webp'};
-const AWK_HAND={blade:[.80,.30],brawler:[.74,.34],gunner:[.82,.30],mage:[.78,.30],priest:[.6,.34]}; // 가시 폭발 위치(일러스트 박스 비율)
+const AWK_ART={blade:'img/blade.webp',brawler:'img/brawler.webp',gunner:'img/gunner.webp',mage:'img/mage2.webp',priest:'img/priest.webp?v=2'};
+const AWK_HAND={blade:[.80,.30],brawler:[.74,.34],gunner:[.82,.30],mage:[.78,.30],priest:[.52,.4]}; // 가시 폭발 위치(일러스트 박스 비율)
 const AWK_MS=1260;
 function awkBurstSvg(){ const n=17, pts=[]; let seed=7; const rn=()=>{seed=(seed*9301+49297)%233280; return seed/233280;};
  for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2, r=i%2?28+rn()*8:44+rn()*6; pts.push((50+Math.cos(a)*r).toFixed(1)+','+(50+Math.sin(a)*r).toFixed(1));}
@@ -8199,7 +8200,7 @@ loadSpriteImg('mage','img/mage2.webp');
 loadSpriteImg('blade','img/blade.webp','#ffd890');
 loadSpriteImg('brawler','img/brawler.webp','#ffe090');
 loadSpriteImg('gunner','img/gunner.webp','#ffd890');
-loadSpriteImg('priest','img/priest.webp','#ffe39a');
+loadSpriteImg('priest','img/priest.webp?v=2','#ffe39a');
 load(); setArt('anime',false); render();
 
 /* ---- 짧은 탭 눌림 연출: 손가락을 바로 떼도 버튼이 눌리는 모양이 최소 0.13초 보이게 함.
