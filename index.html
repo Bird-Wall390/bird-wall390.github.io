@@ -1537,6 +1537,12 @@ body .sw-start:disabled{filter:grayscale(1) brightness(.5)!important;cursor:not-
 #app.battle #einfoTog{display:block;position:absolute;left:8px;bottom:128px;z-index:8;pointer-events:auto;padding:3px 12px;font-size:12px;line-height:1.4;border-radius:5px}
 #app.battle #einfo{display:block;position:absolute;left:8px;bottom:158px;width:270px;max-height:calc(var(--vhf) - 330px);overflow:auto;pointer-events:auto;background:rgba(10,8,6,.86);border:1px solid #8c6e48;border-radius:8px;padding:8px 10px;z-index:6}
 #app.battle.einfoOff #einfo{display:none}
+/* 하단 메뉴 버튼(마을·파티…): 아이콘·글자 크게 */
+body #bhud .bh-hub{grid-template-columns:repeat(5,74px)!important}
+body #bhud .bh-hub button{gap:3px;min-height:64px!important}
+body #bhud .bh-hub button svg{width:30px!important;height:30px!important}
+body #bhud .bh-hub button small{font-size:15px!important;letter-spacing:-.06em!important}
+body #bhud .bh-hub button[data-hub="title"] small,body #bhud .bh-hub button[data-hub="multi"] small{font-size:12.5px!important;letter-spacing:-.08em!important}
 /* 내 정보 창: 위쪽 캐릭터·장비 칸을 낮게 줄여서 아래 능력치를 더 많이 보이게 */
 .lwin .lw-scene{padding:5px 8px!important;gap:4px!important;align-items:center}
 .lwin .lw-scene .iw-col,.lwin .lw-scene .iw-col2{grid-template-columns:repeat(2,36px)!important;gap:3px!important}
@@ -1788,7 +1794,7 @@ body .overlay.rcov.rcdnf{background:transparent!important;-webkit-backdrop-filte
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.0.60';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.0.61';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
