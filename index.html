@@ -2035,13 +2035,23 @@ body button.dsbtn,.dsbtn{font-family:'Do Hyeon','Malgun Gothic',sans-serif!impor
 .wnode:not(.sel) .wplate.dcard .wbp{height:104%!important}
 .tdicons{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}.tdicons .itic.sm{width:36px;height:36px}
 .dc-tab button#dfPrev,.dc-tab button#dfNext{font-size:0!important;color:transparent!important}
+/* v0.5.75 경계-이면 */
+.dc-isk{position:absolute;left:50%;top:-15px;transform:translateX(-50%);font-style:normal;font-size:17px;line-height:1;color:#f0d8e6;text-shadow:0 1px 3px #000,0 0 6px rgba(255,60,140,.7);z-index:6;pointer-events:none}
+.dc-iso{position:absolute;left:50%;bottom:calc(100% - 2px);transform:translateX(-50%);z-index:8;display:flex;align-items:center;gap:0;pointer-events:none;animation:isoRise .5s cubic-bezier(.2,.9,.3,1) both}
+.dc-iso span{display:block;padding:3px 30px 4px;font-size:21px;letter-spacing:3px;color:#ffe9a8;font-family:'Do Hyeon',sans-serif;white-space:nowrap;background:linear-gradient(180deg,#ff5a2a,#a0102a 55%,#4a0620);border:2px solid #ffd070;border-radius:8px 8px 0 0;text-shadow:0 0 6px #ff7a30,0 1px 2px #000;box-shadow:0 0 12px rgba(255,70,40,.9),inset 0 0 10px rgba(255,200,90,.45);animation:isoGlow 1.3s ease-in-out infinite}
+.dc-iso i{font-style:normal;font-size:34px;line-height:1;color:#f4e6d0;margin:0 -10px;position:relative;z-index:2;text-shadow:0 0 8px #ff3a6a,0 2px 3px #000;filter:drop-shadow(0 0 4px rgba(255,80,60,.9));animation:isoGlow 1.3s ease-in-out infinite}
+.dc-iso i:first-child{transform:translateY(-5px) rotate(-12deg)}.dc-iso i:last-child{transform:translateY(-5px) rotate(12deg)}
+@keyframes isoGlow{0%,100%{filter:brightness(1) drop-shadow(0 0 3px rgba(255,80,60,.7))}50%{filter:brightness(1.35) drop-shadow(0 0 9px rgba(255,150,60,.95))}}
+@keyframes isoRise{from{opacity:0;transform:translateX(-50%) translateY(14px)}to{opacity:1;transform:translateX(-50%)}}
+.dswarn.isow{top:7%!important;max-width:40%!important;padding:7px 14px!important;background:linear-gradient(90deg,#2a0620,#6a1030)!important;border-color:#ff6aa0!important;box-shadow:0 0 14px rgba(255,60,120,.65),0 4px 12px rgba(0,0,0,.6)!important}
+.dswarn.isow b{color:#ffc4dc;font-size:1.08em}.dswarn.isow i{color:#ffd0e0!important;filter:drop-shadow(0 0 6px #ff3a7a)!important}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.74';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.75';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6163,8 +6173,8 @@ function renderDSel(app){
   ${z.dungeons.map((d,i)=>{const op=dgOpen(z,i), dn=p.dd[i]||0, cl=dn>=1;
    const nd=i===ZR.sel?ZR.diff:(ZR.dsel[i]!=null?ZR.dsel[i]:dgTop(z,i)), isSel=i===ZR.sel;
    return `<div class="wnode ${op?'':'lock'} ${cl?'clr':''} ${isSel?'sel':''} lab-${d.lab}" data-i="${i}" style="left:${d.pos[0]*100}%;top:${d.pos[1]*100}%">
-    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${isSel&&nd>=2?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>'+(nd>=3?4:3)+'명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도"></button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도"></button></div>`:''}</div></div>`;}).join('')}
-  ${ZR.diff>=2?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
+    ${(()=>{const m=dgQuestMark(z,i); return m?`<i class="wqm" style="--qc:${m.col}" title="${esc('진행 중인 퀘스트: '+m.names.join(', '))}">!</i>`:'';})()}<div class="wpin">${d.boss?'☠':'⚔'}</div><div class="wplate dcard" style="--bc:${isSel?DF_BAND[nd]:'#6f685c'}">${iso?(isSel?'<div class="dc-iso"><i>☠</i><span>경계-이면</span><i>☠</i></div>':'<i class="dc-isk">☠</i>'):''}${isSel&&!iso&&nd>=2?'<i class="dc-skull">☠</i><div class="dc-wwrap"><div class="dc-warn">위험! 권장인원 <b>'+(nd>=3?4:3)+'명</b></div></div>':''}<div class="dc-band"><b>${d.name}</b></div><div class="dc-scene"><canvas class="wth" data-th="${i}"></canvas><canvas class="wbp" data-bp="${i}"></canvas><div class="dc-df dcd${nd}">${DF_TXT[nd]}</div>${cl?'<i class="wchk">✔</i>':''}</div>${isSel?`<div class="dc-tab"><button type="button" id="dfPrev" ${ZR.diff<=0?'disabled':''} aria-label="이전 난이도"></button><button type="button" id="dfNext" ${ZR.diff>=dgTop(z,ZR.sel)?'disabled':''} aria-label="다음 난이도"></button></div>`:''}</div></div>`;}).join('')}
+  ${iso?'<div class="dswarn isow"><i>☠</i><span><b>경계-이면 · 균열이 비틀린 곳</b> 몬스터가 한층 강해지고 보상은 두 배가 되지만, 입장할 때마다 시렌스의 경계석 1개가 사라집니다.'+(ZR.diff>=2?' 권장인원 '+(ZR.diff>=3?4:3)+'명.':'')+'</span></div>':ZR.diff>=2?'<div class="dswarn"><i>☠</i><span>난이도가 높아지면 몬스터가 강해지고 보상이 늘어납니다.</span></div>':''}
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso"><i>☠</i>${iso?'경계-이면 끄기':'경계-이면'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
