@@ -2085,13 +2085,21 @@ html body #app button.dsbtn.dsbtn.dsbtn i{-webkit-text-fill-color:#f0d890!import
 .dc-iso.still{animation:none!important;opacity:1!important}.dc-iso i{animation-delay:var(--gp,0ms)!important}
 .dc-warn.still{animation:dcBlink .85s ease-in-out infinite!important}
 .dsb-m{font-family:'Cormorant Garamond','Almendra',Georgia,serif!important;font-style:italic!important;font-weight:700!important;font-size:clamp(50px,9.4vh,92px)!important;letter-spacing:0!important}
+#app.iso .wnode{filter:none!important}
+#app.iso .wnode .wpin,#app.iso .wnode .wth,#app.iso .wnode .wbp{filter:hue-rotate(300deg) saturate(1.2)}
+.wmapwrap{overflow-x:clip}
+@keyframes dsSlideIn{from{transform:translateX(1100px);opacity:0}to{transform:none;opacity:1}}
+@keyframes dsSlideOut{from{transform:none;opacity:1}to{transform:translateX(1100px);opacity:0}}
+html body #app .dswarn{animation:dsSlideIn .55s cubic-bezier(.2,.8,.25,1) both!important}
+html body #app .dswarn.still,html body #app .dswarn.still.isow{animation:none!important;opacity:1!important;transform:none!important}
+html body #app .dswarn.out{animation:dsSlideOut .5s cubic-bezier(.6,0,.8,.4) both!important;pointer-events:none}
 </style>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#120c18"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head>
 <body>
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.86';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.87';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -6208,6 +6216,7 @@ function renderDSel(app){
  const iso=!!ZR.iso; app.classList.toggle('iso',iso);
  ZR.dsel=ZR.dsel||{}; {let mx=0; while(mx<9&&dgOpen(z,mx+1))mx++; ZR.sel=Math.min(ZR.sel,mx);}
  ZR.diff=ZR.dsel[ZR.sel]!=null?ZR.dsel[ZR.sel]:dgTop(z,ZR.sel); ZR.keepSel=false; const selOpen=dgDiffOpen(z,ZR.sel,ZR.diff);   // 난이도는 던전마다 따로 고릅니다
+ const pWk=ZR._wk, pWh=ZR._wh;
  const stB=(ZR._bi===ZR.sel&&ZR._biso===iso), stW=stB&&!!ZR._bw, ph=(n)=>'animation-delay:-'+(Date.now()%n)+'ms'; ZR._bi=ZR.sel; ZR._biso=iso; ZR._bw=ZR.diff>=2;
  app.innerHTML=`<div class="topbar"><div class="logo">던전 선택 · ${z.name}${iso?' · 경계-이면':''}</div><div class="row"><span class="tag isostone" data-tip="${esc('<div class="tipcard"><b style="color:#ff6a8a">'+MATS.sirens.name+'</b><div style="margin-top:3px">'+MATS.sirens.desc+'</div><div class="dim" style="margin-top:3px">보유 수량 '+((S.mats&&S.mats.sirens&&S.mats.sirens.n)||0)+'개</div></div>')}">${consIcon('sirens',18)} ${(S.mats&&S.mats.sirens&&S.mats.sirens.n)||0}</span></div></div>
  <div class="wmapwrap"><div class="wmap" id="wmap"><canvas id="wmcv"></canvas><div class="wmtitle"><span>${z.name}${iso?' · 경계-이면':''}</span><small>${sirenHtml(z.latin)}</small></div>
@@ -6219,7 +6228,8 @@ function renderDSel(app){
   <div class="dsbtns"><button type="button" class="dsbtn iso" id="dIso">${iso?'<i class="peace"><svg viewBox="0 0 24 24" width="1.15em" height="1.15em" style="vertical-align:-.2em"><path d="M12 22V11" stroke="#e8d08a" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M12 12C6 12 3 8 3 3c6 0 9 3 9 9z" fill="#e8d08a"/><path d="M12 14c0-5 3-8 9-8 0 5-3 8-9 8z" fill="#f4e2a8"/></svg></i>경계':'<i>☠</i>경계-이면'}</button><button type="button" class="dsbtn go" id="dGo" ${selOpen?'':'disabled'}><i>⚔</i>${selOpen?(iso?'경계-이면 진입':'던전으로 가기'):'잠김'}</button><button type="button" class="dsbtn back" id="dBack"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M3 21V9h3v3h2V9h2v3h4V9h2v3h2V9h3v12h-6v-5a2 2 0 0 0-4 0v5z"/></svg>성소로 돌아가기</button></div>
   <div class="wtip" id="wtip" style="display:none"></div></div></div>
 `;
- $('#dBack').onclick=()=>{ZR._wk='';ZR._bi=-1;ZR.iso=false; go('rest');};
+ {const nw=app.querySelector('.dswarn'); ZR._wh=nw?nw.outerHTML:''; if(pWh&&ZR._wk!==pWk){const g=document.createElement('div'); g.innerHTML=pWh; const ge=g.firstChild; ge.classList.remove('still'); ge.classList.add('out'); const mp=app.querySelector('#wmap'); if(mp){mp.appendChild(ge); setTimeout(()=>ge.remove(),560);}}}
+ $('#dBack').onclick=()=>{ZR._wk='';ZR._wh='';ZR._bi=-1;ZR.iso=false; go('rest');};
 
  $('#dIso').onclick=()=>isoErode(()=>{ZR.iso=!ZR.iso; render();});
  $('#dfPrev').onclick=()=>{ZR.dsel[ZR.sel]=Math.max(0,ZR.diff-1); render();}; $('#dfNext').onclick=()=>{const nx=Math.min(dgTop(z,ZR.sel),ZR.diff+1); ZR._siren=false; ZR.dsel[ZR.sel]=nx; render();};
