@@ -2138,7 +2138,7 @@ body .overlay.augpick{-webkit-backdrop-filter:none!important;backdrop-filter:non
 <div id="app"></div>
 <script>
 "use strict";
-const GAME_VER='0.5.118';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
+const GAME_VER='0.5.119';   // 패치 버전: 요청(프롬프트)마다 0.0.1씩 올림 — patch_notes.txt 참고
 /* ---- 화면비 (스테이지): 설정에서 고른 비율로 게임 화면을 고정하고 남는 곳은 검은 띠로 채웁니다 ---- */
 const RATIOS=[['auto','자동 (창 크기에 맞춤)',0,'pc'],['pc169','16:9 (일반 모니터)',16/9,'pc'],['pc1610','16:10 (노트북)',1.6,'pc'],['pc43','4:3 (구형 모니터·태블릿)',4/3,'pc'],['pc195','19.5:9 (기본)',19.5/9,'pc'],['pc219','21:9 (울트라와이드)',21/9,'pc'],['ph16','16:9 스마트폰 (구형)',16/9,'ph'],['ph18','18:9 스마트폰 (2:1)',2,'ph'],['ph195','19.5:9 스마트폰 (기본 · 갤럭시 S·아이폰)',19.5/9,'ph'],['ph20','20:9 스마트폰 (갤럭시 계열)',20/9,'ph'],['ph22','22:9 스마트폰 (긴 화면)',22/9,'ph']];
 const ST={on:false,x:0,y:0,w:0,h:0,k:1};
@@ -7491,7 +7491,7 @@ function bhudRefresh(){
  const hub=$('#bhHub'); hub.innerHTML='';
  const hb=(html,cls,tip,on,span)=>{const b=document.createElement('button'); b.className=cls||''; b.style.gridColumn='span '+span; b.innerHTML=html; if(tip)b.setAttribute('data-tip',tip); if(on)b.onclick=on; hub.appendChild(b);};
  const sm=src.find(b=>b.classList.contains('bt-move')), sa=src.find(b=>b.classList.contains('bt-basic')), se=src.find(b=>b.classList.contains('bt-end'));
- const clone=(sb,span,fallback)=>{if(!sb){hb(fallback,'idle','',null,span); return;} const off=sb.classList.contains('dis')||sb.disabled; hb(sb.innerHTML,sb.className.replace(/\bdis\b/,'')+(off?' off':''),sb.getAttribute('data-tip')||'',()=>{if(!off)sb.click();},span);};
+ const clone=(sb,span,fallback)=>{if(!sb){hb(fallback,'idle off','',null,span); return;} const off=sb.classList.contains('dis')||sb.disabled; hb(sb.innerHTML,sb.className.replace(/\bdis\b/,'')+(off?' off':''),sb.getAttribute('data-tip')||'',()=>{if(!off)sb.click();},span);};
  clone(sm,6,`<em class="kh">${keyName(KEYS.bmov)}</em>이동`); clone(sa,6,`<em class="kh">${keyName(KEYS.batk)}</em>공격`); clone(se,6,`<em class="kh">${keyName(KEYS.bend)}</em>턴 종료`);
  const sk2on=!!((S.opt&&S.opt.sk2)||BW==='skill');
  hb(`<em class="kh">${sk2on?'▼':'▲'}</em><svg class="sk2ic" viewBox="0 0 32 32"><rect x="3" y="3" width="11" height="11" rx="2"/><rect x="18" y="3" width="11" height="11" rx="2"/><rect x="3" y="18" width="11" height="11" rx="2" opacity=".55"/><rect x="18" y="18" width="11" height="11" rx="2" opacity=".55"/><path d="M16 21.5l-3.2 3.2M16 21.5l3.2 3.2" stroke-width="2.4" stroke-linecap="round" fill="none" style="display:none"/></svg>`,'tx sk2b'+(sk2on?' sel':''),'',()=>{S.opt=S.opt||{}; S.opt.sk2=!sk2on; if(!S.opt.sk2&&BW==='skill')try{closeBW();}catch(e){} save(); bhudRefresh();},6);
